@@ -3,10 +3,9 @@
     #region using
 
     using System;
-
-    using Alphacloud.Common.Core.Data;
-
+    using Data;
     using JetBrains.Annotations;
+    using Strings;
 
     #endregion
 
@@ -14,21 +13,21 @@
     public static class DateTimeExtensions
     {
         /// <summary>
-        ///     Rounds minutes to the specified boundary.
+        ///   Rounds minutes to the specified boundary.
         /// </summary>
         /// <param name="dt">DateTime.</param>
         /// <param name="minutes">Round value.</param>
         /// <returns>DateTime rounded to specified value.</returns>
         public static DateTime RoundMinutes(this DateTime dt, int minutes)
         {
-            var min = dt.Minute % minutes;
-            return (min) < (minutes + 1) / 2
+            var min = dt.Minute%minutes;
+            return (min) < (minutes + 1)/2
                 ? dt.AddMinutes(-min)
                 : dt.AddMinutes(minutes - min);
         }
 
         /// <summary>
-        ///     Convert to Date and Time string for current locale.
+        ///   Convert to Date and Time string for current locale.
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
@@ -39,11 +38,11 @@
 
 
         /// <summary>
-        ///     Convert date and time to long datetime string.
+        ///   Convert date and time to long datetime string.
         /// </summary>
         /// <param name="dateTime">Date time</param>
         /// <returns>
-        ///     Long datetime formatted string (corresponds to <c>dateTime.ToString("f")</c>).
+        ///   Long datetime formatted string (corresponds to <c>dateTime.ToString("f")</c>).
         /// </returns>
         public static string ToLongDateTimeStr(this DateTime dateTime)
         {
@@ -51,7 +50,7 @@
         }
 
         /// <summary>
-        ///     Convert to locate time zone and display as date time string.
+        ///   Convert to locate time zone and display as date time string.
         /// </summary>
         /// <param name="dateTime">DateTime</param>
         /// <returns>date time string</returns>
@@ -62,7 +61,7 @@
         }
 
         /// <summary>
-        ///     Convert to relative human-readable date.
+        ///   Convert to relative human-readable date.
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
@@ -71,11 +70,11 @@
             var current = DateTime.Now;
             var diff = dateTime.Subtract(current);
             if (diff.TotalHours.InRange(0, 1))
-                return Strings.Strings.RelativeDate_ThisHours;
+                return Strings.RelativeDate_ThisHours;
             if (diff.TotalHours.InRange(-1, 0))
-                return Strings.Strings.RelativeDate_HourAgo;
+                return Strings.RelativeDate_HourAgo;
             if (diff.TotalDays.InRange(-1, 1))
-                return Strings.Strings.RelativeDate_Today;
+                return Strings.RelativeDate_Today;
             return dateTime.ToShortDateString();
         }
 

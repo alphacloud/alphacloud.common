@@ -6,19 +6,18 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text;
-
     using JetBrains.Annotations;
 
     #endregion
 
     /// <summary>
-    ///     String extension methods.
+    ///   String extension methods.
     /// </summary>
     [PublicAPI]
     public static class StringExtensions
     {
         /// <summary>
-        ///     Format string using Invariant Culture.
+        ///   Format string using Invariant Culture.
         /// </summary>
         /// <param name="fmt">Format specifier.</param>
         /// <param name="arg0">The arg0.</param>
@@ -31,7 +30,7 @@
 
 
         /// <summary>
-        ///     Format string using Invariant Culture.
+        ///   Format string using Invariant Culture.
         /// </summary>
         /// <param name="fmt">Format specifier.</param>
         /// <param name="arg0">The arg0.</param>
@@ -45,7 +44,7 @@
 
 
         /// <summary>
-        ///     Format string using Invariant Culture.
+        ///   Format string using Invariant Culture.
         /// </summary>
         /// <param name="fmt">Format specifier.</param>
         /// <param name="arg0">Arg 0.</param>
@@ -60,7 +59,7 @@
 
 
         /// <summary>
-        ///     Format string using Invariant Culture.
+        ///   Format string using Invariant Culture.
         /// </summary>
         /// <param name="fmt">Format specifier.</param>
         /// <param name="args">Args.</param>
@@ -73,7 +72,7 @@
 
 
         /// <summary>
-        ///     Format string using Current Culture.
+        ///   Format string using Current Culture.
         /// </summary>
         /// <param name="format">Format specifier.</param>
         /// <param name="arg0">The arg0.</param>
@@ -86,7 +85,7 @@
 
 
         /// <summary>
-        ///     Format string using Current Culture.
+        ///   Format string using Current Culture.
         /// </summary>
         /// <param name="format">Format specifier.</param>
         /// <param name="arg0">Arg 0</param>
@@ -100,7 +99,7 @@
 
 
         /// <summary>
-        ///     Format string using Current Culture.
+        ///   Format string using Current Culture.
         /// </summary>
         /// <param name="format">Format specifier.</param>
         /// <param name="arg0">Arg 0</param>
@@ -114,7 +113,7 @@
         }
 
         /// <summary>
-        ///     Format string using Current Culture.
+        ///   Format string using Current Culture.
         /// </summary>
         /// <param name="format">Format specifier.</param>
         /// <param name="args">Arguments.</param>
@@ -126,7 +125,7 @@
         }
 
         /// <summary>
-        ///     Joins strings using separator.
+        ///   Joins strings using separator.
         /// </summary>
         /// <param name="strings">Strings.</param>
         /// <param name="separator">String separator.</param>
@@ -156,7 +155,7 @@
         }
 
         /// <summary>
-        ///     Substitutes null or empty string.
+        ///   Substitutes null or empty string.
         /// </summary>
         /// <param name="str">String to check.</param>
         /// <param name="substitute">The substitute value.</param>
@@ -169,8 +168,8 @@
         }
 
         /// <summary>
-        ///     Trim string if it is not null or whitespace.
-        ///     Behaves like <see cref="string.Trim()" /> except no error thrown in str == <c>null</c>.
+        ///   Trim string if it is not null or whitespace.
+        ///   Behaves like <see cref="string.Trim()" /> except no error thrown in str == <c>null</c>.
         /// </summary>
         /// <param name="str">Input.</param>
         /// <returns></returns>

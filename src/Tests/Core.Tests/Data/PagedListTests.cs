@@ -1,20 +1,18 @@
 ﻿namespace Core.Tests.Data
 {
     using Alphacloud.Common.Core.Data;
-
     using FluentAssertions;
-
     using NUnit.Framework;
 
     [TestFixture]
-    class PagedListTests
+    internal class PagedListTests
     {
         //// ReSharper disable InconsistentNaming
 
         [SetUp]
         public void SetUp()
         {
-            _source = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            _source = new[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         }
 
 
@@ -23,8 +21,8 @@
         {
         }
 
-        int[] _source;
-        const int PageSize = 3;
+        private int[] _source;
+        private const int PageSize = 3;
 
         [TestCase(1, 2)]
         [TestCase(2, 5)]

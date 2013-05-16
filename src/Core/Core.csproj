@@ -54,7 +54,7 @@
     <Compile Include="Data\BooleanExtensions.cs" />
     <Compile Include="Data\CollectionExtensions.cs" />
     <Compile Include="Data\DictionaryExtensions.cs" />
-    <Compile Include="Data\FormattingExtensions.cs" />
+    <Compile Include="Data\BinaryFormattingExtensions.cs" />
     <Compile Include="Data\IPagedList.cs" />
     <Compile Include="Data\NumberExtensions.cs" />
     <Compile Include="Data\NumberFormattingExtensions.cs" />

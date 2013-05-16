@@ -4,19 +4,18 @@
 
     using System;
     using System.Collections.Generic;
-
     using JetBrains.Annotations;
 
     #endregion
 
     /// <summary>
-    ///     Dispose helper.
+    ///   Dispose helper.
     /// </summary>
     [PublicAPI]
     public class Disposer : IDisposable
     {
-        readonly IList<WeakReference> _objects = new List<WeakReference>();
-        bool _isDisposed;
+        private readonly IList<WeakReference> _objects = new List<WeakReference>();
+        private bool _isDisposed;
 
 
         public Disposer()
@@ -33,11 +32,11 @@
 
 
         /// <summary>
-        ///     Add object to dispose.
+        ///   Add object to dispose.
         /// </summary>
         /// <param name="obj">Object</param>
         [NotNull]
-        public T Add <T>([NotNull] T obj)
+        public T Add<T>([NotNull] T obj)
             where T : IDisposable
         {
             CheckDisposed();
@@ -61,7 +60,7 @@
 
 
         /// <summary>
-        ///     Check if object was disposed.
+        ///   Check if object was disposed.
         /// </summary>
         /// <exception cref="ObjectDisposedException">If object already disposed.</exception>
         protected void CheckDisposed()
@@ -73,7 +72,7 @@
         #region Implementation of IDisposable
 
         /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         /// <filterpriority>2</filterpriority>
         public void Dispose()

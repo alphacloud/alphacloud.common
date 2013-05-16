@@ -3,22 +3,21 @@
     #region using
 
     using System;
-
     using JetBrains.Annotations;
 
     #endregion
 
     /// <summary>
-    ///     <c>bool</c> data type extensions.
+    ///   <c>bool</c> data type extensions.
     /// </summary>
     [PublicAPI]
     public static class BooleanExtensions
     {
         /// <summary>
-        ///     Convery boolean value to yes/no string.
+        ///   Convery boolean value to yes/no string.
         /// </summary>
         /// <returns>
-        ///     Yes for <c>true</c>, no for <c>false</c>.
+        ///   Yes for <c>true</c>, no for <c>false</c>.
         /// </returns>
         public static string YesNo(this bool value)
         {
@@ -26,10 +25,10 @@
         }
 
         /// <summary>
-        ///     Return Yes/No text
+        ///   Return Yes/No text
         /// </summary>
         /// <param name="value">
-        ///     if set to <c>true</c> [value].
+        ///   if set to <c>true</c> [value].
         /// </param>
         /// <param name="yes">The yes.</param>
         /// <param name="no">The no.</param>
@@ -40,8 +39,8 @@
         }
 
         /// <summary>
-        ///     Return yes/no string with optional evaluation of No-string.
-        ///     Use for case when No-string appears rarely and requires additional effort to evaluate.
+        ///   Return yes/no string with optional evaluation of No-string.
+        ///   Use for case when No-string appears rarely and requires additional effort to evaluate.
         /// </summary>
         /// <param name="value">boolean.</param>
         /// <param name="yes">Yes-string.</param>
@@ -55,7 +54,7 @@
         }
 
         /// <summary>
-        ///     Convert to 1/0.
+        ///   Convert to 1/0.
         /// </summary>
         public static int AsInt(this bool value)
         {

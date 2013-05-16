@@ -4,7 +4,6 @@
 
     using System;
     using System.Threading;
-
     using JetBrains.Annotations;
 
     #endregion
@@ -12,7 +11,7 @@
     public static class ReaderWriterLockSlimExtensions
     {
         /// <summary>
-        ///     Excecute read operation.
+        ///   Excecute read operation.
         /// </summary>
         /// <param name="locker"></param>
         /// <param name="action">operation</param>
@@ -36,11 +35,11 @@
 
 
         /// <summary>
-        ///     Excecute read operation.
+        ///   Excecute read operation.
         /// </summary>
         /// <param name="locker"></param>
         /// <param name="read">operation</param>
-        public static T Read <T>([NotNull] this ReaderWriterLockSlim locker, [NotNull] Func<T> read)
+        public static T Read<T>([NotNull] this ReaderWriterLockSlim locker, [NotNull] Func<T> read)
         {
             if (locker == null)
                 throw new ArgumentNullException("locker");
@@ -60,7 +59,7 @@
 
 
         /// <summary>
-        ///     Execute write operation.
+        ///   Execute write operation.
         /// </summary>
         /// <param name="locker"></param>
         /// <param name="action">operation</param>

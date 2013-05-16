@@ -5,18 +5,17 @@
     using System;
     using System.Globalization;
     using System.Text.RegularExpressions;
-
     using JetBrains.Annotations;
 
     #endregion
 
     /// <summary>
-    ///     TimeSpan generic parser
+    ///   TimeSpan generic parser
     /// </summary>
     [PublicAPI]
     public static class TimeSpanParser
     {
-        const DateTimeStyles DefaultDateTimeStyles =
+        private const DateTimeStyles DefaultDateTimeStyles =
             DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeLocal | DateTimeStyles.NoCurrentDateDefault;
 
 
@@ -26,7 +25,8 @@
             if (text == null)
                 throw new ArgumentNullException("text");
 
-            var formats = new[] {
+            var formats = new[]
+            {
                 "HH:mm", "HH.mm", "HHmm", "HH,mm", "HH",
                 "H:mm", "H.mm", "H,mm",
                 "hh:mmtt", "hh.mmtt", "hhmmtt", "hh,mmtt", "hhtt",

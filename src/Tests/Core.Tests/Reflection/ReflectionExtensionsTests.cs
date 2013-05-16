@@ -1,13 +1,11 @@
 ﻿namespace Core.Tests.Reflection
 {
     using Alphacloud.Common.Core.Reflection;
-
     using FluentAssertions;
-
     using NUnit.Framework;
 
     [TestFixture]
-    class ReflectionExtensionsTests
+    internal class ReflectionExtensionsTests
     {
         [SetUp]
         public void SetUp()
@@ -20,7 +18,7 @@
         {
         }
 
-        class IndexedData
+        private class IndexedData
         {
             public string this[string key]
             {
@@ -29,7 +27,7 @@
         }
 
 
-        class Test1
+        private class Test1
         {
             #region .ctor
 
@@ -60,7 +58,7 @@
         [Test]
         public void ShouldEnumaratAllPublicProperties()
         {
-            var data = new { Prop1 = "string", Prop2 = 22 };
+            var data = new {Prop1 = "string", Prop2 = 22};
             var dic = data.ToDataDictionary();
             dic.Count.Should().Be(2);
             dic.Keys.Should().Contain("Prop1").And.Contain("Prop2");

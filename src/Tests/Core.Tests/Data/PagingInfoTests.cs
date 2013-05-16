@@ -1,23 +1,24 @@
 ﻿namespace Core.Tests.Data
 {
     using Alphacloud.Common.Core.Data;
-
     using FluentAssertions;
-
     using NUnit.Framework;
 
 //// ReSharper disable InconsistentNaming
 
     [TestFixture]
-    class PagingInfoTests
+    internal class PagingInfoTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+        }
 
-        #region Data
 
-
-        #endregion
-
-        #region Tests
+        [TearDown]
+        public void TearDown()
+        {
+        }
 
         [TestCase(0, 1)]
         [TestCase(2, 1)]
@@ -28,31 +29,16 @@
         }
 
 
-        #endregion
-
-        #region Setup/Teardown
-
-        [SetUp]
-        public void SetUp()
-        {}
-
-
-        [TearDown]
-        public void TearDown()
-        {}
-
-
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
-        {}
+        {
+        }
 
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
-        {}
-
-        #endregion
-
+        {
+        }
     }
 
 

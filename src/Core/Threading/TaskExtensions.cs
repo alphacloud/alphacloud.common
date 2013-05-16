@@ -4,7 +4,6 @@
 
     using System;
     using System.Threading.Tasks;
-
     using JetBrains.Annotations;
 
     #endregion
@@ -13,7 +12,7 @@
     public static class TaskExtensions
     {
         /// <summary>
-        ///     Wait for task completion ignoring OperationCancelled exceptions.
+        ///   Wait for task completion ignoring OperationCancelled exceptions.
         /// </summary>
         /// <param name="task">The task to wait for.</param>
         /// <param name="timeout">The timeout.</param>

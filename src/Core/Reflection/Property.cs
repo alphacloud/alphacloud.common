@@ -5,26 +5,24 @@
     using System;
     using System.Linq.Expressions;
     using System.Text;
-
-    using Alphacloud.Common.Core.Data;
-
+    using Data;
     using JetBrains.Annotations;
 
     #endregion
 
     /// <summary>
-    ///     Gets property name using lambda expressions.
+    ///   Gets property name using lambda expressions.
     /// </summary>
     [PublicAPI]
     public static class Property
     {
-        public static string PropertyName <T>(this T obj, Expression<Func<T, object>> expression)
+        public static string PropertyName<T>(this T obj, Expression<Func<T, object>> expression)
         {
             var body = expression.Body;
             return GetMemberName(new StringBuilder(128), body, false).ToString();
         }
 
-        public static string Name <T>(
+        public static string Name<T>(
             Expression<Func<T, object>> expression)
         {
             var body = expression.Body;
@@ -39,7 +37,7 @@
         }
 
 
-        static StringBuilder GetMemberName(StringBuilder sb, Expression expression, bool skipInstanceReference)
+        private static StringBuilder GetMemberName(StringBuilder sb, Expression expression, bool skipInstanceReference)
         {
             var memberExpression = expression as MemberExpression;
             if (memberExpression != null)

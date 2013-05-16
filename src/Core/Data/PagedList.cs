@@ -6,26 +6,21 @@
 
 namespace Alphacloud.Common.Core.Data
 {
-    #region using
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
     using JetBrains.Annotations;
 
-    #endregion
-
     /// <summary>
-    ///     List with paging support.
+    ///   List with paging support.
     /// </summary>
-    /// <typeparam name="T"> </typeparam>
-    public class PagedList <T> : List<T>, IPagedList
+    /// <typeparam name="T">Item type. </typeparam>
+    public class PagedList<T> : List<T>, IPagedList
     {
         #region .ctor
 
         /// <summary>
-        ///     Extract page form source and create list.
+        ///   Extract page form source and create list.
         /// </summary>
         /// <param name="items"> source </param>
         /// <param name="pageIndex"> Page index to extract </param>
@@ -42,7 +37,7 @@ namespace Alphacloud.Common.Core.Data
 
 
         /// <summary>
-        ///     Create list for particular page.
+        ///   Create list for particular page.
         /// </summary>
         /// <param name="items"> </param>
         /// <param name="pageIndex"> </param>
@@ -58,7 +53,7 @@ namespace Alphacloud.Common.Core.Data
 
 
         /// <summary>
-        ///     Create list representing given page of data..
+        ///   Create list representing given page of data..
         /// </summary>
         /// <param name="items"> Page data. </param>
         /// <param name="page"> Page information. </param>
@@ -75,30 +70,58 @@ namespace Alphacloud.Common.Core.Data
 
         #region IPagedList Members
 
+        /// <summary>
+        ///   Total number of pages.
+        /// </summary>
         public int TotalPageCount
         {
-            get { return (int) Math.Ceiling(TotalItemCount / (double) PageSize); }
+            get { return (int) Math.Ceiling(TotalItemCount/(double) PageSize); }
         }
 
+        /// <summary>
+        ///   Current page indeg.
+        /// </summary>
         public int CurrentPageIndex { get; set; }
+
+        /// <summary>
+        ///   Page size.
+        /// </summary>
         public int PageSize { get; set; }
+
+        /// <summary>
+        ///   Total number of items.
+        /// </summary>
         public int TotalItemCount { get; set; }
 
+        /// <summary>
+        ///   Calculate start item index for current page.
+        /// </summary>
+        /// <returns>Start item index (0-based).</returns>
         public int GetStartRecordIndex()
         {
-            return (CurrentPageIndex - 1) * PageSize;
+            return (CurrentPageIndex - 1)*PageSize;
         }
 
 
+        /// <summary>
+        ///   Calculate end item index for current page.
+        /// </summary>
+        /// <returns>Start item index (0-based).</returns>
         public int GetEndRecordIndex()
         {
-            var idx = CurrentPageIndex * PageSize - 1;
+            var idx = CurrentPageIndex*PageSize - 1;
             return idx >= TotalItemCount - 1 ? TotalItemCount - 1 : idx;
         }
 
         #endregion
 
-        public static PagedList<T> CreateFrom <TSource>(PagedList<TSource> source) where TSource : T
+        /// <summary>
+        ///   Transform from other list.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static PagedList<T> CreateFrom<TSource>(PagedList<TSource> source) where TSource : T
         {
             var data = new List<T>(source.Cast<T>());
             return new PagedList<T>(data, source.CurrentPageIndex, source.PageSize, source.TotalItemCount);
@@ -106,18 +129,23 @@ namespace Alphacloud.Common.Core.Data
 
 
         /// <summary>
-        ///     Convert from existing list.
+        ///   Convert from existing list.
         /// </summary>
         /// <typeparam name="TSource"> Source type. </typeparam>
         /// <param name="source"> Source list. </param>
         /// <param name="selector"> Type convertor. </param>
         /// <returns> New list. </returns>
-        public static PagedList<T> ConvertFrom <TSource>(PagedList<TSource> source, Func<TSource, T> selector)
+        public static PagedList<T> ConvertFrom<TSource>(PagedList<TSource> source, Func<TSource, T> selector)
         {
             var data = source.Select(selector);
             return new PagedList<T>(data, source.CurrentPageIndex, source.PageSize, source.TotalItemCount);
         }
 
+        /// <summary>
+        ///   Create single page from source.
+        /// </summary>
+        /// <param name="source">Source items</param>
+        /// <returns></returns>
         public static PagedList<T> AsSinglePage([NotNull] ICollection<T> source)
         {
             if (source == null)
@@ -127,7 +155,7 @@ namespace Alphacloud.Common.Core.Data
         }
 
         /// <summary>
-        ///     Create empty paged list.
+        ///   Create empty paged list.
         /// </summary>
         /// <returns>New instance</returns>
         public static PagedList<T> Empty()

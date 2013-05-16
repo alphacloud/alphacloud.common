@@ -3,7 +3,7 @@
     public static class NumberExtensions
     {
         /// <summary>
-        ///     Determine whether number is in specified range (inclusive).
+        ///   Determine whether number is in specified range (inclusive).
         /// </summary>
         /// <param name="number">The number.</param>
         /// <param name="min">The min value.</param>

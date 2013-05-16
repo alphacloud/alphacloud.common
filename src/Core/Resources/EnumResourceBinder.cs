@@ -8,18 +8,16 @@
     using System.Linq;
     using System.Reflection;
     using System.Resources;
-
-    using Alphacloud.Common.Core.Data;
-
+    using Data;
     using JetBrains.Annotations;
 
     #endregion
 
     /// <summary>
-    ///     Specified key of resource to bind.
+    ///   Specified key of resource to bind.
     /// </summary>
     /// <summary>
-    ///     See <see cref="EnumResourceBinder" /> for details.
+    ///   See <see cref="EnumResourceBinder" /> for details.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     [BaseTypeRequired(typeof (Enum))]
@@ -30,35 +28,35 @@
 
 
     /// <summary>
-    ///     Key generation strategy.
+    ///   Key generation strategy.
     /// </summary>
     public enum KeyGenerationStategy
     {
         /// <summary>
-        ///     Use numeric value
+        ///   Use numeric value
         /// </summary>
         NumericValue,
 
         /// <summary>
-        ///     Use field name.
+        ///   Use field name.
         /// </summary>
         FieldName
     }
 
 
     /// <summary>
-    ///     Load strings from resource.
+    ///   Load strings from resource.
     /// </summary>
     [PublicAPI]
     public static class EnumResourceBinder
     {
         public static SelectionItem BlankItem()
         {
-            return new SelectionItem { Selected = true, Text = string.Empty, Value = string.Empty };
+            return new SelectionItem {Selected = true, Text = string.Empty, Value = string.Empty};
         }
 
 
-        public static string GetString <T>(ResourceManager resourceManager, T @enum)
+        public static string GetString<T>(ResourceManager resourceManager, T @enum)
             //where T: enum
         {
             CheckIfTypeIsEnum<T>();
@@ -71,7 +69,7 @@
 
 
         /// <summary>
-        ///     Loads strings from resource based on enum members.
+        ///   Loads strings from resource based on enum members.
         /// </summary>
         /// <typeparam name="T">Enum type</typeparam>
         /// <param name="resourceManager">The resourceManager.</param>
@@ -79,7 +77,7 @@
         /// <returns>Mapping Enum field=Resource string</returns>
         [NotNull]
         //// ReSharper disable ReturnTypeCanBeEnumerable.Global
-        public static IDictionary<string, string> LoadStrings <T>(ResourceManager resourceManager,
+        public static IDictionary<string, string> LoadStrings<T>(ResourceManager resourceManager,
             KeyGenerationStategy keyGenerationStategy)
             //// ReSharper restore ReturnTypeCanBeEnumerable.Global
             //where T: Enum
@@ -100,7 +98,7 @@
         }
 
 
-        static Func<FieldInfo, string> CreateKeyGenerator(KeyGenerationStategy keyGenerationStategy)
+        private static Func<FieldInfo, string> CreateKeyGenerator(KeyGenerationStategy keyGenerationStategy)
         {
             Func<FieldInfo, string> keyGenerator;
             switch (keyGenerationStategy)
@@ -118,14 +116,14 @@
         }
 
 
-        static void CheckIfTypeIsEnum <T>()
+        private static void CheckIfTypeIsEnum<T>()
         {
             if (!typeof (T).IsEnum)
                 throw new InvalidOperationException("Type {0} is not enum".ApplyArgs(typeof (T)));
         }
 
 
-        static string GetText <T>(ResourceManager resourceManager, MemberInfo fieldInfo)
+        private static string GetText<T>(ResourceManager resourceManager, MemberInfo fieldInfo)
         {
             var attrs = fieldInfo.GetCustomAttributes(typeof (ResourceBindingAttribute), false);
             if (attrs.Length == 1)
@@ -138,7 +136,7 @@
         }
 
 
-        static string GetResouce(ResourceManager resources, string key)
+        private static string GetResouce(ResourceManager resources, string key)
         {
             return resources.GetString(key);
         }
@@ -151,7 +149,7 @@
         }
 
 
-        public static IEnumerable<SelectionItem> SelectionListFor <T>(ResourceManager resourceManager,
+        public static IEnumerable<SelectionItem> SelectionListFor<T>(ResourceManager resourceManager,
             KeyGenerationStategy keyGenerationStategy = KeyGenerationStategy.FieldName,
             Func<string, bool> selector = null, bool insertBlankItem = false)
         {
@@ -159,7 +157,8 @@
             var checkSelected = selector ?? (s => false);
             var list = data.Select(
                 kvp =>
-                    new SelectionItem {
+                    new SelectionItem
+                    {
                         Value = kvp.Key,
                         Text = kvp.Value ?? kvp.Key,
                         Selected = checkSelected(kvp.Key)

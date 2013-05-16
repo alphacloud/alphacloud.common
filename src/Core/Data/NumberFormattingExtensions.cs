@@ -1,15 +1,14 @@
-﻿namespace KudaNado.Common.Data
+﻿namespace Alphacloud.Common.Core.Data
 {
-    #region using
-
     using System.Globalization;
 
-    #endregion
-
+    /// <summary>
+    ///   Number formatting extensions
+    /// </summary>
     public static class NumberFormattingExtensions
     {
         /// <summary>
-        ///     Format value using neutral culture.
+        ///   Format value using neutral culture.
         /// </summary>
         /// <param name="value"> The value. </param>
         /// <returns> </returns>
@@ -20,7 +19,7 @@
 
 
         /// <summary>
-        ///     Format value using neutral culture.
+        ///   Format value using neutral culture.
         /// </summary>
         /// <param name="value"> The value. </param>
         /// <returns> string </returns>

@@ -62,7 +62,7 @@
 
         #endregion
 
-        void SetWeek(Week week)
+        private void SetWeek(Week week)
         {
             Monday = (week & Week.Monday) == Week.Monday;
             Tuesday = (week & Week.Tuesday) == Week.Tuesday;
@@ -118,12 +118,12 @@
             unchecked
             {
                 int result = Monday.GetHashCode();
-                result = (result * 397) ^ Tuesday.GetHashCode();
-                result = (result * 397) ^ Wednesday.GetHashCode();
-                result = (result * 397) ^ Thursday.GetHashCode();
-                result = (result * 397) ^ Friday.GetHashCode();
-                result = (result * 397) ^ Saturday.GetHashCode();
-                result = (result * 397) ^ Sunday.GetHashCode();
+                result = (result*397) ^ Tuesday.GetHashCode();
+                result = (result*397) ^ Wednesday.GetHashCode();
+                result = (result*397) ^ Thursday.GetHashCode();
+                result = (result*397) ^ Friday.GetHashCode();
+                result = (result*397) ^ Saturday.GetHashCode();
+                result = (result*397) ^ Sunday.GetHashCode();
                 return result;
             }
         }

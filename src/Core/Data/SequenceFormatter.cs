@@ -1,18 +1,13 @@
 ﻿namespace Alphacloud.Common.Core.Data
 {
-    #region using
-
     using System.Collections;
     using System.Text;
-
     using JetBrains.Annotations;
-
-    #endregion
 
     [PublicAPI]
     public class SequenceFormatter
     {
-        readonly IEnumerable _source;
+        private readonly IEnumerable _source;
 
 
         public SequenceFormatter(IEnumerable source)
@@ -28,10 +23,10 @@
         #region Overrides of Object
 
         /// <summary>
-        ///     Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+        ///   Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
         /// </summary>
         /// <returns>
-        ///     A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+        ///   A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
         /// </returns>
         /// <filterpriority>2</filterpriority>
         public override string ToString()
