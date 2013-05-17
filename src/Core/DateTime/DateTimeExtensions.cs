@@ -1,13 +1,9 @@
 ﻿namespace Alphacloud.Common.Core.DateTime
 {
-    #region using
-
     using System;
     using Data;
     using JetBrains.Annotations;
     using Strings;
-
-    #endregion
 
     [PublicAPI]
     public static class DateTimeExtensions
@@ -20,8 +16,8 @@
         /// <returns>DateTime rounded to specified value.</returns>
         public static DateTime RoundMinutes(this DateTime dt, int minutes)
         {
-            var min = dt.Minute%minutes;
-            return (min) < (minutes + 1)/2
+            var min = dt.Minute % minutes;
+            return (min) < (minutes + 1) / 2
                 ? dt.AddMinutes(-min)
                 : dt.AddMinutes(minutes - min);
         }
@@ -33,7 +29,7 @@
         /// <returns></returns>
         public static string ToDateTimeStr(this DateTime dateTime)
         {
-            return dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
+            return String.Concat(dateTime.ToShortDateString(), " ", dateTime.ToShortTimeString());
         }
 
 
@@ -57,7 +53,7 @@
         public static string ToLocalDateTimeStr(this DateTime dateTime)
         {
             var localTime = dateTime.ToLocalTime();
-            return "{0} {1}".ApplyArgs(localTime.ToShortTimeString(), localTime.ToShortDateString());
+            return string.Concat(localTime.ToShortTimeString(), " ", localTime.ToShortDateString());
         }
 
         /// <summary>
