@@ -4,6 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F69E87C-76F0-48C8-B4B0-C2EB68931D89}"
 	ProjectSection(SolutionItems) = preProject
 		Alphacloud.Common.snk = Alphacloud.Common.snk
+		build.proj = build.proj
+		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{50C0FB8B-4B5D-468A-9839-44283E7E6D9E}"
