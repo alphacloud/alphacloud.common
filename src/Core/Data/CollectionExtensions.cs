@@ -1,15 +1,33 @@
-﻿namespace Alphacloud.Common.Core.Data
-{
-    #region using
+﻿#region copyright
 
+// Copyright 2013 Alphacloud.Net
+// 
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+// 
+//        http://www.apache.org/licenses/LICENSE-2.0
+// 
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+#endregion
+
+namespace Alphacloud.Common.Core.Data
+{
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+
     using JetBrains.Annotations;
 
-    #endregion
-
+    /// <summary>
+    ///   Collection extenstion methods.
+    /// </summary>
     [PublicAPI]
     public static class CollectionExtensions
     {
@@ -20,7 +38,7 @@
         /// <param name="collection"> The collection. </param>
         /// <param name="predicate"> The predicate. </param>
         /// <returns> </returns>
-        public static bool RemoveFirst<T>([NotNull] this ICollection<T> collection, [NotNull] Func<T, bool> predicate)
+        public static bool RemoveFirst <T>([NotNull] this ICollection<T> collection, [NotNull] Func<T, bool> predicate)
         {
             if (collection == null)
                 throw new ArgumentNullException("collection");
@@ -42,7 +60,7 @@
         /// <typeparam name="T"> Type </typeparam>
         /// <param name="sequence"> Source sequence. </param>
         /// <param name="process"> Renderer. </param>
-        public static void Repeat<T>(this IEnumerable<T> sequence, Action<CurrentItem<T>> process)
+        public static void Repeat <T>(this IEnumerable<T> sequence, Action<CurrentItem<T>> process)
         {
             if (sequence == null)
                 return;
@@ -61,7 +79,7 @@
         /// <typeparam name="T"> Type </typeparam>
         /// <param name="collection"> Source sequence. </param>
         /// <param name="process"> Renderer. </param>
-        public static void Repeat<T>(ICollection<T> collection, Action<T, CurrentItem<T>> process)
+        public static void Repeat <T>(ICollection<T> collection, Action<T, CurrentItem<T>> process)
         {
             if (collection == null)
                 return;
@@ -83,7 +101,7 @@
         /// <returns>
         ///   Zero-based index or <c>-1</c> if item was not found.
         /// </returns>
-        public static int IndexOf<T>([NotNull] this IEnumerable<T> sequence, T item)
+        public static int IndexOf <T>([NotNull] this IEnumerable<T> sequence, T item)
         {
             if (sequence == null)
                 throw new ArgumentNullException("sequence");
@@ -107,7 +125,7 @@
         /// <returns>
         ///   Zero-based index or <c>-1</c> if item was not found.
         /// </returns>
-        public static int IndexOf<T>([NotNull] this IEnumerable<T> sequence, [NotNull] Func<T, bool> predicate)
+        public static int IndexOf <T>([NotNull] this IEnumerable<T> sequence, [NotNull] Func<T, bool> predicate)
         {
             if (sequence == null)
                 throw new ArgumentNullException("sequence");
@@ -132,7 +150,7 @@
         /// <param name="sequence"> The source. </param>
         /// <param name="action"> The action. </param>
         /// <returns> Number of items processed. </returns>
-        public static int ForAll<T>([NotNull] this IEnumerable<T> sequence, [NotNull] Action<T> action)
+        public static int ForAll <T>([NotNull] this IEnumerable<T> sequence, [NotNull] Action<T> action)
         {
             if (sequence == null)
                 throw new ArgumentNullException("sequence");
@@ -155,7 +173,7 @@
         /// <param name="sequence"> The source. </param>
         /// <param name="action"> The action to run (first param - item, 2nd param - item index). </param>
         /// <returns> Number of items processed. </returns>
-        public static int ForAll<T>([NotNull] this IEnumerable<T> sequence, [NotNull] Action<T, int> action)
+        public static int ForAll <T>([NotNull] this IEnumerable<T> sequence, [NotNull] Action<T, int> action)
         {
             if (sequence == null)
                 throw new ArgumentNullException("sequence");
@@ -180,7 +198,7 @@
         /// <param name="pageSize">Size of the page.</param>
         /// <exception cref="ArgumentException">Page number &lt;= 0 or Page size &lt;= 0. </exception>
         /// <returns></returns>
-        public static IEnumerable<T> TakePage<T>([NotNull] this IEnumerable<T> source, int pageNumber, int pageSize)
+        public static IEnumerable<T> TakePage <T>([NotNull] this IEnumerable<T> source, int pageNumber, int pageSize)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
@@ -188,7 +206,7 @@
                 throw new ArgumentException("Page number must be greater than zero.", "pageNumber");
             if (pageSize < 1)
                 throw new ArgumentException("Page size must be greater than zero.", "pageSize");
-            return source.Skip((pageNumber - 1)*pageSize).Take(pageSize);
+            return source.Skip((pageNumber - 1) * pageSize).Take(pageSize);
         }
 
 
@@ -200,7 +218,7 @@
         /// <param name="lookup"> The lookup. </param>
         /// <param name="key"> The key. </param>
         /// <returns> Values or empty sequence if key not found. </returns>
-        public static IEnumerable<TElement> TryGetValues<TKey, TElement>(this ILookup<TKey, TElement> lookup, TKey key)
+        public static IEnumerable<TElement> TryGetValues <TKey, TElement>(this ILookup<TKey, TElement> lookup, TKey key)
         {
             if (lookup == null || !lookup.Contains(key))
                 return Enumerable.Empty<TElement>();
@@ -214,9 +232,9 @@
     ///   Represents sequence of single item.
     /// </summary>
     /// <typeparam name="T"> </typeparam>
-    public class SingleItemSequence<T> : IEnumerable<T>
+    public class SingleItemSequence <T> : IEnumerable<T>
     {
-        private readonly T _item;
+        readonly T _item;
 
         #region .ctor
 
@@ -263,12 +281,16 @@
     /// </summary>
     /// <typeparam name="T"> Type </typeparam>
     [PublicAPI]
-    public class CurrentItem<T>
+    public class CurrentItem <T>
     {
-        private readonly int _itemCount;
+        readonly int _itemCount;
 
         #region .ctor
 
+        /// <summary>
+        ///   Initializes a new instance of the <see cref="CurrentItem{T}" /> class.
+        /// </summary>
+        /// <param name="items">Items to operate on.</param>
         protected internal CurrentItem(ICollection<T> items)
         {
             _itemCount = items.Count;

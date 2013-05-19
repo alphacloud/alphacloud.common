@@ -1,14 +1,33 @@
-﻿namespace Alphacloud.Common.Core.Data
+﻿#region copyright
+
+// Copyright 2013 Alphacloud.Net
+// 
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+// 
+//        http://www.apache.org/licenses/LICENSE-2.0
+// 
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+#endregion
+
+namespace Alphacloud.Common.Core.Data
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using JetBrains.Annotations;
 
     [PublicAPI]
     public static class PagedListLinqExtensions
     {
-        public static PagedList<T> ToPagedList<T>
+        public static PagedList<T> ToPagedList <T>
             (
             this IQueryable<T> allItems,
             int pageIndex,
@@ -17,7 +36,7 @@
         {
             if (pageIndex < 1)
                 pageIndex = 1;
-            var itemIndex = (pageIndex - 1)*pageSize;
+            var itemIndex = (pageIndex - 1) * pageSize;
             var pageOfItems = allItems.Skip(itemIndex).Take(pageSize);
             var totalItemCount = allItems.Count();
             return new PagedList<T>(pageOfItems, pageIndex, pageSize, totalItemCount);
@@ -31,7 +50,7 @@
         /// <param name="source">The source.</param>
         /// <param name="pagingInfo">The pageing info.</param>
         /// <returns>Data page</returns>
-        public static IEnumerable<T> GetPage<T>([NotNull] this IEnumerable<T> source, [NotNull] PagingInfo pagingInfo)
+        public static IEnumerable<T> GetPage <T>([NotNull] this IEnumerable<T> source, [NotNull] PagingInfo pagingInfo)
         {
             if (source == null)
                 throw new ArgumentNullException("source");

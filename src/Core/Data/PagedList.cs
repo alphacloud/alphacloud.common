@@ -1,21 +1,34 @@
-﻿/*
- ASP.NET MvcPager control
- Copyright:2009-2011 Webdiyer (http://en.webdiyer.com)
- Source code released under Ms-PL license
- */
+﻿#region copyright
+
+// Copyright 2013 Alphacloud.Net
+// 
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+// 
+//        http://www.apache.org/licenses/LICENSE-2.0
+// 
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+#endregion
 
 namespace Alphacloud.Common.Core.Data
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using JetBrains.Annotations;
 
     /// <summary>
     ///   List with paging support.
     /// </summary>
     /// <typeparam name="T">Item type. </typeparam>
-    public class PagedList<T> : List<T>, IPagedList
+    public class PagedList <T> : List<T>, IPagedList
     {
         #region .ctor
 
@@ -75,7 +88,7 @@ namespace Alphacloud.Common.Core.Data
         /// </summary>
         public int TotalPageCount
         {
-            get { return (int) Math.Ceiling(TotalItemCount/(double) PageSize); }
+            get { return (int) Math.Ceiling(TotalItemCount / (double) PageSize); }
         }
 
         /// <summary>
@@ -99,7 +112,7 @@ namespace Alphacloud.Common.Core.Data
         /// <returns>Start item index (0-based).</returns>
         public int GetStartRecordIndex()
         {
-            return (CurrentPageIndex - 1)*PageSize;
+            return (CurrentPageIndex - 1) * PageSize;
         }
 
 
@@ -109,7 +122,7 @@ namespace Alphacloud.Common.Core.Data
         /// <returns>Start item index (0-based).</returns>
         public int GetEndRecordIndex()
         {
-            var idx = CurrentPageIndex*PageSize - 1;
+            var idx = CurrentPageIndex * PageSize - 1;
             return idx >= TotalItemCount - 1 ? TotalItemCount - 1 : idx;
         }
 
@@ -121,7 +134,7 @@ namespace Alphacloud.Common.Core.Data
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static PagedList<T> CreateFrom<TSource>(PagedList<TSource> source) where TSource : T
+        public static PagedList<T> CreateFrom <TSource>(PagedList<TSource> source) where TSource : T
         {
             var data = new List<T>(source.Cast<T>());
             return new PagedList<T>(data, source.CurrentPageIndex, source.PageSize, source.TotalItemCount);
@@ -135,7 +148,7 @@ namespace Alphacloud.Common.Core.Data
         /// <param name="source"> Source list. </param>
         /// <param name="selector"> Type convertor. </param>
         /// <returns> New list. </returns>
-        public static PagedList<T> ConvertFrom<TSource>(PagedList<TSource> source, Func<TSource, T> selector)
+        public static PagedList<T> ConvertFrom <TSource>(PagedList<TSource> source, Func<TSource, T> selector)
         {
             var data = source.Select(selector);
             return new PagedList<T>(data, source.CurrentPageIndex, source.PageSize, source.TotalItemCount);

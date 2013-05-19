@@ -1,6 +1,25 @@
-﻿namespace Alphacloud.Common.Core.Data
+﻿#region copyright
+
+// Copyright 2013 Alphacloud.Net
+// 
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+// 
+//        http://www.apache.org/licenses/LICENSE-2.0
+// 
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+#endregion
+
+namespace Alphacloud.Common.Core.Data
 {
     using System;
+
     using JetBrains.Annotations;
 
     /// <summary>
@@ -11,8 +30,8 @@
     [Serializable]
     public class PagingInfo : IEquatable<PagingInfo>
     {
-        private int _number;
-        private int _size;
+        int _number;
+        int _size;
 
         #region .ctor
 
@@ -95,7 +114,7 @@
         /// </summary>
         public int StartIndex
         {
-            get { return (Number - 1)*Size; }
+            get { return (Number - 1) * Size; }
         }
 
         /// <summary>
@@ -103,7 +122,7 @@
         /// </summary>
         public int EndIndex
         {
-            get { return Number*Size - 1; }
+            get { return Number * Size - 1; }
         }
 
 
@@ -127,7 +146,7 @@
         {
             if (itemIndex < 0)
                 throw new ArgumentOutOfRangeException("itemIndex", itemIndex, @"Item index must bepositive number.");
-            return (itemIndex/Size) + 1;
+            return (itemIndex / Size) + 1;
         }
 
 
@@ -147,7 +166,7 @@
         {
             unchecked
             {
-                return (_number*397) ^ _size;
+                return (_number * 397) ^ _size;
             }
         }
 

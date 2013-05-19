@@ -1,4 +1,6 @@
-ï»¿#region copyright
+using System.Reflection;
+
+#region copyright
 
 // Copyright 2013 Alphacloud.Net
 // 
@@ -16,20 +18,19 @@
 
 #endregion
 
-namespace Alphacloud.Common.Core.Data
-{
-    public static class NumberExtensions
-    {
-        /// <summary>
-        ///   Determine whether number is in specified range (inclusive).
-        /// </summary>
-        /// <param name="number">The number.</param>
-        /// <param name="min">The min value.</param>
-        /// <param name="max">The max value.</param>
-        /// <returns></returns>
-        public static bool InRange(this double number, double min, double max)
-        {
-            return number >= min && number <= max;
-        }
-    }
-}
+ // General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+
+#if DEBUG
+
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
+[assembly: AssemblyCompany("Alphacloud.Net")]
+[assembly: AssemblyProduct("Alphacloud commmon libs")]
+[assembly: AssemblyCopyright("Copyright © Alphacloud 2013")]
+[assembly: AssemblyTrademark("Alphacloud")]
+[assembly: AssemblyCulture("")]
