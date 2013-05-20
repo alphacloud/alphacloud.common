@@ -58,7 +58,7 @@ namespace Alphacloud.Common.Core.Utils
         /// <summary>
         ///   Resets current date time functions to use DateTime.Now and DateTime.UtcNow.
         /// </summary>
-        internal static void Reset()
+        public static void Reset()
         {
             CurrentTime = GetCurrentLocalTime;
             CurrentTimeUtc = GetCurrentUtcTime;
