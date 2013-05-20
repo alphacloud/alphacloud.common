@@ -90,14 +90,7 @@
     <None Include="..\Alphacloud.Common.snk">
       <Link>Alphacloud.Common.snk</Link>
     </None>
-    <None Include="obj\Debug\Core.csprojResolveAssemblyReference.cache" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="obj\Debug\Alphacloud.Common.Core.dll" />
-    <Content Include="obj\Debug\Alphacloud.Common.Core.pdb" />
-    <Content Include="obj\Debug\Core.csproj.FileListAbsolute.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Strings\Strings.resx">
