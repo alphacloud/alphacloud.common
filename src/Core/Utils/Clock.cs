@@ -41,18 +41,18 @@ namespace Alphacloud.Common.Core.Utils
         /// <summary>
         ///   Returns current time. See <see cref="DateTime.Now" />.
         /// </summary>
-        public static Func<DateTime> CurrentTime { get; internal set; }
+        public static Func<DateTime> CurrentTime { get; set; }
 
 
         /// <summary>
         ///   Returns current time in UTC format. See <see cref="DateTime.UtcNow" />.
         /// </summary>
-        public static Func<DateTime> CurrentTimeUtc { get; internal set; }
+        public static Func<DateTime> CurrentTimeUtc { get; set; }
 
         /// <summary>
         ///   Returns current time with time zone info. See <see cref="DateTimeOffset.Now" />.
         /// </summary>
-        public static Func<DateTimeOffset> CurrentTimeWithZone { get; internal set; }
+        public static Func<DateTimeOffset> CurrentTimeWithZone { get; set; }
 
 
         /// <summary>
