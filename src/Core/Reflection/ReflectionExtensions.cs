@@ -18,8 +18,6 @@
 
 namespace Alphacloud.Common.Core.Reflection
 {
-    #region using
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -27,11 +25,20 @@ namespace Alphacloud.Common.Core.Reflection
 
     using JetBrains.Annotations;
 
-    #endregion
-
+    /// <summary>
+    /// Reflection helpers.
+    /// </summary>
     [PublicAPI]
     public static class ReflectionExtensions
     {
+        /// <summary>
+        /// Collect public property values to dictionary.
+        /// </summary>
+        /// <param name="obj">source</param>
+        /// <returns>Propery values as dictionary.</returns>
+        /// <remarks>
+        /// Only public readable non-indexes properties are processed.
+        /// </remarks>
         public static IDictionary<string, object> ToDataDictionary([NotNull] this object obj)
         {
             if (obj == null)

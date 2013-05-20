@@ -24,12 +24,23 @@ namespace Alphacloud.Common.Core.Data
 
     using JetBrains.Annotations;
 
+    /// <summary>
+    /// LINQ extensions for paged lists.
+    /// </summary>
     [PublicAPI]
     public static class PagedListLinqExtensions
     {
-        public static PagedList<T> ToPagedList <T>
+        /// <summary>
+        /// Get page from queriable.
+        /// </summary>
+        /// <typeparam name="T">Entity type.</typeparam>
+        /// <param name="query">IQueryable</param>
+        /// <param name="pageIndex">Page index (1-based).</param>
+        /// <param name="pageSize">Page size</param>
+        /// <returns>Paged list with given page loaded.</returns>
+        public static PagedList<T> GetPage <T>
             (
-            this IQueryable<T> allItems,
+            this IQueryable<T> query,
             int pageIndex,
             int pageSize
             )
@@ -37,8 +48,8 @@ namespace Alphacloud.Common.Core.Data
             if (pageIndex < 1)
                 pageIndex = 1;
             var itemIndex = (pageIndex - 1) * pageSize;
-            var pageOfItems = allItems.Skip(itemIndex).Take(pageSize);
-            var totalItemCount = allItems.Count();
+            var pageOfItems = query.Skip(itemIndex).Take(pageSize);
+            var totalItemCount = query.Count();
             return new PagedList<T>(pageOfItems, pageIndex, pageSize, totalItemCount);
         }
 

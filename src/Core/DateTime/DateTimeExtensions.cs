@@ -5,6 +5,9 @@
     using JetBrains.Annotations;
     using Strings;
 
+    /// <summary>
+    /// DateTime extensions
+    /// </summary>
     [PublicAPI]
     public static class DateTimeExtensions
     {
@@ -74,6 +77,12 @@
             return dateTime.ToShortDateString();
         }
 
+        /// <summary>
+        /// Format datatime as relative to current.
+        /// </summary>
+        /// <param name="dateTime">DateTime</param>
+        /// <param name="emptyDate">Empty data value.</param>
+        /// <returns>Return relative date or <paramref name="emptyDate"/> if date was not provided.</returns>
         public static string AsHumanReadable(this DateTime? dateTime, string emptyDate = "")
         {
             return dateTime.HasValue ? dateTime.Value.AsRelativeDateTime() : emptyDate;

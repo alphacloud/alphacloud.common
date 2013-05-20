@@ -23,20 +23,40 @@ namespace Alphacloud.Common.Core.Data
 
     using JetBrains.Annotations;
 
+    /// <summary>
+    /// Format sequence of items.
+    /// </summary>
     [PublicAPI]
     public class SequenceFormatter
     {
         readonly IEnumerable _source;
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SequenceFormatter"/> class.
+        /// </summary>
+        /// <param name="source">The source sequence.</param>
         public SequenceFormatter(IEnumerable source)
         {
             _source = source;
             Separator = ", ";
         }
 
+        /// <summary>
+        /// Header to insert.
+        /// </summary>
+        /// <value>
+        /// The header.
+        /// </value>
         public string Header { get; set; }
 
+        /// <summary>
+        /// Item separator.
+        /// Default is <c>", "</c>
+        /// </summary>
+        /// <value>
+        /// The separator.
+        /// </value>
         public string Separator { get; set; }
 
         #region Overrides of Object

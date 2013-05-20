@@ -75,8 +75,10 @@
         [Test]
         public void ShouldSkipNonPublicProperties()
         {
-            new Test1().ToDataDictionary().Should().ContainKey("PublicProp").And.ContainValue("public").And.HaveCount(
-                1, "non-public properties should not be listed");
+            new Test1().ToDataDictionary()
+                .Should().ContainKey("PublicProp")
+                .And.ContainValue("public")
+                .And.HaveCount(1, "non-public properties should not be listed");
         }
     }
 }

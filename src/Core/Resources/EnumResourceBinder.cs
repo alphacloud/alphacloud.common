@@ -18,8 +18,6 @@
 
 namespace Alphacloud.Common.Core.Resources
 {
-    #region using
-
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -31,10 +29,8 @@ namespace Alphacloud.Common.Core.Resources
 
     using JetBrains.Annotations;
 
-    #endregion
-
     /// <summary>
-    ///   Specified key of resource to bind.
+    ///   Specifies key of resource to bind.
     /// </summary>
     /// <summary>
     ///   See <see cref="EnumResourceBinder" /> for details.
@@ -43,6 +39,9 @@ namespace Alphacloud.Common.Core.Resources
     [BaseTypeRequired(typeof (Enum))]
     public sealed class ResourceBindingAttribute : Attribute
     {
+        /// <summary>
+        ///   Resource key.
+        /// </summary>
         public string Key { get; set; }
     }
 
@@ -53,7 +52,7 @@ namespace Alphacloud.Common.Core.Resources
     public enum KeyGenerationStategy
     {
         /// <summary>
-        ///   Use numeric value
+        ///   Use numeric value.
         /// </summary>
         NumericValue,
 
@@ -70,12 +69,24 @@ namespace Alphacloud.Common.Core.Resources
     [PublicAPI]
     public static class EnumResourceBinder
     {
+        /// <summary>
+        ///   Create blank item.
+        /// </summary>
+        /// <returns></returns>
         public static SelectionItem BlankItem()
         {
             return new SelectionItem { Selected = true, Text = string.Empty, Value = string.Empty };
         }
 
 
+        /// <summary>
+        ///   Get string from resource.
+        /// </summary>
+        /// <typeparam name="T">Enum type.</typeparam>
+        /// <param name="resourceManager">Resource manager instance.</param>
+        /// <param name="enum">Enum.</param>
+        /// <returns>String from resource or enum member name if string does not exist.</returns>
+        [NotNull]
         public static string GetString <T>(ResourceManager resourceManager, T @enum)
             //where T: enum
         {
@@ -169,6 +180,17 @@ namespace Alphacloud.Common.Core.Resources
         }
 
 
+        /// <summary>
+        ///   Generate selection list for enum.
+        /// </summary>
+        /// <typeparam name="T">Enum type.</typeparam>
+        /// <param name="resourceManager">Resource manager.</param>
+        /// <param name="keyGenerationStategy">
+        ///   <see cref="KeyGenerationStategy" />
+        /// </param>
+        /// <param name="selector">Action to set selected item.</param>
+        /// <param name="insertBlankItem">Should blank item be inserted?</param>
+        /// <returns>Selection list</returns>
         public static IEnumerable<SelectionItem> SelectionListFor <T>(ResourceManager resourceManager,
             KeyGenerationStategy keyGenerationStategy = KeyGenerationStategy.FieldName,
             Func<string, bool> selector = null, bool insertBlankItem = false)
@@ -189,11 +211,25 @@ namespace Alphacloud.Common.Core.Resources
         }
     }
 
+    /// <summary>
+    ///   Selection list.
+    /// </summary>
     [Serializable]
     public class SelectionItem
     {
+        /// <summary>
+        ///   Display text.
+        /// </summary>
         public string Text { get; set; }
+
+        /// <summary>
+        ///   Item value.
+        /// </summary>
         public string Value { get; set; }
+
+        /// <summary>
+        ///   Is item selected?
+        /// </summary>
         public bool Selected { get; set; }
     }
 }

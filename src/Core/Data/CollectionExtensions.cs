@@ -231,13 +231,17 @@ namespace Alphacloud.Common.Core.Data
     /// <summary>
     ///   Represents sequence of single item.
     /// </summary>
-    /// <typeparam name="T"> </typeparam>
+    /// <typeparam name="T">Type of item.</typeparam>
     public class SingleItemSequence <T> : IEnumerable<T>
     {
         readonly T _item;
 
         #region .ctor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SingleItemSequence{T}"/> class.
+        /// </summary>
+        /// <param name="item">The item.</param>
         public SingleItemSequence(T item)
         {
             _item = item;
@@ -324,9 +328,17 @@ namespace Alphacloud.Common.Core.Data
         /// </value>
         public bool IsLast { get; private set; }
 
+        /// <summary>
+        ///   Current item of the repeater.
+        /// </summary>
         public T Item { get; private set; }
 
-
+        /// <summary>
+        ///   Update current item.
+        /// </summary>
+        /// <param name="index">0-based item index.</param>
+        /// <param name="item">Item</param>
+        /// <returns>Self.</returns>
         protected internal CurrentItem<T> Update(int index, T item)
         {
             Counter = index + 1;

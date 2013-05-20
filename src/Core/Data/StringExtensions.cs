@@ -161,6 +161,14 @@ namespace Alphacloud.Common.Core.Data
             return sb;
         }
 
+        /// <summary>
+        /// Truncate string to specified length, adding <paramref name="terminator"/> if string was truncated.
+        /// </summary>
+        /// <param name="str">String to truncate.</param>
+        /// <param name="maxLength">Maximum length.</param>
+        /// <param name="terminator">The terminator to add if string was truncated.</param>
+        /// <returns>Truncated string</returns>
+        /// <exception cref="System.ArgumentException">@Terminator cannot be longer than maxLength.;terminator</exception>
         public static string Truncate(this string str, int maxLength, string terminator = "...")
         {
             if (string.IsNullOrEmpty(str))

@@ -18,6 +18,9 @@
 
 namespace Alphacloud.Common.Core.Data
 {
+    /// <summary>
+    /// Various numbers extensions.
+    /// </summary>
     public static class NumberExtensions
     {
         /// <summary>

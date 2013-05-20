@@ -35,6 +35,10 @@ namespace Alphacloud.Common.Core.Data
 
         #region .ctor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PagingInfo"/> class.
+        /// Initialize to page 1 of size 10 items.
+        /// </summary>
         public PagingInfo() : this(10, 1)
         {
         }
@@ -126,6 +130,11 @@ namespace Alphacloud.Common.Core.Data
         }
 
 
+        /// <summary>
+        /// Compare for equality.
+        /// </summary>
+        /// <param name="other">The other.</param>
+        /// <returns></returns>
         public bool Equals(PagingInfo other)
         {
             if (ReferenceEquals(null, other))
@@ -150,6 +159,13 @@ namespace Alphacloud.Common.Core.Data
         }
 
 
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" /> is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -162,6 +178,12 @@ namespace Alphacloud.Common.Core.Data
         }
 
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode()
         {
             unchecked
@@ -171,12 +193,24 @@ namespace Alphacloud.Common.Core.Data
         }
 
 
+        /// <summary>
+        /// Compare for equality.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns><c>True</c> if equal.</returns>
         public static bool operator ==(PagingInfo left, PagingInfo right)
         {
             return Equals(left, right);
         }
 
 
+        /// <summary>
+        /// Compare for inequality.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns><c>True</c> if paging info differs.</returns>
         public static bool operator !=(PagingInfo left, PagingInfo right)
         {
             return !Equals(left, right);
@@ -184,6 +218,12 @@ namespace Alphacloud.Common.Core.Data
 
         #region Overrides of Object
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return "Page {1} of size {0}".ApplyArgs(Size, Number);
