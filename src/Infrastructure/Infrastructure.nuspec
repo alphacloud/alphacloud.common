@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/shatl/alphacloud.common</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags>alphacloud infrastructure</tags>
+    <dependencies>
+      <dependency id="ReSharper.Annotations" version="[7.1.3,8.0.0)" />
+      <dependency id="Common.Logging" version="[2.1.2,3.0.0)" />
+      <dependency id="CommonServiceLocator" />
+    </dependencies>
+  </metadata>
+</package>
