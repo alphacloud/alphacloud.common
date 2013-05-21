@@ -78,6 +78,8 @@
     <Compile Include="Reflection\Property.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="Resources\EnumResourceBinder.cs" />
+    <Compile Include="Security\IPrincipalProvider.cs" />
+    <Compile Include="Security\ThreadPrincipalProvider.cs" />
     <Compile Include="Strings\Strings1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -87,6 +89,9 @@
     <Compile Include="Utils\Clock.cs" />
     <Compile Include="Reflection\DelegateAdjuster.cs" />
     <Compile Include="Utils\Disposer.cs" />
+    <Compile Include="Utils\EventHelper.cs" />
+    <Compile Include="Utils\IServiceFactory.cs" />
+    <Compile Include="Utils\MaybeMonad.cs" />
     <Compile Include="Utils\ReaderWriterLockSlimExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
