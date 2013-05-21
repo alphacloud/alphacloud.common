@@ -60,11 +60,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\BinaryFormattingExtensionsTests.cs" />
+    <Compile Include="Data\ChartHelperTests.cs" />
     <Compile Include="Data\CollectionExtensionsTests.cs" />
     <Compile Include="Data\DictionaryExtensionsTests.cs" />
     <Compile Include="Data\EnumResourceBinderTests.cs" />
     <Compile Include="Data\NumberExtensionsTests.cs" />
     <Compile Include="Data\NumberFormattingExtensionsTests.cs" />
+    <Compile Include="Data\OrderByHelperTests.cs" />
     <Compile Include="Data\PagedListTests.cs" />
     <Compile Include="Data\PagingInfoTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

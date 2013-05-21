@@ -94,5 +94,26 @@ namespace Alphacloud.Common.Core.Data
             dictionary.Add(key, val);
             return val;
         }
+        /// <summary>
+        /// Add item if it does not exists in dictionary.
+        /// </summary>
+        /// <typeparam name="K"></typeparam>
+        /// <typeparam name="V"></typeparam>
+        /// <param name="dictionary"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns><c>true</c>if item was added; <c>false</c> if item was exist in dictionary.</returns>
+        public static bool AddNew<K, V>([NotNull] this IDictionary<K, V> dictionary, K key, V value)
+        {
+            if (dictionary == null)
+            {
+                throw new ArgumentNullException("dictionary");
+            }
+            bool isNew = !dictionary.ContainsKey(key);
+            if (isNew)
+                dictionary[key] = value;
+
+            return isNew;
+        }
     }
 }

@@ -87,5 +87,18 @@
         {
             return dateTime.HasValue ? dateTime.Value.AsRelativeDateTime() : emptyDate;
         }
+
+        /// <summary>
+        ///     Strips the milliseconds from datetime.
+        /// </summary>
+        /// <param name="dateTime">The date time.</param>
+        /// <returns></returns>
+        public static DateTime StripMilliseconds(this DateTime dateTime)
+        {
+            var result = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour,
+                dateTime.Minute, dateTime.Second, dateTime.Kind);
+            return result;
+        }
+
     }
 }

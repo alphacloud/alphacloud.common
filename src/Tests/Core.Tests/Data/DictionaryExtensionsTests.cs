@@ -5,9 +5,6 @@
     using FluentAssertions;
     using NUnit.Framework;
 
-    #region using
-
-    #endregion
 
 //// ReSharper disable InconsistentNaming
 
