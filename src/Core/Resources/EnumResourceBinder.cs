@@ -24,9 +24,7 @@ namespace Alphacloud.Common.Core.Resources
     using System.Linq;
     using System.Reflection;
     using System.Resources;
-
-    using Alphacloud.Common.Core.Data;
-
+    using Data;
     using JetBrains.Annotations;
 
     /// <summary>
@@ -75,7 +73,7 @@ namespace Alphacloud.Common.Core.Resources
         /// <returns></returns>
         public static SelectionItem BlankItem()
         {
-            return new SelectionItem { Selected = true, Text = string.Empty, Value = string.Empty };
+            return new SelectionItem {Selected = true, Text = string.Empty, Value = string.Empty};
         }
 
 
@@ -87,7 +85,7 @@ namespace Alphacloud.Common.Core.Resources
         /// <param name="enum">Enum.</param>
         /// <returns>String from resource or enum member name if string does not exist.</returns>
         [NotNull]
-        public static string GetString <T>(ResourceManager resourceManager, T @enum)
+        public static string GetString<T>(ResourceManager resourceManager, T @enum)
             //where T: enum
         {
             CheckIfTypeIsEnum<T>();
@@ -108,7 +106,7 @@ namespace Alphacloud.Common.Core.Resources
         /// <returns>Mapping Enum field=Resource string</returns>
         [NotNull]
         //// ReSharper disable ReturnTypeCanBeEnumerable.Global
-        public static IDictionary<string, string> LoadStrings <T>(ResourceManager resourceManager,
+        public static IDictionary<string, string> LoadStrings<T>(ResourceManager resourceManager,
             KeyGenerationStategy keyGenerationStategy)
             //// ReSharper restore ReturnTypeCanBeEnumerable.Global
             //where T: Enum
@@ -129,7 +127,7 @@ namespace Alphacloud.Common.Core.Resources
         }
 
 
-        static Func<FieldInfo, string> CreateKeyGenerator(KeyGenerationStategy keyGenerationStategy)
+        private static Func<FieldInfo, string> CreateKeyGenerator(KeyGenerationStategy keyGenerationStategy)
         {
             Func<FieldInfo, string> keyGenerator;
             switch (keyGenerationStategy)
@@ -147,14 +145,14 @@ namespace Alphacloud.Common.Core.Resources
         }
 
 
-        static void CheckIfTypeIsEnum <T>()
+        private static void CheckIfTypeIsEnum<T>()
         {
             if (!typeof (T).IsEnum)
                 throw new InvalidOperationException("Type {0} is not enum".ApplyArgs(typeof (T)));
         }
 
 
-        static string GetText <T>(ResourceManager resourceManager, MemberInfo fieldInfo)
+        private static string GetText<T>(ResourceManager resourceManager, MemberInfo fieldInfo)
         {
             var attrs = fieldInfo.GetCustomAttributes(typeof (ResourceBindingAttribute), false);
             if (attrs.Length == 1)
@@ -167,7 +165,7 @@ namespace Alphacloud.Common.Core.Resources
         }
 
 
-        static string GetResouce(ResourceManager resources, string key)
+        private static string GetResouce(ResourceManager resources, string key)
         {
             return resources.GetString(key);
         }
@@ -191,7 +189,7 @@ namespace Alphacloud.Common.Core.Resources
         /// <param name="selector">Action to set selected item.</param>
         /// <param name="insertBlankItem">Should blank item be inserted?</param>
         /// <returns>Selection list</returns>
-        public static IEnumerable<SelectionItem> SelectionListFor <T>(ResourceManager resourceManager,
+        public static IEnumerable<SelectionItem> SelectionListFor<T>(ResourceManager resourceManager,
             KeyGenerationStategy keyGenerationStategy = KeyGenerationStategy.FieldName,
             Func<string, bool> selector = null, bool insertBlankItem = false)
         {
@@ -199,7 +197,8 @@ namespace Alphacloud.Common.Core.Resources
             var checkSelected = selector ?? (s => false);
             var list = data.Select(
                 kvp =>
-                    new SelectionItem {
+                    new SelectionItem
+                    {
                         Value = kvp.Key,
                         Text = kvp.Value ?? kvp.Key,
                         Selected = checkSelected(kvp.Key)

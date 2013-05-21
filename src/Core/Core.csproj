@@ -91,13 +91,13 @@
     <Compile Include="Utils\Disposer.cs" />
     <Compile Include="Utils\EventHelper.cs" />
     <Compile Include="Utils\IServiceFactory.cs" />
-    <Compile Include="Utils\MaybeMonad.cs" />
     <Compile Include="Utils\ReaderWriterLockSlimExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Alphacloud.Common.snk">
       <Link>Alphacloud.Common.snk</Link>
     </None>
+    <None Include="Core.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
