@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/shatl/alphacloud.common</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial Revision.</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags>alphacloud castle windsor microkernel signed dependencyInjection inversionOfControl</tags>
+    <dependencies>
+      <dependency id="Castle.Core" version="[3.2.0,4.0.0)" />
+      <dependency id="Castle.Windsor" version="[3.2.0,4.0.0)" />
+      <dependency id="CommonServiceLocator" version="1.0"  />
+    </dependencies>
+    <!--<references>
+      <reference file="Castle.Windsor.dll" />
+      <reference file="Microsoft.Practices.ServiceLocation.dll" />
+    </references>-->
+  </metadata>
+</package>
