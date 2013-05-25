@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLocator.Castle", "ServiceLocator.Castle\ServiceLocator.Castle.csproj", "{A5878975-B3CE-4E4C-8B83-017DA279A039}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Tests", "Tests\Infrastructure.Tests\Infrastructure.Tests.csproj", "{8B9A63FB-B63F-47AC-B7FA-4032CDABE7BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Nunit", "Testing.Nunit\Testing.Nunit.csproj", "{B94885E3-6D45-47D3-B9B5-C78BD45653F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,14 @@ Global
 		{D40ED75D-018A-42D0-8A45-011BF25031BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D40ED75D-018A-42D0-8A45-011BF25031BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D40ED75D-018A-42D0-8A45-011BF25031BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B9A63FB-B63F-47AC-B7FA-4032CDABE7BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B9A63FB-B63F-47AC-B7FA-4032CDABE7BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B9A63FB-B63F-47AC-B7FA-4032CDABE7BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B9A63FB-B63F-47AC-B7FA-4032CDABE7BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B94885E3-6D45-47D3-B9B5-C78BD45653F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B94885E3-6D45-47D3-B9B5-C78BD45653F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B94885E3-6D45-47D3-B9B5-C78BD45653F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B94885E3-6D45-47D3-B9B5-C78BD45653F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A5878975-B3CE-4E4C-8B83-017DA279A039}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A5878975-B3CE-4E4C-8B83-017DA279A039}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5878975-B3CE-4E4C-8B83-017DA279A039}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,5 +65,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BD0E45F6-3065-4A49-AF4B-0A451EC4E2F3} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
+		{8B9A63FB-B63F-47AC-B7FA-4032CDABE7BB} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
 	EndGlobalSection
 EndGlobal

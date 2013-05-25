@@ -22,6 +22,7 @@ namespace Alphacloud.Common.Core.Utils
 
     using System;
     using System.Collections.Generic;
+    using System.Security.Cryptography;
 
     using JetBrains.Annotations;
 
@@ -49,6 +50,20 @@ namespace Alphacloud.Common.Core.Utils
             Add(disposable);
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static bool TryDispose([CanBeNull] object obj)
+        {
+            var disposable = obj as IDisposable;
+            if (disposable == null)
+                return false;
+            disposable.Dispose();
+            return true;
+        }
 
         /// <summary>
         ///   Add object to dispose.
@@ -105,6 +120,7 @@ namespace Alphacloud.Common.Core.Utils
         {
             if (_isDisposed)
                 return;
+
             if (disposing)
             {
                 // dispose in reverse order
@@ -113,9 +129,7 @@ namespace Alphacloud.Common.Core.Utils
                     var reference = _objects[i];
                     if (!reference.IsAlive)
                         continue;
-                    var obj = reference.Target as IDisposable;
-                    if (obj != null)
-                        obj.Dispose();
+                    TryDispose(reference.Target as IDisposable);
                 }
                 _isDisposed = true;
             }
