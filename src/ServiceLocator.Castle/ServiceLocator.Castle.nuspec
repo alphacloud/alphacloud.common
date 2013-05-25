@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/shatl/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial Revision.</releaseNotes>
+    <releaseNotes>Workaround for incorrect named instance resolution in CastleWindsor 3.2.</releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>alphacloud castle windsor microkernel signed dependencyInjection inversionOfControl</tags>
     <dependencies>
@@ -18,9 +18,5 @@
       <dependency id="Castle.Windsor" version="[3.2.0,4.0.0)" />
       <dependency id="CommonServiceLocator" version="1.0"  />
     </dependencies>
-    <!--<references>
-      <reference file="Castle.Windsor.dll" />
-      <reference file="Microsoft.Practices.ServiceLocation.dll" />
-    </references>-->
   </metadata>
 </package>

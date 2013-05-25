@@ -31,6 +31,7 @@ namespace Alphacloud.Common.ServiceLocator.Castle
     {
         private readonly IWindsorContainer _container;
 
+
         /// <summary>
         ///   Initializes a new instance of the <see cref="WindsorServiceLocatorAdapter" /> class.
         /// </summary>
@@ -42,6 +43,7 @@ namespace Alphacloud.Common.ServiceLocator.Castle
             _container = container;
         }
 
+
         protected override object DoGetInstance(Type serviceType, string key)
         {
             return string.IsNullOrEmpty(key)
@@ -49,9 +51,31 @@ namespace Alphacloud.Common.ServiceLocator.Castle
                 : _container.Resolve(serviceType, key);
         }
 
+
         protected override IEnumerable<object> DoGetAllInstances(Type serviceType)
         {
             return _container.ResolveAll(serviceType).OfType<object>();
+        }
+
+
+        public override TService GetInstance<TService>()
+        {
+            return GetInstance<TService>(null);
+        }
+
+
+        public override TService GetInstance<TService>(string key)
+        {
+            try
+            {
+                return string.IsNullOrEmpty(key)
+                    ? _container.Resolve<TService>()
+                    : _container.Resolve<TService>(key);
+            }
+            catch (Exception ex)
+            {
+                throw new ActivationException(FormatActivateAllExceptionMessage(ex, typeof (TService)), ex);
+            }
         }
     }
 }

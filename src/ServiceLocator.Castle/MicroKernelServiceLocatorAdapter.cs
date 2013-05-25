@@ -53,5 +53,26 @@ namespace Alphacloud.Common.ServiceLocator.Castle
         {
             return _kernel.ResolveAll(serviceType).OfType<object>();
         }
+
+        public override TService GetInstance<TService>()
+        {
+            return GetInstance<TService>(null);
+        }
+
+
+        public override TService GetInstance<TService>(string key)
+        {
+            try
+            {
+                return string.IsNullOrEmpty(key)
+                    ? _kernel.Resolve<TService>()
+                    : _kernel.Resolve<TService>(key);
+            }
+            catch (Exception ex)
+            {
+                throw new ActivationException(FormatActivateAllExceptionMessage(ex, typeof(TService)), ex);
+            }
+        }
+
     }
 }
