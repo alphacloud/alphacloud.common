@@ -12,12 +12,14 @@
     <PrgToolsRoot>$(ProgramFiles)\Prg</PrgToolsRoot>
 
     <RootDir>$(MSBuildProjectDirectory)</RootDir>
-    <NuGetExe>$(RootDir\.nuget\nuget.exe</NuGetExe>
+    <NuGetExe>$(RootDir)\.nuget\nuget.exe</NuGetExe>
+    <PackagesOutDir>$(RootDir)\out\packages</PackagesOutDir>
   </PropertyGroup>
 
   <PropertyGroup>
     <MainSolution>$(RootDir)\Alphacloud.Common.sln</MainSolution>
     <CoreDir>$(RootDir)\Core</CoreDir>
+    <InfrastructureProj>$(RootDir)\Infrastructure</InfrastructureProj>
   </PropertyGroup>
 
   <Target Name="BuildAll">
@@ -31,4 +33,11 @@
     <MSBuild Projects="$(MainSolution)" Properties="Configuration=Release" Targets="Clean" BuildInParallel="true" />
   </Target>
 
+  <Target Name="CreatePackagesDir">
+    <MakeDir Directories="$(PackagesOutDir)" ContinueOnError="true" />
+  </Target>
+  
+  <Target Name="PackCore" Condition="'$(BuildConfig)'=='Release'" DependsOnTargets="CreatePackagesDir">
+    <Exec Command="$(NuGetExe) pack $(CoreDir)\Core.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(CoreDir)" />
+  </Target>
 </Project>

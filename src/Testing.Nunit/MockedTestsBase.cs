@@ -16,10 +16,9 @@
 
 #endregion
 
-namespace Testing.Nunit
+namespace Alphacloud.Common.Testing.Nunit
 {
     using Moq;
-
     using NUnit.Framework;
 
     //// ReSharper disable InconsistentNaming
@@ -30,6 +29,8 @@ namespace Testing.Nunit
     [TestFixture]
     public abstract class MockedTestsBase
     {
+        #region Setup/Teardown
+
         /// <summary>
         ///   Setup tests
         /// </summary>
@@ -39,6 +40,7 @@ namespace Testing.Nunit
             _mockery = new MockRepository(MockBehavior.Default);
             DoSetup();
         }
+
 
         /// <summary>
         ///   Cleanup tests
@@ -50,15 +52,32 @@ namespace Testing.Nunit
             Mockery.Verify();
         }
 
-        MockRepository _mockery;
+        #endregion
 
+        private MockRepository _mockery;
+
+        /// <summary>
+        ///   Mock repository.
+        /// </summary>
         protected MockRepository Mockery
         {
             get { return _mockery; }
         }
 
+
+        /// <summary>
+        ///   Performs test setup.
+        /// </summary>
         protected abstract void DoSetup();
-        protected abstract void DoTearDown();
+
+
+        /// <summary>
+        ///   Performs test tear-down.
+        /// </summary>
+        protected virtual void DoTearDown()
+        {
+            // do nothing
+        }
     }
 
 //// ReSharper restore InconsistentNaming
