@@ -84,6 +84,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Caching\AdaptiveTimeoutTests.cs" />
     <Compile Include="Caching\CacheBaseTests.cs" />
     <Compile Include="Caching\CacheConfigurationTests.cs" />
     <Compile Include="Caching\CompositeCacheDebugModeTests.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Caching\DisabledCompositeFactoryTests.cs" />
     <Compile Include="Caching\MemoryCacheTests.cs" />
     <Compile Include="Caching\TransformingCacheWrapperTests.cs" />
+    <Compile Include="Castle\CastleWindsorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

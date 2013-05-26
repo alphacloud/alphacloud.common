@@ -21,14 +21,11 @@ namespace Alphacloud.Common.Infrastructure.Caching
     using System;
     using System.Collections.Specialized;
     using System.Configuration;
-    using System.Globalization;
-
     using JetBrains.Annotations;
-
     using Microsoft.Practices.ServiceLocation;
 
     /// <summary>
-    ///   Created composite (2 level cache)
+    ///   Composite cache factory (Two Level Cache).
     /// </summary>
     [UsedImplicitly]
     public class CompositeCacheFactory : CacheFactoryBase
@@ -36,13 +33,14 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <summary>
         ///   The default local cache timeout in seconds.
         /// </summary>
-        const int DefaultLocalCacheTimeout = 5;
+        private const int DefaultLocalCacheTimeout = 5;
 
-        string _defaultCacheName;
-        bool _devMode;
-        ICacheFactory _localCacheFactory;
-        TimeSpan _localCacheTimeout = TimeSpan.FromSeconds(DefaultLocalCacheTimeout);
-        ICacheFactory _remoteCacheFactory;
+        private const string CacheParametersSectionName = "alphacloud/cache/parameters";
+
+        private string _defaultCacheName;
+        private bool _devMode;
+        private ICacheFactory _localCacheFactory;
+        private ICacheFactory _backingCacheFactory;
 
 
         /// <summary>
@@ -50,7 +48,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </summary>
         public CompositeCacheFactory()
         {
-            var section = (NameValueCollection) ConfigurationManager.GetSection("alphacloud/cache/parameters");
+            var section = (NameValueCollection) ConfigurationManager.GetSection(CacheParametersSectionName);
             if (section != null)
                 LoadFromConfig(section);
         }
@@ -77,20 +75,24 @@ namespace Alphacloud.Common.Infrastructure.Caching
             if (cache != null)
                 return cache;
 
-            if (_localCacheFactory == null || _remoteCacheFactory == null)
+            if (_localCacheFactory == null || _backingCacheFactory == null)
                 throw new InvalidOperationException("CacheFactory was not initialized");
 
             instance = string.IsNullOrEmpty(instance) ? _defaultCacheName : instance;
 
             var localCacheTimeout = GetLocalTimeoutStrategy();
+            Log.InfoFormat("Local cache timeout strategy: {0}", localCacheTimeout.Describe());
+
+            var localCache = _localCacheFactory.GetCache(instance);
+            var remoteCache = _backingCacheFactory.GetCache(instance);
 
             return new CompositeCache(
-                _localCacheFactory.GetCache(instance),
-                _remoteCacheFactory.GetCache(instance),
-                _localCacheTimeout, _devMode);
+                localCache, remoteCache,
+                localCacheTimeout, _devMode);
         }
 
-        ILocalCacheTimeoutStrategy GetLocalTimeoutStrategy()
+
+        private ILocalCacheTimeoutStrategy GetLocalTimeoutStrategy()
         {
             try
             {
@@ -109,23 +111,20 @@ namespace Alphacloud.Common.Infrastructure.Caching
 
         public override void Initialize()
         {
-            if (IsEnabled)
-            {
-                _remoteCacheFactory = ServiceLocator.Current.GetInstance<ICacheFactory>("remote");
-                _localCacheFactory = ServiceLocator.Current.GetInstance<ICacheFactory>("local");
+            if (!IsEnabled) return;
 
-                _remoteCacheFactory.Initialize();
-                _localCacheFactory.Initialize();
-            }
+            _backingCacheFactory = ServiceLocator.Current.GetInstance<ICacheFactory>(CompositeCache.BackingCacheInstanceName);
+            _localCacheFactory = ServiceLocator.Current.GetInstance<ICacheFactory>(CompositeCache.LocalCacheInstanceName);
+
+            _backingCacheFactory.Initialize();
+            _localCacheFactory.Initialize();
+
+            Log.Info("Initialized");
         }
 
 
-        void LoadFromConfig(NameValueCollection settings)
+        private void LoadFromConfig(NameValueCollection settings)
         {
-            if (!TimeSpan.TryParse(settings["localCacheTimeout"], CultureInfo.InvariantCulture, out _localCacheTimeout))
-            {
-                _localCacheTimeout = TimeSpan.FromSeconds(DefaultLocalCacheTimeout);
-            }
             _defaultCacheName = settings["cacheName"];
             bool.TryParse(settings["devMode"], out _devMode);
         }

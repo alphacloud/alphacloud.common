@@ -53,6 +53,7 @@ namespace Infrastructure.Tests.Castle
         }
 
         [Test]
+        [Ignore]
         public void ShouldResolveNamedInstances()
         {
             Assert.AreSame(_instance1,  _container.Resolve(typeof(IService), "service1"), "service1");

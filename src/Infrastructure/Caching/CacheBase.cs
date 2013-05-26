@@ -19,22 +19,21 @@
 namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
-
-    using Alphacloud.Common.Core.Data;
-
+    using Core.Data;
     using JetBrains.Annotations;
-
     using global::Common.Logging;
 
     /// <summary>
     ///   Basic cache functionality.
     /// </summary>
+    [PublicAPI]
     public abstract class CacheBase : ICache, IDisposable
     {
         static readonly ICache s_nullCache = new NullCache();
         readonly ILog _log;
 
         readonly ICacheHealthcheckMonitor _monitor;
+
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="CacheBase" /> class.
@@ -49,6 +48,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             _monitor = monitor;
             Name = instanceName;
         }
+
 
         /// <summary>
         ///   Cache what does nothing.
@@ -77,6 +77,8 @@ namespace Alphacloud.Common.Infrastructure.Caching
             get { return _monitor.IsCacheAvailable; }
         }
 
+        #region ICache Members
+
         /// <summary>
         ///   Gets cache instance name.
         /// </summary>
@@ -84,6 +86,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         ///   The name.
         /// </value>
         public virtual string Name { get; private set; }
+
 
         /// <summary>
         ///   Get cache statistics
@@ -104,6 +107,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
             return new CacheStatistics(false);
         }
+
 
         /// <summary>
         ///   Get item from cache.
@@ -142,7 +146,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </summary>
         public virtual void Clear()
         {
-            Log.DebugFormat("{0}: Clearing Cache", Name);
+            Log.DebugFormat("{0}: Clearing cache", Name);
             CheckDisposed();
 
             if (!CanClear())
@@ -151,13 +155,14 @@ namespace Alphacloud.Common.Infrastructure.Caching
             try
             {
                 DoClear();
-                Log.InfoFormat("{0}: Cleared Cache", Name);
+                Log.InfoFormat("{0}: Cleared cache", Name);
             }
             catch (Exception ex)
             {
-                Log.WarnFormat("{0}: Cleared Cache Failed {1}", Name, ex.ToString());
+                Log.WarnFormat("{0}: Clear Cache failed", ex, Name);
             }
         }
+
 
         /// <summary>
         ///   Remove item from cache.
@@ -182,9 +187,10 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
             catch (Exception ex)
             {
-                Log.WarnFormat("{0}: Remove('{1}')", ex, key, Name);
+                Log.WarnFormat("{1}: Remove('{0}')", ex, key, Name);
             }
         }
+
 
         /// <summary>
         ///   Add item to cache.
@@ -195,9 +201,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <exception cref="System.ArgumentNullException">key</exception>
         /// <remarks>
         ///   If <paramref name="value" /> is <c>null</c>, <see cref="Remove" /> item will be removed from cache by calling
-        ///   <see
-        ///     cref="Remove" />
-        ///   .
+        ///   <see cref="Remove" />.
         /// </remarks>
         public virtual void Put([NotNull] string key, object value, TimeSpan ttl)
         {
@@ -234,6 +238,8 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
         }
 
+        #endregion
+
         /// <summary>
         ///   Checks if cache is disposed.
         /// </summary>
@@ -241,14 +247,18 @@ namespace Alphacloud.Common.Infrastructure.Caching
         protected void CheckDisposed()
         {
             if (IsDisposed)
-                throw new ObjectDisposedException(Name);
+                throw new ObjectDisposedException("Cache '{0}' was disposed.");
         }
 
+
         /// <summary>
-        /// Retrieve statistics from underlying cache.
+        ///   Retrieve statistics from underlying cache.
         /// </summary>
-        /// <returns><see cref="CacheStatistics"/></returns>
-        protected abstract CacheStatistics DoGetStatistics();
+        /// <returns>
+        ///   <see cref="CacheStatistics" />
+        /// </returns>
+        protected internal abstract CacheStatistics DoGetStatistics();
+
 
         /// <summary>
         ///   Prepare cache key.
@@ -263,6 +273,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
                 : "{0}.{1}".ApplyArgs(Name, key);
         }
 
+
         /// <summary>
         ///   Invokes Get operation on underlying cache.
         /// </summary>
@@ -272,11 +283,13 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </returns>
         protected internal abstract object DoGet([NotNull] string key);
 
+
         /// <summary>
         ///   Invokes Remove opration on underlying cache.
         /// </summary>
         /// <param name="key">The key.</param>
         protected internal abstract void DoRemove([NotNull] string key);
+
 
         /// <summary>
         ///   Invokes Put operation on underlying cache.
@@ -285,6 +298,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <param name="value">Value to put.</param>
         /// <param name="ttl">Expiration timeout.</param>
         protected internal abstract void DoPut([NotNull] string key, [NotNull] object value, TimeSpan ttl);
+
 
         /// <summary>
         ///   Clears all items in underlying cache.
@@ -308,6 +322,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             return true;
         }
 
+
         /// <summary>
         ///   Determines whether Put operation can be executed for cache.
         /// </summary>
@@ -324,6 +339,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             return true;
         }
 
+
         /// <summary>
         ///   Determines whether Remove operation can be executed for cache.
         /// </summary>
@@ -339,6 +355,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
             return true;
         }
+
 
         /// <summary>
         ///   Determines whether cache is available and can be cleared.
@@ -366,6 +383,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         ///   <c>true</c> if this instance is disposed; otherwise, <c>false</c>.
         /// </value>
         public bool IsDisposed { get; private set; }
+
 
         /// <summary>
         ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

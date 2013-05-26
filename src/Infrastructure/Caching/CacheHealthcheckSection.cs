@@ -20,12 +20,13 @@ namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
     using System.Configuration;
-
+    using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
 
     /// <summary>
-    /// Cache healthcheck configuration section
+    /// Cache healthcheck configuration section.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class CacheHealthcheckSection : ConfigurationSection
     {

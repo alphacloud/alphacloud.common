@@ -85,7 +85,7 @@ namespace Alphacloud.Common.Infrastructure.Caching.MemoryCache
         }
 
 
-        protected override CacheStatistics DoGetStatistics()
+        protected internal override CacheStatistics DoGetStatistics()
         {
             Log.Info("GetStatistics is not supported");
             return new CacheStatistics(false);

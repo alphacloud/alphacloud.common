@@ -20,12 +20,14 @@ namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
     using System.Configuration;
-
+    using System.Diagnostics.CodeAnalysis;
+    using Core.Reflection;
     using JetBrains.Annotations;
 
     /// <summary>
-    ///   Configuration section for predefined cache durations
+    ///   Configuration section for predefined cache durations.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class CacheDurationSection : ConfigurationSection
     {

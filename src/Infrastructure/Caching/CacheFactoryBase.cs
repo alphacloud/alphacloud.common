@@ -75,6 +75,13 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </summary>
         public bool IsEnabled { get; private set; }
 
+        /// <summary>
+        /// Get cache instance.
+        /// </summary>
+        /// <param name="instance">Instance name (optional)</param>
+        /// <returns>
+        /// Cache instance
+        /// </returns>
         public ICache GetCache(string instance = null)
         {
             string instanceName = instance ?? DefaultInstanceName;
@@ -97,10 +104,13 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
+        /// <summary>
+        /// Initialize cache factory.
+        /// </summary>
         public abstract void Initialize();
 
 
-        void CheckDisposed()
+        protected void CheckDisposed()
         {
             if (IsDisposed)
             {

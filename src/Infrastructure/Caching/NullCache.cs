@@ -12,7 +12,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         {
         }
 
-        protected override CacheStatistics DoGetStatistics()
+        protected internal override CacheStatistics DoGetStatistics()
         {
             return new CacheStatistics(false);
         }

@@ -1,7 +1,7 @@
 ﻿namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
-
+    using Core.Data;
     using JetBrains.Annotations;
 
     /// <summary>
@@ -34,7 +34,7 @@
         public AdaptiveTimeout(TimeSpan minTtl, TimeSpan maxTtl, double percentage)
         {
             if (percentage <= 0)
-                throw new ArgumentOutOfRangeException("percentage", percentage, "Percentage cannot be negative");
+                throw new ArgumentOutOfRangeException("percentage", percentage, @"Percentage cannot be negative");
 
             _minTtl = minTtl;
             _maxTtl = maxTtl;
@@ -50,8 +50,8 @@
         /// </returns>
         public TimeSpan GetLocalTimeout(TimeSpan ttl)
         {
-            if (ttl <= TimeSpan.Zero)
-                return ttl;
+            if (ttl == TimeSpan.Zero)
+                return _minTtl;
 
             var localTtl = TimeSpan.FromMilliseconds(ttl.TotalMilliseconds * _percentage);
 
@@ -60,6 +60,12 @@
             if (localTtl > _maxTtl)
                 return _maxTtl;
             return localTtl;
+        }
+
+
+        public string Describe()
+        {
+            return "Percentage ({0}% [{1}s .. {2}s])".ApplyArgs(_percentage, _minTtl.TotalSeconds, _maxTtl.TotalSeconds);
         }
     }
 }

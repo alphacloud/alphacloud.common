@@ -19,63 +19,71 @@
 namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
-    using System.Globalization;
-
-    using Alphacloud.Common.Core.Data;
-
+    using Core.Data;
     using JetBrains.Annotations;
-
     using global::Common.Logging;
 
     /// <summary>
     ///   Composite cache.
-    ///   Consists of 2 caches: local (short-term) and remote (long-term).
+    ///   Consists of 2 caches: local (short-term) and backing (long-term).
     /// </summary>
     public class CompositeCache : ICache
     {
         /// <summary>
         ///   Predefined name for local cache.
-        ///   User with statistics.
+        ///   Used for statistics and IOC registration.
         /// </summary>
-        public const string LocalCacheName = "LocalCache";
+        public const string LocalCacheInstanceName = "LocalCache";
+
+        /// <summary>
+        ///   Predefined name of backing cache.
+        ///   Used for IOC registration.
+        /// </summary>
+        public const string BackingCacheInstanceName = "BackingCache";
 
         static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        readonly ICache _backingCache;
         readonly bool _devMode;
 
         readonly ICache _localCache;
-        readonly ICache _remoteCache;
-        string _machineName;
+        readonly ILocalCacheTimeoutStrategy _localTimeoutStrategy;
+        string _prefix;
 
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="CompositeCache" /> class.
         /// </summary>
         /// <param name="localCache">The local cache.</param>
-        /// <param name="remoteCache">The remote cache.</param>
-        /// <param name="localCacheTimeout">The local cache timeout.</param>
+        /// <param name="backingCache">The backing cache.</param>
+        /// <param name="localTimeoutStrategy">The local cache timeout calculation strategy.</param>
         /// <param name="devMode">
-        ///   if set to <c>true</c> [debug mode].
+        ///   Development mode.
+        ///   if set to <c>true</c> cache keys will be prefixed with unque value to prevent collisions whan using same cache by development team.
         /// </param>
         /// <exception cref="System.ArgumentNullException">localCache is null</exception>
-        /// <exception cref="System.ArgumentNullException">remoteCache is null</exception>
+        /// <exception cref="System.ArgumentNullException">backingCache is null</exception>
+        /// <remarks>
+        ///   In <see cref="devMode" /> cache keys are prefixed with machine name and random number. This prevents cache collisions when using same cache server by development team.
+        ///   Also this allows to start with empty cache by simply restarting application.
+        /// </remarks>
         public CompositeCache(
-            [NotNull] ICache localCache, [NotNull] ICache remoteCache, TimeSpan localCacheTimeout,
+            [NotNull] ICache localCache, [NotNull] ICache backingCache,
+            [NotNull] ILocalCacheTimeoutStrategy localTimeoutStrategy,
             bool devMode = false)
         {
             if (localCache == null)
             {
                 throw new ArgumentNullException("localCache");
             }
-            if (remoteCache == null)
+            if (backingCache == null)
             {
-                throw new ArgumentNullException("remoteCache");
+                throw new ArgumentNullException("backingCache");
             }
+            if (localTimeoutStrategy == null) throw new ArgumentNullException("localTimeoutStrategy");
 
             _localCache = localCache;
-            _remoteCache = remoteCache;
-            LocalCacheTimeout = localCacheTimeout;
-            s_log.DebugFormat(CultureInfo.InvariantCulture, "Local cache timeout={0:0.00} sec",
-                localCacheTimeout.TotalSeconds);
+            _backingCache = backingCache;
+            _localTimeoutStrategy = localTimeoutStrategy;
             _devMode = devMode;
             if (_devMode)
             {
@@ -84,46 +92,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
         }
 
-
-        /// <summary>
-        ///   Gets the local cache timeout.
-        /// </summary>
-        /// <value>
-        ///   The local cache timeout.
-        /// </value>
-        public TimeSpan LocalCacheTimeout { get; private set; }
-
-        /// <summary>
-        ///   Calculate cache key prefix for use in Dev Mode.
-        ///   Prefix will change each time application restarted.
-        /// </summary>
-        internal string CacheKeyPrefix
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_machineName))
-                {
-                    lock (this)
-                    {
-                        if (string.IsNullOrEmpty(_machineName))
-                        {
-                            try
-                            {
-                                _machineName = "{0}({1:00}).".ApplyArgs(Environment.MachineName, DateTime.Now.Second);
-                            }
-                            catch (Exception ex)
-                            {
-                                s_log.Warn("Error getting computer name, using GUID", ex);
-                                _machineName = Guid.NewGuid().ToString();
-                            }
-                            s_log.InfoFormat("Using '{0}' as cache key prefix",
-                                _machineName);
-                        }
-                    }
-                }
-                return _machineName;
-            }
-        }
+        #region ICache Members
 
         /// <summary>
         ///   Cache name.
@@ -137,15 +106,15 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <returns></returns>
         public CacheStatistics GetStatistics()
         {
-            var remoteStats = _remoteCache.GetStatistics();
+            var backingStats = _backingCache.GetStatistics();
             var localStats = _localCache.GetStatistics();
             if (localStats.IsSuccess)
             {
-                remoteStats.Nodes.Add(
-                    new CacheNodeStatistics(LocalCacheName, localStats.HitCount, localStats.GetCount,
+                backingStats.Nodes.Add(
+                    new CacheNodeStatistics(LocalCacheInstanceName, localStats.HitCount, localStats.GetCount,
                         localStats.PutCount, localStats.ItemCount));
             }
-            return remoteStats;
+            return backingStats;
         }
 
 
@@ -162,11 +131,11 @@ namespace Alphacloud.Common.Infrastructure.Caching
             object item = _localCache.Get(cacheKey);
             if (item == null)
             {
-                s_log.DebugFormat("Loading '{0}' from remote cache...", key);
-                item = _remoteCache.Get(cacheKey);
+                s_log.DebugFormat("Loading '{0}' from backing cache...", key);
+                item = _backingCache.Get(cacheKey);
                 if (item != null)
                 {
-                    _localCache.Put(cacheKey, item, LocalCacheTimeout);
+                    _localCache.Put(cacheKey, item, _localTimeoutStrategy.GetLocalTimeout(TimeSpan.Zero));
                 }
             }
             else
@@ -183,7 +152,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         public void Clear()
         {
             _localCache.Clear();
-            _remoteCache.Clear();
+            _backingCache.Clear();
         }
 
 
@@ -195,7 +164,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         {
             key = FormatKey(key);
             _localCache.Remove(key);
-            _remoteCache.Remove(key);
+            _backingCache.Remove(key);
         }
 
 
@@ -213,15 +182,44 @@ namespace Alphacloud.Common.Infrastructure.Caching
         public void Put(string key, object value, TimeSpan ttl)
         {
             key = FormatKey(key);
-            _localCache.Put(key, value, (ttl < LocalCacheTimeout) ? ttl : LocalCacheTimeout);
-            _remoteCache.Put(key, value, ttl);
+            _localCache.Put(key, value, _localTimeoutStrategy.GetLocalTimeout(ttl));
+            _backingCache.Put(key, value, ttl);
+        }
+
+        #endregion
+
+        /// <summary>
+        ///   Calculate cache key prefix for use in Dev Mode.
+        ///   Prefix will change each time application restarted.
+        /// </summary>
+        internal string GetCacheKeyPrefix()
+        {
+            if (!string.IsNullOrEmpty(_prefix)) return _prefix;
+
+            lock (this)
+            {
+                if (string.IsNullOrEmpty(_prefix))
+                {
+                    try
+                    {
+                        _prefix = "{0}-{1:00}.".ApplyArgs(Environment.MachineName, DateTime.Now.Second);
+                    }
+                    catch (Exception ex)
+                    {
+                        s_log.Warn("Error retrieving computer name, using GUID", ex);
+                        _prefix = Guid.NewGuid().ToString();
+                    }
+                    s_log.InfoFormat("Using '{0}' as cache key prefix", _prefix);
+                }
+            }
+            return _prefix;
         }
 
 
         string FormatKey(string key)
         {
             return _devMode
-                ? string.Concat(CacheKeyPrefix, key)
+                ? string.Concat(GetCacheKeyPrefix(), key)
                 : key;
         }
     }

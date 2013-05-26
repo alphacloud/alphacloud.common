@@ -40,15 +40,15 @@ namespace Infrastructure.Tests.Caching
         protected override void DoSetup()
         {
             base.DoSetup();
-            _cache = new CompositeCache(LocalCache.Object, RemoteCache.Object, 2.Seconds(), true);
-            _fullKey = "{0}{1}".ApplyArgs(_cache.CacheKeyPrefix, Key);
+            _cache = new CompositeCache(LocalCache.Object, RemoteCache.Object, new FixedTimeoutStrategy(2.Seconds()), true);
+            _fullKey = "{0}{1}".ApplyArgs(_cache.GetCacheKeyPrefix(), Key);
         }
 
 
         [Test]
         public void CachePrefix_Should_ContainMachineName()
         {
-            _cache.CacheKeyPrefix
+            _cache.GetCacheKeyPrefix()
                 .Should().StartWith(Environment.MachineName);
         }
 

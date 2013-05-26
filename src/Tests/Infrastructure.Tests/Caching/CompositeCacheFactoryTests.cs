@@ -19,20 +19,14 @@
 namespace Infrastructure.Tests.Caching
 {
     using System.Collections.Specialized;
-
     using Alphacloud.Common.Infrastructure.Caching;
     using Alphacloud.Common.ServiceLocator.Castle;
-
-    using Castle.MicroKernel.Registration;
-    using Castle.Windsor;
-
     using FluentAssertions;
-
     using Microsoft.Practices.ServiceLocation;
-
     using Moq;
-
     using NUnit.Framework;
+    using global::Castle.MicroKernel.Registration;
+    using global::Castle.Windsor;
 
     //// ReSharper disable InconsistentNaming
 
@@ -41,8 +35,34 @@ namespace Infrastructure.Tests.Caching
     #endregion
 
     [TestFixture]
-    class CompositeCacheFactoryTests
+    internal class CompositeCacheFactoryTests
     {
+
+        class CacheFactoryWrapper: ICacheFactory
+        {
+            private readonly ICacheFactory _innerFactory;
+
+
+            public CacheFactoryWrapper(ICacheFactory innerFactory)
+            {
+                _innerFactory = innerFactory;
+            }
+
+
+            public ICache GetCache(string instance = null)
+            {
+                return _innerFactory.GetCache(instance);
+            }
+
+
+            public void Initialize()
+            {
+                _innerFactory.Initialize();
+            }
+        }
+
+        #region Setup/Teardown
+
         [SetUp]
         public void SetUp()
         {
@@ -56,14 +76,21 @@ namespace Infrastructure.Tests.Caching
             _localCacheFactory = _mockery.Create<ICacheFactory>();
             _localCacheFactory.Setup(f => f.GetCache(It.IsAny<string>()))
                 .Returns(_localCache.Object);
-            _kernel.Register(Component.For<ICacheFactory>().Instance(_localCacheFactory.Object).Named("local"));
+            _kernel.Register(
+                Component.For<ICacheFactory>()
+                    .Instance(new CacheFactoryWrapper(_localCacheFactory.Object))
+                .Named(CompositeCache.LocalCacheInstanceName));
 
 
             _remoteCache = _mockery.Create<ICache>();
             _remoteCacheFactory = _mockery.Create<ICacheFactory>();
             _remoteCacheFactory.Setup(f => f.GetCache(It.IsAny<string>()))
                 .Returns(_remoteCache.Object);
-            _kernel.Register(Component.For<ICacheFactory>().Instance(_remoteCacheFactory.Object).Named("remote"));
+
+            _kernel.Register(
+                Component.For<ICacheFactory>()
+                    .Instance(new CacheFactoryWrapper(_remoteCacheFactory.Object))
+                    .Named(CompositeCache.BackingCacheInstanceName));
         }
 
 
@@ -73,13 +100,22 @@ namespace Infrastructure.Tests.Caching
             _mockery.Verify();
         }
 
+        #endregion
 
-        MockRepository _mockery;
-        Mock<ICache> _localCache;
-        Mock<ICache> _remoteCache;
-        WindsorContainer _kernel;
-        Mock<ICacheFactory> _localCacheFactory;
-        Mock<ICacheFactory> _remoteCacheFactory;
+        private MockRepository _mockery;
+        private Mock<ICache> _localCache;
+        private Mock<ICache> _remoteCache;
+        private WindsorContainer _kernel;
+        private Mock<ICacheFactory> _localCacheFactory;
+        private Mock<ICacheFactory> _remoteCacheFactory;
+
+        [Test]
+        public void EnsureCacheFactoiesResolved()
+        {
+            var local = ServiceLocator.Current.GetInstance<ICacheFactory>(CompositeCache.LocalCacheInstanceName);
+            var remote = ServiceLocator.Current.GetInstance<ICacheFactory>(CompositeCache.BackingCacheInstanceName);
+            local.Should().NotBeSameAs(remote);
+        }
 
 
         [Test]
@@ -91,8 +127,8 @@ namespace Infrastructure.Tests.Caching
             factory.Initialize();
             factory.GetCache();
 
-            _localCacheFactory.Verify(f => f.GetCache("cache1"));
-            _remoteCacheFactory.Verify(f => f.GetCache("cache1"));
+            _localCacheFactory.Verify(localFactory => localFactory.GetCache("cache1"));
+            _remoteCacheFactory.Verify(remoteFactory => remoteFactory.GetCache("cache1"));
         }
 
 
@@ -103,8 +139,18 @@ namespace Infrastructure.Tests.Caching
             factory.Initialize();
             factory.GetCache("customCache");
 
-            _localCacheFactory.Verify(f => f.GetCache("customCache"));
-            _remoteCacheFactory.Verify(f => f.GetCache("customCache"));
+            _localCacheFactory.Verify(local => local.GetCache("customCache"));
+            _remoteCacheFactory.Verify(remote => remote.GetCache("customCache"));
+        }
+
+
+        [Test]
+        public void ShouldResolveNamedInstances()
+        {
+            var local = _kernel.Resolve<ICacheFactory>(CompositeCache.LocalCacheInstanceName);
+            var remote = _kernel.Resolve<ICacheFactory>(CompositeCache.BackingCacheInstanceName);
+
+            local.Should().NotBeSameAs(remote);
         }
 
 

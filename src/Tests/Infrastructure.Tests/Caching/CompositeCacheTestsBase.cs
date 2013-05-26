@@ -1,10 +1,8 @@
 ﻿namespace Infrastructure.Tests.Caching
 {
     using Alphacloud.Common.Infrastructure.Caching;
-
+    using Alphacloud.Common.Testing.Nunit;
     using Moq;
-
-    using Testing.Nunit;
 
     abstract class CompositeCacheTestsBase: MockedTestsBase
     {

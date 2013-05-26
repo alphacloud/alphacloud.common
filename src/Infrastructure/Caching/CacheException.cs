@@ -19,6 +19,7 @@
 namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
 
     using JetBrains.Annotations;
@@ -28,6 +29,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
     /// </summary>
     [Serializable]
     [PublicAPI]
+    [ExcludeFromCodeCoverage]
     public class CacheException : Exception
     {
         /// <summary>

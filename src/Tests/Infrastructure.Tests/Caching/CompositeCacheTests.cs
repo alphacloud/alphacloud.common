@@ -38,7 +38,7 @@ namespace Infrastructure.Tests.Caching
         protected override void DoSetup()
         {
             base.DoSetup();
-            m_cache = new CompositeCache(LocalCache.Object, RemoteCache.Object, 2.Seconds());
+            m_cache = new CompositeCache(LocalCache.Object, RemoteCache.Object, new FixedTimeoutStrategy(2.Seconds()));
         }
 
         [Test]

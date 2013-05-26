@@ -19,11 +19,9 @@
 namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
-
-    using Alphacloud.Common.Core.Data;
-    using Alphacloud.Common.Infrastructure.Transformations;
-
+    using Core.Data;
     using JetBrains.Annotations;
+    using Transformations;
 
     /// <summary>
     ///   Implements cache wrapper that transforms keys or values
@@ -32,9 +30,10 @@ namespace Alphacloud.Common.Infrastructure.Caching
     [PublicAPI]
     public class TransformingCacheWrapper : CacheBase
     {
-        readonly ICache _innerCache;
-        readonly IEncoder<string> _keyTransformer;
-        readonly ITransformer<object> _valueTransformer;
+        private readonly ICache _innerCache;
+        private readonly IEncoder<string> _keyTransformer;
+        private readonly ITransformer<object> _valueTransformer;
+
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="TransformingCacheWrapper" /> class.
@@ -58,7 +57,6 @@ namespace Alphacloud.Common.Infrastructure.Caching
             _valueTransformer = valueTransformer ?? AdHocTransformer<object>.Null;
         }
 
-        #region ICache Members
 
         /// <summary>
         ///   Gets cache instance name.
@@ -71,10 +69,12 @@ namespace Alphacloud.Common.Infrastructure.Caching
             get { return "{0}.{1}".ApplyArgs(base.Name, _innerCache.Name); }
         }
 
-        protected override CacheStatistics DoGetStatistics()
+
+        protected internal override CacheStatistics DoGetStatistics()
         {
             throw new InvalidOperationException("Should override GetStatistics()");
         }
+
 
         /// <summary>
         ///   Gets data from cache by key.
@@ -90,6 +90,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             return value;
         }
 
+
         /// <summary>
         ///   Get cache statistics
         /// </summary>
@@ -101,6 +102,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             return _innerCache.GetStatistics();
         }
 
+
         /// <summary>
         ///   Clears the entire cache.
         /// </summary>
@@ -109,11 +111,13 @@ namespace Alphacloud.Common.Infrastructure.Caching
             _innerCache.Clear();
         }
 
+
         public override void Remove(string key)
         {
             var encodedKey = _keyTransformer.Encode(key);
             _innerCache.Remove(encodedKey);
         }
+
 
         /// <summary>
         ///   Add item to cache.
@@ -135,26 +139,36 @@ namespace Alphacloud.Common.Infrastructure.Caching
             _innerCache.Put(encodedkey, encodedValue, ttl);
         }
 
+
+        /// <summary>
+        ///   Invokes Get operation on underlying cache.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>
+        ///   Value or <c>null</c>
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException">Get() should call inner cache.</exception>
         protected internal override object DoGet(string key)
         {
             throw new InvalidOperationException("Get() should call inner cache.");
         }
+
 
         protected internal override void DoClear()
         {
             throw new InvalidOperationException("Clear() should call inner cache.");
         }
 
+
         protected internal override void DoRemove(string key)
         {
             throw new InvalidOperationException("Remove() should call inner cache.");
         }
 
+
         protected internal override void DoPut(string key, object value, TimeSpan ttl)
         {
             throw new InvalidOperationException("Put() should call inner cache.");
         }
-
-        #endregion
     }
 }

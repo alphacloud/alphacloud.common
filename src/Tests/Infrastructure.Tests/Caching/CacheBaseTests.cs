@@ -19,16 +19,11 @@
 namespace Infrastructure.Tests.Caching
 {
     using System;
-
     using Alphacloud.Common.Infrastructure.Caching;
-
+    using Alphacloud.Common.Testing.Nunit;
     using FluentAssertions;
-
     using Moq;
-
     using NUnit.Framework;
-
-    using Testing.Nunit;
 
     //// ReSharper disable InconsistentNaming
 
@@ -39,7 +34,7 @@ namespace Infrastructure.Tests.Caching
         protected override void DoSetup()
         {
             _healthcheckMock = Mockery.Create<ICacheHealthcheckMonitor>();
-            _cacheMock = new Mock<CacheBase>(_healthcheckMock.Object, CacheName) { CallBase = true };
+            _cacheMock = new Mock<CacheBase>(_healthcheckMock.Object, CacheName) {CallBase = true};
             _cache = _cacheMock.Object;
         }
 
@@ -68,6 +63,49 @@ namespace Infrastructure.Tests.Caching
         void SetCacheAvailable()
         {
             _healthcheckMock.SetupGet(m => m.IsCacheAvailable).Returns(true);
+        }
+
+
+        [Test]
+        public void Clear_CacheIsAvaiable_Should_ClearUnderlyingCache()
+        {
+            SetCacheAvailable();
+            _cache.Clear();
+
+            _cacheMock.Verify(c => c.DoClear(), Times.Once());
+        }
+
+
+        [Test]
+        public void Clear_CacheIsUnavailable_ShouldSkipClear()
+        {
+            SetCacheUnavailable();
+            _cache.Clear();
+
+            _cacheMock.Verify(c => c.DoClear(), Times.Never(), "should not access unavailable cache");
+        }
+
+
+        [Test]
+        public void GetStatistics_CacheIsAvailable_Should_GetStatisticsFromUnderlyingCache()
+        {
+            SetCacheAvailable();
+
+            var statistics = new CacheStatistics(10, 20, 30, 25);
+            _cacheMock.Setup(c => c.DoGetStatistics()).Returns(statistics)
+                .Verifiable();
+
+            _cache.GetStatistics().Should().Be(statistics);
+        }
+
+
+        [Test]
+        public void GetStatistics_CacheIsUnavailable_Should_SkipStatisticsRetrieval()
+        {
+            SetCacheUnavailable();
+            _cache.GetStatistics();
+
+            _cacheMock.Verify(c => c.DoGetStatistics(), Times.Never(), "should not access unavailable cache");
         }
 
 
@@ -115,7 +153,7 @@ namespace Infrastructure.Tests.Caching
 
 
         [Test]
-        public void Put_CacheIsNotAvailable_Should_SkipPut()
+        public void Put_CacheIsUnavailable_Should_SkipPut()
         {
             SetCacheUnavailable();
 
@@ -143,7 +181,7 @@ namespace Infrastructure.Tests.Caching
         {
             SetCacheAvailable();
             _cacheMock.Setup(c => c.DoPut(CacheKey, "2", 1.Seconds()))
-                .Throws<InvalidOperationException>()
+                .Throws(new Exception("Test exception"))
                 .Verifiable();
 
             _cache.Put(Key, "2", 1.Seconds());
@@ -162,7 +200,7 @@ namespace Infrastructure.Tests.Caching
 
 
         [Test]
-        public void Remove_CacheIsNotAvailable_Should_SkipRemove()
+        public void Remove_CacheIsUnavailable_Should_SkipRemove()
         {
             SetCacheUnavailable();
 
@@ -176,7 +214,7 @@ namespace Infrastructure.Tests.Caching
         {
             SetCacheAvailable();
             _cacheMock.Setup(c => c.DoRemove(CacheKey))
-                .Throws<InvalidOperationException>()
+                .Throws(new Exception("Test exception"))
                 .Verifiable();
 
             _cache.Remove(Key);

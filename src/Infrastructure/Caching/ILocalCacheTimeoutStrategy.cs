@@ -11,10 +11,16 @@
     public interface ILocalCacheTimeoutStrategy
     {
         /// <summary>
-        ///     Gets timeout for local cache item.
+        ///     Calculate timeout for local cache item.
         /// </summary>
-        /// <param name="ttl">Shared cache timeout.</param>
-        /// <returns>Local cache timeout.</returns>
+        /// <param name="ttl">Base cache item timeout.</param>
+        /// <returns>Local cache item timeout.</returns>
         TimeSpan GetLocalTimeout(TimeSpan ttl);
+
+        /// <summary>
+        /// Text description of timeout calculation strategy.
+        /// </summary>
+        /// <returns></returns>
+        string Describe();
     }
 }

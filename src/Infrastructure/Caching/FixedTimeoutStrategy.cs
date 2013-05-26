@@ -1,7 +1,7 @@
 ﻿namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
-
+    using Core.Data;
     using JetBrains.Annotations;
 
     /// <summary>
@@ -22,9 +22,28 @@
             _timeout = timeout;
         }
 
+        /// <summary>
+        /// Calculate timeout for local cache item.
+        /// </summary>
+        /// <param name="ttl">Base cache item timeout.</param>
+        /// <returns>
+        /// Fixed timeout.
+        /// </returns>
         public TimeSpan GetLocalTimeout(TimeSpan ttl)
         {
-            return _timeout;
+            if (ttl == TimeSpan.Zero)
+                return _timeout;
+            return (ttl > _timeout ? _timeout : ttl);
+        }
+
+
+        /// <summary>
+        /// Text description of timeout calculation strategy.
+        /// </summary>
+        /// <returns></returns>
+        public string Describe()
+        {
+            return "Fixed ({0} seconds)".ApplyArgs(_timeout.TotalSeconds);
         }
     }
 }
