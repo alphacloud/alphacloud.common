@@ -69,7 +69,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
-        protected override ICache CreateCache(string instance)
+        protected internal override ICache CreateCache(string instance)
         {
             var cache = base.CreateCache(instance);
             if (cache != null)

@@ -19,18 +19,23 @@
 namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
-
-    using Alphacloud.Common.Core.Data;
+    using Core.Data;
+    using JetBrains.Annotations;
 
     /// <summary>
     ///   Cache node statistics.
     /// </summary>
     [Serializable]
+    [PublicAPI]
     public class CacheNodeStatistics
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheNodeStatistics"/> class.
+        /// </summary>
         protected CacheNodeStatistics()
         {
         }
+
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="CacheNodeStatistics" /> class.
@@ -48,6 +53,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             PutCount = putCount;
             ItemCount = itemCount;
         }
+
 
         /// <summary>
         ///   Cache node name or address.
@@ -89,9 +95,10 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
         }
 
+
         public override string ToString()
         {
-            return "Node: '{0}', Items: {1}, Hit rate: {2}".ApplyArgs(Server, ItemCount, HitRate);
+            return "Node '{0}': Items: {1}, Hit rate: {2}".ApplyArgs(Server, ItemCount, HitRate);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
 
     /// <summary>
     ///   Composite cache.
-    ///   Consists of 2 caches: local (short-term) and backing (long-term).
+    ///   Aggregates two caches: local (short-term) and backing (long-term).
     /// </summary>
     public class CompositeCache : ICache
     {
@@ -43,10 +43,11 @@ namespace Alphacloud.Common.Infrastructure.Caching
 
         static readonly ILog s_log = LogManager.GetCurrentClassLogger();
         readonly ICache _backingCache;
-        readonly bool _devMode;
-
         readonly ICache _localCache;
         readonly ILocalCacheTimeoutStrategy _localTimeoutStrategy;
+
+        readonly bool _devMode;
+
         string _prefix;
 
 
@@ -63,7 +64,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <exception cref="System.ArgumentNullException">localCache is null</exception>
         /// <exception cref="System.ArgumentNullException">backingCache is null</exception>
         /// <remarks>
-        ///   In <see cref="devMode" /> cache keys are prefixed with machine name and random number. This prevents cache collisions when using same cache server by development team.
+        ///   When <c>devMode</c> is on, cache keys are prefixed with machine name and random number. This prevents cache collisions when using same cache server by development team.
         ///   Also this allows to start with empty cache by simply restarting application.
         /// </remarks>
         public CompositeCache(

@@ -19,18 +19,26 @@
 namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System.Threading;
-
-    using Alphacloud.Common.Core.Data;
-    using Alphacloud.Common.Infrastructure.Transformations;
+    using Core.Data;
+    using Transformations;
 
     /// <summary>
     ///   Define cache scope based on curent User Identity.
     /// </summary>
     public class UserIdentityCacheKeyScope : IEncoder<string>
     {
+        #region IEncoder<string> Members
+
+        /// <summary>
+        ///   Prefix key with current identity name.
+        /// </summary>
+        /// <param name="source">Cache key</param>
+        /// <returns>Cache key prefixed with current thread user name</returns>
         public string Encode(string source)
         {
             return "{0}.{1}".ApplyArgs(Thread.CurrentPrincipal.Identity.Name, source);
         }
+
+        #endregion
     }
 }

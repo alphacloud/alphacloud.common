@@ -22,9 +22,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Configuration;
-
     using JetBrains.Annotations;
-
     using global::Common.Logging;
 
     /// <summary>
@@ -33,7 +31,12 @@ namespace Alphacloud.Common.Infrastructure.Caching
     [PublicAPI]
     public abstract class CacheFactoryBase : ICacheFactory, IDisposable
     {
+        /// <summary>
+        ///   Default cache instance name.
+        /// </summary>
         protected const string DefaultInstanceName = "default";
+
+        const string CacheParametersConfigPath = "alphacloud/cache/parameters";
         readonly IDictionary<string, ICache> _caches = new SortedList<string, ICache>(16);
         readonly ILog _log;
 
@@ -45,11 +48,17 @@ namespace Alphacloud.Common.Infrastructure.Caching
         {
             _log = LogManager.GetLogger(GetType());
             IsEnabled = true;
-            var section = (NameValueCollection) ConfigurationManager.GetSection("alphacloud/cache/parameters");
+            var section = (NameValueCollection) ConfigurationManager.GetSection(CacheParametersConfigPath);
             if (section != null)
                 LoadParameters(section);
         }
 
+
+        /// <summary>
+        ///   Initializes factory with custom configuration settings.
+        /// </summary>
+        /// <param name="settings">Configuration settings.</param>
+        /// <exception cref="System.ArgumentNullException">settings is null</exception>
         protected CacheFactoryBase([NotNull] NameValueCollection settings)
         {
             _log = LogManager.GetLogger(GetType());
@@ -63,6 +72,9 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
+        /// <summary>
+        ///   Logger
+        /// </summary>
         protected ILog Log
         {
             get { return _log; }
@@ -71,16 +83,17 @@ namespace Alphacloud.Common.Infrastructure.Caching
         #region Implementation of ICacheFactory
 
         /// <summary>
-        /// Gets a value indicating whether factory is enabled.
+        ///   Gets a value indicating whether caching is enabled.
         /// </summary>
         public bool IsEnabled { get; private set; }
 
+
         /// <summary>
-        /// Get cache instance.
+        ///   Get cache instance.
         /// </summary>
         /// <param name="instance">Instance name (optional)</param>
         /// <returns>
-        /// Cache instance
+        ///   Cache instance
         /// </returns>
         public ICache GetCache(string instance = null)
         {
@@ -99,17 +112,21 @@ namespace Alphacloud.Common.Infrastructure.Caching
                 }
             }
 
-            Log.InfoFormat("Resolved cache '{0}'", instance);
+            Log.InfoFormat("Resolved cache '{0}'", instanceName);
             return cache;
         }
 
 
         /// <summary>
-        /// Initialize cache factory.
+        ///   Initialize cache factory.
         /// </summary>
         public abstract void Initialize();
 
 
+        /// <summary>
+        ///   Check wether factory is disposed.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">if factory is disposed.</exception>
         protected void CheckDisposed()
         {
             if (IsDisposed)
@@ -119,7 +136,14 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
-        protected virtual ICache CreateCache(string instance)
+        /// <summary>
+        ///   Create named cache instance.
+        /// </summary>
+        /// <param name="instance">Instance name.</param>
+        /// <returns>
+        ///   <see cref="ICache" /> instance or <see cref="CacheBase.Null" /> null cache if caching is disabled.
+        /// </returns>
+        protected internal virtual ICache CreateCache(string instance)
         {
             return IsEnabled ? null : CacheBase.Null;
         }
@@ -166,7 +190,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
                 }
                 _caches.Clear();
                 IsDisposed = true;
-                Log.Info("Factory disposed.");
+                Log.Info("Disposed factory and caches.");
             }
         }
 

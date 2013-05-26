@@ -87,6 +87,8 @@
     <Compile Include="Caching\AdaptiveTimeoutTests.cs" />
     <Compile Include="Caching\CacheBaseTests.cs" />
     <Compile Include="Caching\CacheConfigurationTests.cs" />
+    <Compile Include="Caching\CacheExtensionsTests.cs" />
+    <Compile Include="Caching\CacheFactoryBaseTests.cs" />
     <Compile Include="Caching\CompositeCacheDebugModeTests.cs" />
     <Compile Include="Caching\CompositeCacheFactoryTests.cs" />
     <Compile Include="Caching\CompositeCacheTests.cs" />
