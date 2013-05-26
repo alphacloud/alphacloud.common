@@ -42,6 +42,15 @@ namespace Alphacloud.Common.ServiceLocator.Castle
             _kernel = kernel;
         }
 
+        /// <summary>
+        /// When implemented by inheriting classes, this method will do the actual work of resolving
+        /// the requested service instance.
+        /// </summary>
+        /// <param name="serviceType">Type of instance requested.</param>
+        /// <param name="key">Name of registered service you want. May be null.</param>
+        /// <returns>
+        /// The requested service instance.
+        /// </returns>
         protected override object DoGetInstance(Type serviceType, string key)
         {
             return string.IsNullOrEmpty(key)
@@ -49,17 +58,37 @@ namespace Alphacloud.Common.ServiceLocator.Castle
                 : _kernel.Resolve(serviceType, key);
         }
 
+        /// <summary>
+        /// When implemented by inheriting classes, this method will do the actual work of
+        /// resolving all the requested service instances.
+        /// </summary>
+        /// <param name="serviceType">Type of service requested.</param>
+        /// <returns>
+        /// Sequence of service instance objects.
+        /// </returns>
         protected override IEnumerable<object> DoGetAllInstances(Type serviceType)
         {
             return _kernel.ResolveAll(serviceType).OfType<object>();
         }
 
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <returns></returns>
         public override TService GetInstance<TService>()
         {
             return GetInstance<TService>(null);
         }
 
 
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
+        /// <exception cref="Microsoft.Practices.ServiceLocation.ActivationException"></exception>
         public override TService GetInstance<TService>(string key)
         {
             try
