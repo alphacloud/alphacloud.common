@@ -6,31 +6,42 @@
     using JetBrains.Annotations;
 
     /// <summary>
-    ///     Handles percentage calculations.
+    ///     Percentage calculation for charts.
     /// </summary>
     [PublicAPI]
     public static class ChartHelper
     {
+        /// <summary>
+        /// Calculate percentage value of each entity in data source.
+        /// </summary>
+        /// <typeparam name="TEntity">Type of entity</typeparam>
+        /// <param name="data">source data</param>
+        /// <param name="valueSelector">Used to get value from entity.</param>
+        /// <param name="percentageUpdater">Used to update entity percentage field.</param>
+        /// <returns>Total value (sum of eniity values)</returns>
+        /// <remarks>
+        /// 
+        /// </remarks>
         public static double UpdatePercentage<TEntity>(ICollection<TEntity> data, Func<TEntity, double> valueSelector,
-            Action<TEntity, double> updatePercentage)
+            Action<TEntity, double> percentageUpdater)
         {
             if (data == null) throw new ArgumentNullException("data");
             if (valueSelector == null) throw new ArgumentNullException("valueSelector");
-            if (updatePercentage == null) throw new ArgumentNullException("updatePercentage");
+            if (percentageUpdater == null) throw new ArgumentNullException("percentageUpdater");
 
             var total = data.Sum(valueSelector);
             if (total == 0.0)
             {
                 foreach (var entity in data)
                 {
-                    updatePercentage(entity, 0.0);
+                    percentageUpdater(entity, 0.0);
                 }
             }
             else
             {
                 foreach (var entity in data)
                 {
-                    updatePercentage(entity, valueSelector(entity) / total * 100);
+                    percentageUpdater(entity, valueSelector(entity) / total * 100);
                 }
             }
 

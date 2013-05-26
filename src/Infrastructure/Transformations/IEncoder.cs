@@ -21,7 +21,7 @@ namespace Alphacloud.Common.Infrastructure.Transformations
     /// <summary>
     ///   Provides services for converting values from one to another.
     /// </summary>
-    public interface IEncoder <T>
+    public interface IEncoder<T>
     {
         /// <summary>
         ///   Converts specified source value.
@@ -35,8 +35,14 @@ namespace Alphacloud.Common.Infrastructure.Transformations
     ///   Two-way converstion service.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ITransformer <T> : IEncoder<T>
+    public interface ITransformer<T> : IEncoder<T>
     {
+        /// <summary>
+        ///   Decode value.
+        ///   This operation is reverse to <see cref="IEncoder{T}.Encode" />
+        /// </summary>
+        /// <param name="encoded">Encoded value.</param>
+        /// <returns>Decoded value.</returns>
         T Decode(T encoded);
     }
 }

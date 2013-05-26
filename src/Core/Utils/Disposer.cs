@@ -29,20 +29,34 @@ namespace Alphacloud.Common.Core.Utils
     #endregion
 
     /// <summary>
-    ///   Dispose helper.
+    ///   Disposes registered objects.
+    /// 
+    /// Used to manually dispose set of objects.
+    /// Registered objects will be disposed then Disposer is disposed.
     /// </summary>
+    /// <remarks>
+    /// Registered objects are stored as <see cref="WeakReference"/> to they could be processed by garbadge collector earlier.
+    /// </remarks>
     [PublicAPI]
-    public class Disposer : IDisposable
+    public sealed class Disposer : IDisposable
     {
         readonly IList<WeakReference> _objects = new List<WeakReference>();
         bool _isDisposed;
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Disposer"/> class.
+        /// </summary>
         public Disposer()
         {
         }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Disposer"/> class.
+        /// </summary>
+        /// <param name="disposable">The disposable.</param>
+        /// <exception cref="System.ArgumentNullException">disposable</exception>
         public Disposer([NotNull] IDisposable disposable)
         {
             if (disposable == null)
@@ -52,10 +66,10 @@ namespace Alphacloud.Common.Core.Utils
 
 
         /// <summary>
-        /// 
+        /// Disposes object if it is not null and implements IDisposable interface.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <param name="obj">Object to dispose.</param>
+        /// <returns><c>true</c>if object was disposed.</returns>
         public static bool TryDispose([CanBeNull] object obj)
         {
             var disposable = obj as IDisposable;
@@ -66,7 +80,7 @@ namespace Alphacloud.Common.Core.Utils
         }
 
         /// <summary>
-        ///   Add object to dispose.
+        ///   Register object to be disposed.
         /// </summary>
         /// <param name="obj">Object</param>
         [NotNull]
@@ -84,6 +98,10 @@ namespace Alphacloud.Common.Core.Utils
         }
 
 
+        /// <summary>
+        /// Register object to be disposed.
+        /// </summary>
+        /// <param name="obj">Object to dispose.</param>
         public void Add(IDisposable obj)
         {
             CheckDisposed();
@@ -94,10 +112,10 @@ namespace Alphacloud.Common.Core.Utils
 
 
         /// <summary>
-        ///   Check if object was disposed.
+        ///   Check if this object was disposed.
         /// </summary>
         /// <exception cref="ObjectDisposedException">If object already disposed.</exception>
-        protected void CheckDisposed()
+        void CheckDisposed()
         {
             if (_isDisposed)
                 throw new ObjectDisposedException("Disposer");
@@ -111,28 +129,18 @@ namespace Alphacloud.Common.Core.Utils
         /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-
-        protected virtual void Dispose(bool disposing)
-        {
             if (_isDisposed)
                 return;
 
-            if (disposing)
+            // dispose in reverse order
+            for (var i = _objects.Count - 1; i >= 0; i--)
             {
-                // dispose in reverse order
-                for (var i = _objects.Count - 1; i >= 0; i--)
-                {
-                    var reference = _objects[i];
-                    if (!reference.IsAlive)
-                        continue;
-                    TryDispose(reference.Target as IDisposable);
-                }
-                _isDisposed = true;
+                var reference = _objects[i];
+                if (!reference.IsAlive)
+                    continue;
+                TryDispose(reference.Target as IDisposable);
             }
+            _isDisposed = true;
         }
 
         #endregion

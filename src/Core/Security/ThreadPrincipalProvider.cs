@@ -28,6 +28,10 @@ namespace Alphacloud.Common.Core.Security
     [PublicAPI]
     public class ThreadPrincipalProvider : IPrincipalProvider
     {
+        /// <summary>
+        /// Gets current user's principal.
+        /// </summary>
+        /// <returns></returns>
         public IPrincipal GetCurrentPrincipal()
         {
             return Thread.CurrentPrincipal;
