@@ -96,6 +96,7 @@
     <Compile Include="Caching\DisabledCompositeFactoryTests.cs" />
     <Compile Include="Caching\MemoryCacheTests.cs" />
     <Compile Include="Caching\TransformingCacheWrapperTests.cs" />
+    <Compile Include="Caching\UserIdentityCacheKeyScopeTests.cs" />
     <Compile Include="Castle\CastleWindsorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -103,7 +104,9 @@
     <None Include="..\..\Alphacloud.Common.snk">
       <Link>Alphacloud.Common.snk</Link>
     </None>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

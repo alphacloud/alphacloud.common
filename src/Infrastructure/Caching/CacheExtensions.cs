@@ -84,6 +84,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             return item;
         }
 
+
         /// <summary>
         ///   Get item from cache or load from external source.
         /// </summary>
@@ -104,6 +105,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             return cache.GetOrLoad<Cached<T>>(key, retrieve, ttl, shouldCache);
         }
 
+
         /// <summary>
         ///   Gets the specified key.
         /// </summary>
@@ -114,11 +116,8 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <exception cref="CacheException">If cached item cannot be casted to requested type.</exception>
         public static T Get <T>([NotNull] this ICache cache, string key)
             where T : class
-
-
         {
             object cached = cache.Get(key);
-
             if (cached == null)
             {
                 return null;

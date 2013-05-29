@@ -60,7 +60,7 @@ namespace Infrastructure.Tests.Caching
 
 
         [Test]
-        void GetOrLoad_Should_UpdateCache()
+        public void GetOrLoad_Should_UpdateCache()
         {
             _cache.Object.GetOrLoad("key", () => "value", 10.Seconds())
                 .Should().Be("value");
