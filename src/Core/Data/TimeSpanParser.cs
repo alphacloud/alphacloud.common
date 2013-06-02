@@ -16,7 +16,7 @@
 
 #endregion
 
-namespace Alphacloud.Common.Core.DateTime
+namespace Alphacloud.Common.Core.Data
 {
     using System;
     using System.Globalization;
@@ -30,6 +30,13 @@ namespace Alphacloud.Common.Core.DateTime
     [PublicAPI]
     public static class TimeSpanParser
     {
+        static readonly string[] s_formats = {
+            "HH:mm", "HH.mm", "HHmm", "HH,mm", "HH",
+            "H:mm", "H.mm", "H,mm",
+            "hh:mmtt", "hh.mmtt", "hhmmtt", "hh,mmtt", "hhtt",
+            "h:mmtt", "h.mmtt", "hmmtt", "h,mmtt", "htt"
+        };
+
         const DateTimeStyles DefaultDateTimeStyles =
             DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeLocal | DateTimeStyles.NoCurrentDateDefault;
 
@@ -47,17 +54,10 @@ namespace Alphacloud.Common.Core.DateTime
             if (text == null)
                 throw new ArgumentNullException("text");
 
-            var formats = new[] {
-                "HH:mm", "HH.mm", "HHmm", "HH,mm", "HH",
-                "H:mm", "H.mm", "H,mm",
-                "hh:mmtt", "hh.mmtt", "hhmmtt", "hh,mmtt", "hhtt",
-                "h:mmtt", "h.mmtt", "hmmtt", "h,mmtt", "htt"
-            };
-
             text = Regex.Replace(text, "([^0-9]|^)([0-9])([0-9]{2})([^0-9]|$)", "$1$2:$3$4", RegexOptions.Compiled);
             text = Regex.Replace(text, "^[0-9]$", "0$0", RegexOptions.Compiled);
 
-            foreach (var format in formats)
+            foreach (var format in s_formats)
             {
                 DateTime value;
                 if (

@@ -1,9 +1,11 @@
-﻿namespace Alphacloud.Common.Core.DateTime
+﻿namespace Alphacloud.Common.Core.Data
 {
     using System;
-    using Data;
+
+    using Alphacloud.Common.Core.Strings;
+    using Alphacloud.Common.Core.Utils;
+
     using JetBrains.Annotations;
-    using Strings;
 
     /// <summary>
     /// DateTime extensions
@@ -20,9 +22,10 @@
         public static DateTime RoundMinutes(this DateTime dt, int minutes)
         {
             var min = dt.Minute % minutes;
+            var seconds = -1.0 * dt.Second;
             return (min) < (minutes + 1) / 2
-                ? dt.AddMinutes(-min)
-                : dt.AddMinutes(minutes - min);
+                ? dt.AddMinutes(-min).AddSeconds(seconds)
+                : dt.AddMinutes(minutes - min).AddSeconds(seconds);
         }
 
         /// <summary>
@@ -66,7 +69,7 @@
         /// <returns></returns>
         public static string AsRelativeDateTime(this DateTime dateTime)
         {
-            var current = DateTime.Now;
+            var current = Clock.CurrentTime();
             var diff = dateTime.Subtract(current);
             if (diff.TotalHours.InRange(0, 1))
                 return Strings.RelativeDate_ThisHours;

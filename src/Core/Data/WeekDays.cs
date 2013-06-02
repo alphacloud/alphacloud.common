@@ -16,7 +16,7 @@
 
 #endregion
 
-namespace Alphacloud.Common.Core.DateTime
+namespace Alphacloud.Common.Core.Data
 {
     using System;
 
@@ -243,6 +243,18 @@ namespace Alphacloud.Common.Core.DateTime
         public override int GetHashCode()
         {
             return (int) Pack();
+        }
+
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents week days.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents week days.
+        /// </returns>
+        public override string ToString()
+        {
+            return Pack().ToString();
         }
     }
 }
