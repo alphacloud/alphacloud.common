@@ -21,7 +21,6 @@ namespace Alphacloud.Common.Infrastructure.Caching
     using System;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
-    using Core.Reflection;
     using JetBrains.Annotations;
 
     /// <summary>
@@ -32,9 +31,19 @@ namespace Alphacloud.Common.Infrastructure.Caching
     public class CacheDurationSection : ConfigurationSection
     {
         /// <summary>
+        ///   Tiny (intra-request) cache ttl.
+        /// </summary>
+        [ConfigurationProperty("tiny", DefaultValue = "00:00:30", IsRequired = true)]
+        public TimeSpan Tiny
+        {
+            get { return (TimeSpan) this["tiny"]; }
+            set { this["tiny"] = value; }
+        }
+
+        /// <summary>
         ///   Short (per-request) cache ttl.
         /// </summary>
-        [ConfigurationProperty("short", IsRequired = true)]
+        [ConfigurationProperty("short", DefaultValue = "00:01:00", IsRequired = true)]
         public TimeSpan Short
         {
             get { return (TimeSpan) this["short"]; }
@@ -44,7 +53,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <summary>
         ///   Balanced cache ttl.
         /// </summary>
-        [ConfigurationProperty("balanced", IsRequired = true)]
+        [ConfigurationProperty("balanced", DefaultValue = "00:05:00", IsRequired = true)]
         public TimeSpan Balanced
         {
             get { return (TimeSpan) this["balanced"]; }
@@ -54,7 +63,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <summary>
         ///   Long (rarely modified data) cache ttl.
         /// </summary>
-        [ConfigurationProperty("long", IsRequired = true)]
+        [ConfigurationProperty("long", DefaultValue="00:30:00", IsRequired = true)]
         public TimeSpan Long
         {
             get { return (TimeSpan) this["long"]; }

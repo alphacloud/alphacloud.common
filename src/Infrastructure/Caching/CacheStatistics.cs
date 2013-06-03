@@ -21,7 +21,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
     using System;
     using System.Collections.Generic;
 
-    using Alphacloud.Common.Core.Data;
+    using Core.Data;
 
     using JetBrains.Annotations;
 
@@ -115,7 +115,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
 
         public override string ToString()
         {
-            return "Nodes: {0}, Total items: {1}, HitRate: {2}%".ApplyArgs(Nodes.Count, ItemCount, HitRate);
+            return "Nodes: {0}, Total items: {1}, Hit rate: {2}%".ApplyArgs(Nodes.Count, ItemCount, HitRate);
         }
     }
 }

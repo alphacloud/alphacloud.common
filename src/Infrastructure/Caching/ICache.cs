@@ -66,9 +66,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </exception>
         /// <remarks>
         ///   If <paramref name="value" /> is <c>null</c>, <see cref="Remove" /> item will be removed from cache by calling
-        ///   <see
-        ///     cref="Remove" />
-        ///   .
+        ///   <see cref="Remove" />.
         /// </remarks>
         void Put([NotNull] string key, [CanBeNull] object value, TimeSpan ttl);
 

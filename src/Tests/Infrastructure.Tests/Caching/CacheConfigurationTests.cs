@@ -15,6 +15,7 @@
         [Test]
         public void ShouldReadDurationFromAppConfig()
         {
+            CacheDuration.Instance.Tiny.Should().Be(1.Seconds());
             CacheDuration.Instance.Short.Should().Be(5.Seconds());
             CacheDuration.Instance.Balanced.Should().Be(30.Seconds());
             CacheDuration.Instance.Long.Should().Be(1.Minutes());
