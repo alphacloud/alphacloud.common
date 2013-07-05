@@ -19,7 +19,10 @@
   <PropertyGroup>
     <MainSolution>$(RootDir)\Alphacloud.Common.sln</MainSolution>
     <CoreDir>$(RootDir)\Core</CoreDir>
-    <InfrastructureProj>$(RootDir)\Infrastructure</InfrastructureProj>
+    <InfrastructureDir>$(RootDir)\Infrastructure</InfrastructureDir>
+    <MemcachedAdapterDir>$(RootDir)\Integration\Caching.Memcached</MemcachedAdapterDir>
+    <MemcachedCommonLoggingAdapterDir>$(RootDir)\Integration\Caching.Memcached</MemcachedCommonLoggingAdapterDir>
+	<CastleWindsorAdapterDir>$(RootDir)\ServiceLocator.Castle</CastleWindsorAdapterDir>
   </PropertyGroup>
 
   <Target Name="BuildAll">
@@ -37,7 +40,24 @@
     <MakeDir Directories="$(PackagesOutDir)" ContinueOnError="true" />
   </Target>
   
-  <Target Name="PackCore" Condition="'$(BuildConfig)'=='Release'" DependsOnTargets="CreatePackagesDir">
-    <Exec Command="$(NuGetExe) pack $(CoreDir)\Core.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(CoreDir)" />
+  <Target Name="PackCore" DependsOnTargets="CreatePackagesDir">
+    <Exec Command="$(NuGetExe) pack Core.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(CoreDir)" />
   </Target>
+
+  <Target Name="PackInfrastructure" DependsOnTargets="CreatePackagesDir">
+    <Exec Command="$(NuGetExe) pack Infrastructure.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(InfrastructureDir)" />
+  </Target>
+
+  <Target Name="PackMemcachedAdapter" DependsOnTargets="CreatePackagesDir">
+    <Exec Command="$(NuGetExe) pack Caching.Memcached.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(MemcachedAdapterDir)" />
+  </Target>
+
+  <Target Name="PackMemcachedCommonLoggingAdapter" DependsOnTargets="CreatePackagesDir">
+    <Exec Command="$(NuGetExe) pack Caching.Memcached.CommonLogging.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(MemcachedCommonLoggingAdapterDir)" />
+  </Target>
+
+  <Target Name="PackCastleWindsorAdapter" DependsOnTargets="CreatePackagesDir">
+    <Exec Command="$(NuGetExe) pack ServiceLocator.Castle.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(CastleWindsorAdapterDir)" />
+  </Target>
+
 </Project>

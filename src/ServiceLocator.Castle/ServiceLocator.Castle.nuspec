@@ -7,10 +7,10 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
-    <projectUrl>https://github.com/shatl/alphacloud.common</projectUrl>
+    <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Workaround for incorrect named instance resolution in CastleWindsor 3.2.</releaseNotes>
+    <releaseNotes>Fix named instance resolution.</releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>alphacloud castle windsor microkernel signed dependencyInjection inversionOfControl</tags>
     <dependencies>

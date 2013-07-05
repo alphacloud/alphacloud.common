@@ -21,15 +21,15 @@ namespace Alphacloud.Common.ServiceLocator.Castle
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.Practices.ServiceLocation;
     using global::Castle.Windsor;
+    using Microsoft.Practices.ServiceLocation;
 
     /// <summary>
     ///   CommonServiceLocator adapter for Castle Windsor
     /// </summary>
     public sealed class WindsorServiceLocatorAdapter : ServiceLocatorImplBase
     {
-        private readonly IWindsorContainer _container;
+        readonly IWindsorContainer _container;
 
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Alphacloud.Common.ServiceLocator.Castle
         {
             return string.IsNullOrEmpty(key)
                 ? _container.Resolve(serviceType)
-                : _container.Resolve(serviceType, key);
+                : _container.Resolve(key, serviceType);
         }
 
 
@@ -72,39 +72,6 @@ namespace Alphacloud.Common.ServiceLocator.Castle
         protected override IEnumerable<object> DoGetAllInstances(Type serviceType)
         {
             return _container.ResolveAll(serviceType).OfType<object>();
-        }
-
-
-        /// <summary>
-        ///   Gets the instance.
-        /// </summary>
-        /// <typeparam name="TService">The type of the service.</typeparam>
-        /// <returns></returns>
-        public override TService GetInstance<TService>()
-        {
-            return GetInstance<TService>(null);
-        }
-
-
-        /// <summary>
-        ///   Gets the instance.
-        /// </summary>
-        /// <typeparam name="TService">The type of the service.</typeparam>
-        /// <param name="key">The key.</param>
-        /// <returns></returns>
-        /// <exception cref="Microsoft.Practices.ServiceLocation.ActivationException"></exception>
-        public override TService GetInstance<TService>(string key)
-        {
-            try
-            {
-                return string.IsNullOrEmpty(key)
-                    ? _container.Resolve<TService>()
-                    : _container.Resolve<TService>(key);
-            }
-            catch (Exception ex)
-            {
-                throw new ActivationException(FormatActivateAllExceptionMessage(ex, typeof (TService)), ex);
-            }
         }
     }
 }
