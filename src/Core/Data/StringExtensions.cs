@@ -24,7 +24,6 @@ namespace Alphacloud.Common.Core.Data
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text;
-
     using JetBrains.Annotations;
 
     #endregion
@@ -131,6 +130,7 @@ namespace Alphacloud.Common.Core.Data
             return string.Format(CultureInfo.CurrentCulture, format, arg0, arg1, arg2);
         }
 
+
         /// <summary>
         ///   Format string using Current Culture.
         /// </summary>
@@ -142,6 +142,7 @@ namespace Alphacloud.Common.Core.Data
         {
             return string.Format(CultureInfo.CurrentCulture, format, args);
         }
+
 
         /// <summary>
         ///   Joins strings using separator.
@@ -161,8 +162,9 @@ namespace Alphacloud.Common.Core.Data
             return sb;
         }
 
+
         /// <summary>
-        /// Truncate string to specified length, adding <paramref name="terminator"/> if string was truncated.
+        ///   Truncate string to specified length, adding <paramref name="terminator" /> if string was truncated.
         /// </summary>
         /// <param name="str">String to truncate.</param>
         /// <param name="maxLength">Maximum length.</param>
@@ -181,6 +183,7 @@ namespace Alphacloud.Common.Core.Data
                 : str.Substring(0, maxLength - terminator.Length) + terminator;
         }
 
+
         /// <summary>
         ///   Substitutes null or empty string.
         /// </summary>
@@ -194,6 +197,7 @@ namespace Alphacloud.Common.Core.Data
                 : str;
         }
 
+
         /// <summary>
         ///   Trim string if it is not null or whitespace.
         ///   Behaves like <see cref="string.Trim()" /> except no error thrown in str == <c>null</c>.
@@ -205,6 +209,39 @@ namespace Alphacloud.Common.Core.Data
             return string.IsNullOrWhiteSpace(str)
                 ? string.Empty
                 : str.Trim();
+        }
+
+
+        /// <summary>
+        ///   Determines whether string contains substring ignoring case.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="substring">The substring.</param>
+        /// <returns>
+        ///   <c>true</c> if string conrains substring; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">
+        ///   <paramref name="str" />  or
+        ///   <paramref name="substring" /> is <c>null</c>.
+        /// </exception>
+        public static bool ContainsIgnoreCase([NotNull] this string str, [NotNull] string substring)
+        {
+            if (str == null) throw new ArgumentNullException("str");
+            if (substring == null) throw new ArgumentNullException("substring");
+
+            return str.IndexOf(str, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+
+        /// <summary>
+        ///   Compare strings usingcase-insensitive comparison.
+        /// </summary>
+        /// <param name="strA">First string.</param>
+        /// <param name="strB">Second string.</param>
+        /// <returns><c>true</c> if strings are equal, <c>false</c> otherwise.</returns>
+        public static bool EqualsIgnoreCase(this string strA, string strB)
+        {
+            return string.CompareOrdinal(strA, strB) == 0;
         }
     }
 }
