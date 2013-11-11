@@ -27,15 +27,16 @@ namespace Caching.Memcached.Tests
     using ILog = Common.Logging.ILog;
 
     [TestFixture]
-    public class MemcachedClientTests
+    class MemcachedClientTests
     {
-        ILog s_log = Common.Logging.LogManager.GetCurrentClassLogger();
+        ILog _log;
 
         #region Setup/Teardown
 
         [SetUp]
         public void SetUp()
         {
+            _log = Common.Logging.LogManager.GetCurrentClassLogger();
             _client = new MemcachedClient();
         }
 
@@ -61,7 +62,7 @@ namespace Caching.Memcached.Tests
         [Test]
         public void MultiGet()
         {
-            s_log.Debug("MultiGet");
+            _log.Debug("MultiGet");
             var k1 = Guid.NewGuid().ToString();
             var k2 = Guid.NewGuid().ToString();
 

@@ -16,6 +16,9 @@
 
 #endregion
 
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
@@ -127,6 +130,12 @@ namespace Alphacloud.Common.Infrastructure.Caching
             if (!CanGet())
                 return null;
 
+            return SafeGetWithLogging(key);
+        }
+
+
+        object SafeGetWithLogging(string key)
+        {
             try
             {
                 var data = DoGet(PrepareCacheKey(key));
@@ -138,6 +147,32 @@ namespace Alphacloud.Common.Infrastructure.Caching
                 Log.WarnFormat("{0}: Get('{1}')", ex, Name, key);
                 return null;
             }
+        }
+
+
+        public IDictionary<string, object> Get([NotNull] ICollection<string> keys)
+        {
+            if (keys == null) throw new ArgumentNullException("keys");
+            Log.Debug(m => m("{1}: Getting data for keys '{0}'", new SequenceFormatter(keys), Name));
+
+            CheckDisposed();
+            var res = new Dictionary<string, object>();
+            if (!CanGet())
+            {
+                // build dictionary
+                foreach (var key in keys)
+                {
+                    res[key] = null;
+                }
+            }
+            else
+            {
+                foreach (var key in keys)
+                {
+                    res[key] = SafeGetWithLogging(key);
+                }
+            }
+            return res;
         }
 
 

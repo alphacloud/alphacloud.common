@@ -16,6 +16,8 @@
 
 #endregion
 
+using System.Collections.Generic;
+
 namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
@@ -144,6 +146,12 @@ namespace Alphacloud.Common.Infrastructure.Caching
                 s_log.DebugFormat("Returning local copy of '{0}'", key);
             }
             return item;
+        }
+
+
+        public IDictionary<string, object> Get(ICollection<string> keys)
+        {
+            throw new NotImplementedException();
         }
 
 

@@ -16,15 +16,15 @@
 
 #endregion
 
+using System;
+using Alphacloud.Common.Infrastructure.Caching;
+using Alphacloud.Common.Testing.Nunit;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
+
 namespace Infrastructure.Tests.Caching
 {
-    using System;
-    using Alphacloud.Common.Infrastructure.Caching;
-    using Alphacloud.Common.Testing.Nunit;
-    using FluentAssertions;
-    using Moq;
-    using NUnit.Framework;
-
     //// ReSharper disable InconsistentNaming
 
 
@@ -143,6 +143,58 @@ namespace Infrastructure.Tests.Caching
 
 
         [Test]
+        public void MiltiGet_OnUnderlyingCacheException_Should_UseNullValueAndProcessNextCacheKey()
+        {
+            SetCacheAvailable();
+
+            _cacheMock.Setup(c => c.DoGet("BaseCache.err"))
+                .Throws<Exception>();
+            _cacheMock.Setup(c => c.DoGet("BaseCache.key"))
+                .Returns("val");
+
+            var res = _cache.Get(new[] {"err", "key"});
+            res.Should().ContainKeys(new[] {"err", "key"});
+
+            res["err"].Should().BeNull("exception occured in underlying cache");
+            res["key"].Should().Be("val");
+        }
+
+
+        [Test]
+        public void MultiGet_CacheIsAvaiable_ShouldReturnDictionaryWithAllKeys()
+        {
+            SetCacheAvailable();
+            _cacheMock.Setup(c => c.DoGet("BaseCache.key1"))
+                .Returns(null)
+                .Verifiable();
+            _cacheMock.Setup(c => c.DoGet("BaseCache.key2"))
+                .Returns("val2")
+                .Verifiable();
+
+            var res = _cache.Get(new[] {"key1", "key2"});
+
+            res.Should().HaveCount(2, "should return results for all keys");
+            res["key1"].Should().BeNull("no data in cache");
+            res["key2"].Should().Be("val2");
+        }
+
+
+        [Test]
+        public void MultiGet_CacheIsNotAvailable_Should_SkipGet()
+        {
+            SetCacheUnavailable();
+
+            var res = _cache.Get(new[] {"key1", "key2"});
+
+            res.Should().HaveCount(2);
+            res["key1"].Should().BeNull("key1");
+            res["key2"].Should().BeNull("key2");
+
+            _cacheMock.Verify(c => c.DoGet(It.IsAny<string>()), Times.Never(), "cache is not enabled");
+        }
+
+
+        [Test]
         public void Put_CacheIsAvailable_Should_PutItemToCache()
         {
             SetCacheAvailable();
@@ -220,8 +272,6 @@ namespace Infrastructure.Tests.Caching
             _cache.Remove(Key);
             _cacheMock.Verify();
         }
-
-
     }
 
     //// ReSharper restore InconsistentNaming

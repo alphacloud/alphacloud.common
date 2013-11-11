@@ -28,7 +28,7 @@ namespace Caching.Memcached.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public class MemcachedStatsParserTests
+    class MemcachedStatsParserTests
     {
         #region Setup/Teardown
 

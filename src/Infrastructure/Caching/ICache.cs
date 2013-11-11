@@ -16,6 +16,8 @@
 
 #endregion
 
+using System.Collections.Generic;
+
 namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
@@ -43,6 +45,13 @@ namespace Alphacloud.Common.Infrastructure.Caching
         ///   if <paramref name="key" /> is null.
         /// </exception>
         object Get([NotNull] string key);
+
+        /// <summary>
+        /// Multi-Get
+        /// </summary>
+        /// <param name="keys">Keys to retrieve from cache</param>
+        /// <returns>Key-value dictionary. Missing items will have <c>null</c> value.</returns>
+        IDictionary<string, object> Get(ICollection<string> keys); 
 
         /// <summary>
         ///   Clears the entire cache.
