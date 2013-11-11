@@ -220,6 +220,8 @@ namespace Infrastructure.Tests.Caching
             _cache.Remove(Key);
             _cacheMock.Verify();
         }
+
+
     }
 
     //// ReSharper restore InconsistentNaming
