@@ -16,6 +16,8 @@
 
 #endregion
 
+using System.Net.NetworkInformation;
+
 namespace Alphacloud.Common.Core.Data
 {
     using System;
@@ -239,8 +241,68 @@ namespace Alphacloud.Common.Core.Data
             return collection == null || collection.Count == 0;
         }
 
+
+        /// <summary>
+        /// Create dictionary from source
+        /// </summary>
+        /// <typeparam name="TItem"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="keySelector"></param>
+        /// <param name="valueSelector"></param>
+        /// <param name="duplicateKeyHandlingOption"></param>
+        /// <param name="dictionary"></param>
+        /// <returns></returns>
+        public static IDictionary<TKey, TValue> CreateDictionary<TItem, TKey, TValue>(
+            [NotNull] this IEnumerable<TItem> source, [NotNull] Func<TItem, TKey> keySelector,
+            [NotNull] Func<TItem, TValue> valueSelector,
+            DuplicateKeyHandling duplicateKeyHandlingOption, 
+            [CanBeNull] IDictionary<TKey, TValue> dictionary = null)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (keySelector == null) throw new ArgumentNullException("keySelector");
+            if (valueSelector == null) throw new ArgumentNullException("valueSelector");
+
+            if(dictionary == null)
+                dictionary = new Dictionary<TKey, TValue>();
+
+            switch (duplicateKeyHandlingOption)
+            {
+                case DuplicateKeyHandling.KeepFirst:
+                    foreach (var item in source)
+                    {
+                        var key = keySelector(item);
+                        if (!dictionary.ContainsKey(key))
+                            dictionary.Add(key, valueSelector(item));
+                    }
+                    break;
+                case DuplicateKeyHandling.KeepLast:
+                    foreach (var item in source)
+                    {
+                        dictionary[keySelector(item)] = valueSelector(item);
+                    }
+                    break;
+                case DuplicateKeyHandling.Error:
+                    foreach (var item in source)
+                    {
+                        dictionary.Add(keySelector(item), valueSelector(item));
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("duplicateKeyHandlingOption");
+            }
+            return dictionary;
+        }
     }
 
+
+    public enum DuplicateKeyHandling
+    {
+        KeepFirst,
+        KeepLast,
+        Error
+    }
 
     /// <summary>
     ///   Represents sequence of single item.
