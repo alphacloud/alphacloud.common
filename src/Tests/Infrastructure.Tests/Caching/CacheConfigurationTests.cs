@@ -15,11 +15,12 @@
         [Test]
         public void ShouldReadDurationFromAppConfig()
         {
-            CacheDuration.Instance.Tiny.Should().Be(1.Seconds());
-            CacheDuration.Instance.Short.Should().Be(5.Seconds());
-            CacheDuration.Instance.Balanced.Should().Be(30.Seconds());
-            CacheDuration.Instance.Long.Should().Be(1.Minutes());
-            CacheDuration.Instance.Huge.Should().Be(1.Hours());
+            var cacheDuration = CacheDuration.LoadDurationSettings();
+            cacheDuration.Tiny.Should().Be(1.Seconds());
+            cacheDuration.Short.Should().Be(5.Seconds());
+            cacheDuration.Balanced.Should().Be(30.Seconds());
+            cacheDuration.Long.Should().Be(1.Minutes());
+            cacheDuration.Huge.Should().Be(1.Hours());
         }
     }
 

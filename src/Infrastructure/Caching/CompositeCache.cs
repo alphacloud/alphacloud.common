@@ -16,15 +16,15 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Alphacloud.Common.Core.Data;
+using Common.Logging;
+using JetBrains.Annotations;
 
 namespace Alphacloud.Common.Infrastructure.Caching
 {
-    using System;
-    using Core.Data;
-    using JetBrains.Annotations;
-    using global::Common.Logging;
-
     /// <summary>
     ///   Composite cache.
     ///   Aggregates two caches: local (short-term) and backing (long-term).
@@ -45,10 +45,9 @@ namespace Alphacloud.Common.Infrastructure.Caching
 
         static readonly ILog s_log = LogManager.GetCurrentClassLogger();
         readonly ICache _backingCache;
+        readonly bool _devMode;
         readonly ICache _localCache;
         readonly ILocalCacheTimeoutStrategy _localTimeoutStrategy;
-
-        readonly bool _devMode;
 
         string _prefix;
 
@@ -61,12 +60,14 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <param name="localTimeoutStrategy">The local cache timeout calculation strategy.</param>
         /// <param name="devMode">
         ///   Development mode.
-        ///   if set to <c>true</c> cache keys will be prefixed with unque value to prevent collisions whan using same cache by development team.
+        ///   if set to <c>true</c> cache keys will be prefixed with unque value to prevent collisions whan using same cache by
+        ///   development team.
         /// </param>
         /// <exception cref="System.ArgumentNullException">localCache is null</exception>
         /// <exception cref="System.ArgumentNullException">backingCache is null</exception>
         /// <remarks>
-        ///   When <c>devMode</c> is on, cache keys are prefixed with machine name and random number. This prevents cache collisions when using same cache server by development team.
+        ///   When <c>devMode</c> is on, cache keys are prefixed with machine name and random number. This prevents cache
+        ///   collisions when using same cache server by development team.
         ///   Also this allows to start with empty cache by simply restarting application.
         /// </remarks>
         public CompositeCache(
@@ -149,9 +150,26 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
-        public IDictionary<string, object> Get(ICollection<string> keys)
+        public IDictionary<string, object> Get([NotNull] ICollection<string> keys)
         {
-            throw new NotImplementedException();
+            if (keys == null) throw new ArgumentNullException("keys");
+            var localData = _localCache.Get(keys);
+
+            var missingKeys = keys.Where(k => localData.ValueOrDefault(k) == null).ToArray();
+            if (!missingKeys.Any()) return localData;
+
+            var remoteData = _backingCache.Get(missingKeys);
+            foreach (var kv in remoteData)
+            {
+                // update local cache: mske sure no obsolete data stored locally
+                if (kv.Value != null)
+                    _localCache.Put(kv.Key, kv.Value, _localTimeoutStrategy.GetLocalTimeout(TimeSpan.Zero));
+                else
+                    _localCache.Remove(kv.Key);
+
+                localData[kv.Key] = kv.Value;
+            }
+            return localData;
         }
 
 

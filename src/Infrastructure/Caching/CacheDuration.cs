@@ -101,7 +101,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
-        static CacheDuration LoadDurationSettings()
+        internal static CacheDuration LoadDurationSettings()
         {
             var duration = new CacheDuration();
             var section = (CacheDurationSection) ConfigurationManager.GetSection(ConfigPath);

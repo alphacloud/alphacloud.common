@@ -16,18 +16,16 @@
 
 #endregion
 
+using System.Collections.Generic;
+using System.Linq;
+using Alphacloud.Common.Infrastructure.Caching;
+using Alphacloud.Common.Testing.Nunit;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
+
 namespace Infrastructure.Tests.Caching
 {
-    using System.Linq;
-
-    using Alphacloud.Common.Infrastructure.Caching;
-
-    using FluentAssertions;
-
-    using Moq;
-
-    using NUnit.Framework;
-
     //// ReSharper disable InconsistentNaming
 
     [TestFixture]
@@ -37,61 +35,23 @@ namespace Infrastructure.Tests.Caching
         const string Value = "val";
         CompositeCache _cache;
 
+
         protected override void DoSetup()
         {
             base.DoSetup();
             _cache = new CompositeCache(LocalCache.Object, RemoteCache.Object, new FixedTimeoutStrategy(2.Seconds()));
         }
 
-        [Test]
-        public void Get_FromRemoteCache_Should_UpdateLocal()
-        {
-            RemoteCache.Setup(c => c.Get(Key))
-                .Returns(Value);
-
-            _cache.Get(Key).Should().Be(Value, "data lost");
-
-            LocalCache.Verify(c => c.Put(Key, Value, 2.Seconds()), "should update local cache");
-        }
-
-        [Test]
-        public void Get_Should_ReturnDataFromLocaCache()
-        {
-            LocalCache.Setup(c => c.Get(Key))
-                .Returns(Value);
-
-            _cache.Get(Key)
-                .Should().Be(Value, "wrong data returned from cache");
-            RemoteCache.Verify(c => c.Get(Key), Times.Never(),
-                "should not access remote cache if local cache contains data");
-        }
-
-        [Test]
-        public void Put_Should_UpdateCaches()
-        {
-            _cache.Put(Key, Value, 30.Seconds());
-
-            LocalCache.Verify(c => c.Put(Key, Value, 2.Seconds()), "should update local cache with LocalTimeout");
-            RemoteCache.Verify(c => c.Put(Key, Value, 30.Seconds()), "should update remote cache");
-        }
-
-        [Test]
-        public void Remove_Should_RemoveDataFromCaches()
-        {
-            _cache.Remove(Key);
-
-            LocalCache.Verify(c => c.Remove(Key), "should remove from local cache");
-            RemoteCache.Verify(c => c.Remove(Key), "should remove from remote cache");
-        }
 
         [Test]
         public void Clear_Should_ClearCaches()
         {
             _cache.Clear();
-            
+
             LocalCache.Verify(localCache => localCache.Clear());
             RemoteCache.Verify(remoteCache => remoteCache.Clear());
         }
+
 
         [Test]
         public void GetStatistics_Should_CollectStatistics()
@@ -119,6 +79,103 @@ namespace Infrastructure.Tests.Caching
             locaStats.PutCount.Should().Be(100);
             locaStats.ItemCount.Should().Be(50);
             locaStats.HitRate.Should().Be(10);
+        }
+
+
+        [Test]
+        public void Get_FromRemoteCache_Should_UpdateLocal()
+        {
+            RemoteCache.Setup(c => c.Get(Key))
+                .Returns(Value);
+
+            _cache.Get(Key).Should().Be(Value, "data lost");
+
+            LocalCache.Verify(c => c.Put(Key, Value, 2.Seconds()), "should update local cache");
+        }
+
+
+        [Test]
+        public void Get_Should_ReturnDataFromLocaCache()
+        {
+            LocalCache.Setup(c => c.Get(Key))
+                .Returns(Value);
+
+            _cache.Get(Key)
+                .Should().Be(Value, "wrong data returned from cache");
+            RemoteCache.Verify(c => c.Get(Key), Times.Never(),
+                "should not access remote cache if local cache contains data");
+        }
+
+
+        [Test]
+        public void MultiGet_Should_TryLocalCacheFirst()
+        {
+            var localCacheResponse = new Dictionary<string, object> {
+                {"k1", "v1"},
+                {"k2", "v2"},
+                {"k3", null}
+            };
+            var remoteCacheResponse = new Dictionary<string, object> {
+                {"k3", "v3"}
+            };
+
+            LocalCache.Setup(lc => lc.Get(Argument.IsCollection(new[] {"k1", "k2"})))
+                .Returns(localCacheResponse);
+            RemoteCache.Setup(rc => rc.Get(new[] {"k3"}))
+                .Returns(remoteCacheResponse);
+
+            var res = _cache.Get(new[] {"k1", "k2", "k3"});
+            res.Should().Contain(new KeyValuePair<string, object>("k1", "v1"), "local cache failed");
+            res.Should().Contain(new KeyValuePair<string, object>("k2", "v2"), "local cache failed");
+            res.Should().Contain(new KeyValuePair<string, object>("k3", "v3"), "remote cache failed");
+        }
+
+
+        [Test]
+        public void MultiGet_Should_UpdateLocalCacheWithFreshData()
+        {
+            var localResponse = new Dictionary<string, object> {
+                {"k1", null},
+                {"k2", null}
+            };
+            var remoteResponse = new Dictionary<string, object> {
+                {"k1", "v1"},
+                {"k2", null}
+            };
+
+            var keys = new[] {"k1", "k2"};
+            LocalCache.Setup(lc => lc.Get(Argument.IsCollection(keys)))
+                .Returns(localResponse);
+            RemoteCache.Setup(rc => rc.Get(Argument.IsCollection(keys)))
+                .Returns(remoteResponse);
+
+            var res = _cache.Get(keys);
+            res.Should().Contain(new KeyValuePair<string, object>("k1", "v1"))
+                .And.Contain(new KeyValuePair<string, object>("k2", null),
+                    "remote cache results not returned");
+
+            LocalCache.Verify(lc => lc.Put("k1", "v1", 2.Seconds()), "Local Cache should be updated with new data");
+            LocalCache.Verify(lc => lc.Remove("k2"), "obsolete data should be removed from cache");
+        }
+
+
+        [Test]
+        public void Put_Should_UpdateCaches()
+        {
+            _cache.Put(Key, Value, 30.Seconds());
+
+            LocalCache.Verify(c => c.Put(Key, Value, 2.Seconds()), "should update local cache with LocalTimeout");
+            RemoteCache.Verify(c => c.Put(Key, Value, 30.Seconds()), "should update remote cache");
+        }
+
+
+        [Test]
+        public void Remove_Should_RemoveDataFromCaches()
+        {
+            _cache.Remove(Key);
+
+            LocalCache.Verify(c => c.Remove(Key), "should remove from local cache");
+            RemoteCache.Verify(c => c.Remove(Key), "should remove from remote cache");
         }
     }
 
