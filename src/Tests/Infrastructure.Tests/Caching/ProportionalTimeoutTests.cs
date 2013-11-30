@@ -1,4 +1,5 @@
 ﻿#region copyright
+
 // Copyright 2013 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +13,9 @@
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
+
 #endregion
+
 namespace Infrastructure.Tests.Caching
 {
     using System;
@@ -21,35 +24,24 @@ namespace Infrastructure.Tests.Caching
     using NUnit.Framework;
 
     [TestFixture]
-    public class AdaptiveTimeoutTests
+    public class ProportionalTimeoutTests
     {
-        ProportionalTimeout _timeout;
-        TimeSpan _minTtl;
-        TimeSpan _maxTtl;
-
+        #region Setup/Teardown
 
         [SetUp]
-         public void SetUp()
+        public void SetUp()
         {
             _minTtl = 10.Seconds();
             _maxTtl = 20.Seconds();
             _timeout = new ProportionalTimeout(_minTtl, _maxTtl, 10);
         }
 
+        #endregion
 
-        [Test]
-        public void When_ZeroTimeoutIsSpecifued_Should_ReturnMinimalTtl()
-        {
-            _timeout.GetLocalTimeout(TimeSpan.Zero)
-                .Should().Be(_minTtl);
-        }
- 
-        [Test]
-        public void When_CalculatedTimeoutIsBelowMinTtl_Should_ReturnMinimalTtl()
-        {
-            _timeout.GetLocalTimeout(99.Seconds())
-                .Should().Be(_minTtl);
-        }
+        ProportionalTimeout _timeout;
+        TimeSpan _minTtl;
+        TimeSpan _maxTtl;
+
 
         [Test]
         public void When_CalculatedTimeouIsAboveMaximumTtl_Should_ReturnMaximumTtl()
@@ -58,11 +50,28 @@ namespace Infrastructure.Tests.Caching
                 .Should().Be(_maxTtl);
         }
 
+
+        [Test]
+        public void When_CalculatedTimeoutIsBelowMinTtl_Should_ReturnMinimalTtl()
+        {
+            _timeout.GetLocalTimeout(99.Seconds())
+                .Should().Be(_minTtl);
+        }
+
+
         [Test]
         public void When_CalculatedTimeoutIsInAllowedRange_Should_ReturnPercentage()
         {
             _timeout.GetLocalTimeout(120.Seconds())
                 .Should().Be(12.Seconds());
+        }
+
+
+        [Test]
+        public void When_ZeroTimeoutIsSpecifued_Should_ReturnMinimalTtl()
+        {
+            _timeout.GetLocalTimeout(TimeSpan.Zero)
+                .Should().Be(_minTtl);
         }
     }
 }
