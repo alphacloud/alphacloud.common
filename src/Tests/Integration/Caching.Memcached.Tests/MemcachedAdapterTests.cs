@@ -16,14 +16,13 @@
 
 #endregion
 
-using System.Collections.Generic;
-using Alphacloud.Common.Testing.Nunit;
-
 namespace Caching.Memcached.Tests
 {
     using System;
+    using System.Collections.Generic;
     using Alphacloud.Common.Caching.Memcached;
     using Alphacloud.Common.Infrastructure.Caching;
+    using Alphacloud.Common.Testing.Nunit;
     using Enyim.Caching;
     using Enyim.Caching.Memcached;
     using FluentAssertions;
@@ -82,18 +81,6 @@ namespace Caching.Memcached.Tests
 
 
         [Test]
-        public void Put_Should_TransformKey()
-        {
-            _clientMock.Setup(
-                cli => cli.Store(StoreMode.Set, It.IsAny<string>(), It.IsAny<object>(), It.IsAny<TimeSpan>()))
-                .Returns(true);
-            _adapter.Put("key-d", "value", 3.Seconds());
-
-            _clientMock.Verify(c => c.Store(StoreMode.Set, "test.key-d", "value", 3.Seconds()));
-        }
-
-
-        [Test]
         public void MultiGet_Should_PerformMultiGetWithTransformedKeys()
         {
             var cachedData = new Dictionary<string, object> {
@@ -109,6 +96,18 @@ namespace Caching.Memcached.Tests
             var res = _adapter.Get(new[] {"key1", "key2"});
             res.Should().Contain(new KeyValuePair<string, object>("key1", "val1"))
                 .And.Contain(new KeyValuePair<string, object>("key2", "val2"));
+        }
+
+
+        [Test]
+        public void Put_Should_TransformKey()
+        {
+            _clientMock.Setup(
+                cli => cli.Store(StoreMode.Set, It.IsAny<string>(), It.IsAny<object>(), It.IsAny<TimeSpan>()))
+                .Returns(true);
+            _adapter.Put("key-d", "value", 3.Seconds());
+
+            _clientMock.Verify(c => c.Store(StoreMode.Set, "test.key-d", "value", 3.Seconds()));
         }
     }
 }

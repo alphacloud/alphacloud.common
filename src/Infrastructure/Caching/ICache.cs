@@ -46,12 +46,6 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </exception>
         object Get([NotNull] string key);
 
-        /// <summary>
-        /// Multi-Get
-        /// </summary>
-        /// <param name="keys">Keys to retrieve from cache</param>
-        /// <returns>Key-value dictionary. Missing items will have <c>null</c> value.</returns>
-        IDictionary<string, object> Get(ICollection<string> keys); 
 
         /// <summary>
         ///   Clears the entire cache.
@@ -85,5 +79,15 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <returns></returns>
         [NotNull]
         CacheStatistics GetStatistics();
+
+
+        IDictionary<string, object> Get([NotNull] ICollection<string> keys);
+
+        /// <summary>
+        /// Store multiple values in cache.
+        /// </summary>
+        /// <param name="data">Key-Value pairs</param>
+        /// <param name="ttl">Absolute expiration timeout.</param>
+        void Put([NotNull] ICollection<KeyValuePair<string, object>> data, TimeSpan ttl);
     }
 }

@@ -23,7 +23,7 @@ namespace Infrastructure.Tests.Caching
     [TestFixture]
     public class AdaptiveTimeoutTests
     {
-        AdaptiveTimeout _timeout;
+        ProportionalTimeout _timeout;
         TimeSpan _minTtl;
         TimeSpan _maxTtl;
 
@@ -33,7 +33,7 @@ namespace Infrastructure.Tests.Caching
         {
             _minTtl = 10.Seconds();
             _maxTtl = 20.Seconds();
-            _timeout = new AdaptiveTimeout(_minTtl, _maxTtl, 10);
+            _timeout = new ProportionalTimeout(_minTtl, _maxTtl, 10);
         }
 
 

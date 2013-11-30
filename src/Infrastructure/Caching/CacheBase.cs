@@ -283,6 +283,46 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
         }
 
+        public virtual void Put([NotNull] ICollection<KeyValuePair<string, object>> data, TimeSpan ttl)
+        {
+            if (data == null) throw new ArgumentNullException("data");
+            if (ttl < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException("ttl", ttl, @"Cache timeout should be positive");
+
+            Log.Debug(m=>m("{0}: Adding {1}, expires after {2}", Name, new SequenceFormatter(data.Select(kvp=>kvp.Key)), ttl));
+            CheckDisposed();
+
+            if (!CanPut() || !data.Any())
+                return;
+
+            var preparedKeys = new SortedList<string, object>();
+            foreach (var kvp in data)
+            {
+                preparedKeys[PrepareCacheKey(kvp.Key)] = kvp.Value;
+            }
+            try
+            {
+                DoPutOrRemove(preparedKeys, ttl);
+                Log.InfoFormat("{0}: Added {1}", Name, new SequenceFormatter(data.Select(kvp => kvp.Key)));
+            }
+            catch (Exception ex)
+            {
+                Log.WarnFormat("{0}: Put({1})", ex, Name, new SequenceFormatter(data.Select(kvp => kvp.Key)));
+            }
+        }
+
+
+        protected virtual void DoPutOrRemove(IEnumerable<KeyValuePair<string, object>> data, TimeSpan ttl)
+        {
+            foreach (var kvp in data)
+            {
+                if (kvp.Value == null)
+                    DoRemove(kvp.Key);
+                else
+                    DoPut(kvp.Key, kvp.Value, ttl);
+            }
+        }
+
         #endregion
 
         /// <summary>

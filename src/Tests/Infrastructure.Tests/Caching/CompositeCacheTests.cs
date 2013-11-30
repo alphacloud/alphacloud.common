@@ -16,16 +16,16 @@
 
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
-using Alphacloud.Common.Infrastructure.Caching;
-using Alphacloud.Common.Testing.Nunit;
-using FluentAssertions;
-using Moq;
-using NUnit.Framework;
-
 namespace Infrastructure.Tests.Caching
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Alphacloud.Common.Infrastructure.Caching;
+    using Alphacloud.Common.Testing.Nunit;
+    using FluentAssertions;
+    using Moq;
+    using NUnit.Framework;
+
     //// ReSharper disable InconsistentNaming
 
     [TestFixture]
@@ -156,6 +156,34 @@ namespace Infrastructure.Tests.Caching
 
             LocalCache.Verify(lc => lc.Put("k1", "v1", 2.Seconds()), "Local Cache should be updated with new data");
             LocalCache.Verify(lc => lc.Remove("k2"), "obsolete data should be removed from cache");
+        }
+
+
+        [Test]
+        public void MultiPut_Should_UpdateLocalCache()
+        {
+            var data = new Dictionary<string, object> {
+                {"k1", "v1"},
+                {"k2", "v2"}
+            };
+
+            _cache.Put(data, 1.Minutes());
+
+            LocalCache.Verify(lc => lc.Put(Argument.IsDictionary(data), 2.Seconds()), "local cache not updated");
+        }
+
+
+        [Test]
+        public void MultiPut_Should_UpdateRemoteCache()
+        {
+            var data = new Dictionary<string, object> {
+                {"k1", "v1"},
+                {"k2", "v2"}
+            };
+
+            _cache.Put(data, 1.Minutes());
+
+            LocalCache.Verify(lc => lc.Put(Argument.IsDictionary(data), 2.Seconds()), "local cache not updated");
         }
 
 

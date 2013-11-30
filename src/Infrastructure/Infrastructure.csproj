@@ -67,7 +67,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Caching\AdaptiveTimeout.cs" />
+    <Compile Include="Caching\ProportionalTimeout.cs" />
     <Compile Include="Caching\CacheBase.cs" />
     <Compile Include="Caching\Cached.cs" />
     <Compile Include="Caching\CacheDuration.cs" />

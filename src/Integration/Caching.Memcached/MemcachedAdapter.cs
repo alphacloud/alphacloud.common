@@ -16,17 +16,17 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Alphacloud.Common.Core.Data;
-using Alphacloud.Common.Infrastructure.Caching;
-using Enyim.Caching;
-using Enyim.Caching.Memcached;
-using JetBrains.Annotations;
-
 namespace Alphacloud.Common.Caching.Memcached
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Core.Data;
+    using Enyim.Caching;
+    using Enyim.Caching.Memcached;
+    using Infrastructure.Caching;
+    using JetBrains.Annotations;
+
     /// <summary>
     ///   Memcached adapter.
     /// </summary>

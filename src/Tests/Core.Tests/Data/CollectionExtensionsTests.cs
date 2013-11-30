@@ -16,16 +16,15 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Alphacloud.Common.Core.Data;
-using FluentAssertions;
-using NUnit.Framework;
-
 namespace Core.Tests.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using Alphacloud.Common.Core.Data;
+    using FluentAssertions;
+    using NUnit.Framework;
+
     //// ReSharper disable InconsistentNaming
 
     [TestFixture]

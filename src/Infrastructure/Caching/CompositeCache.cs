@@ -25,6 +25,9 @@ using JetBrains.Annotations;
 
 namespace Alphacloud.Common.Infrastructure.Caching
 {
+    using System.Globalization;
+    using System.Threading.Tasks;
+
     /// <summary>
     ///   Composite cache.
     ///   Aggregates two caches: local (short-term) and backing (long-term).
@@ -170,6 +173,38 @@ namespace Alphacloud.Common.Infrastructure.Caching
                 localData[kv.Key] = kv.Value;
             }
             return localData;
+        }
+
+
+        public void Put([NotNull] ICollection<KeyValuePair<string, object>> data, TimeSpan ttl)
+        {
+            if (data == null) throw new ArgumentNullException("data");
+            if(!data.Any())
+                return;
+            try
+            {
+                // prepare data for parallel upload
+                var local = new List<KeyValuePair<string, object>>(data.Count);
+                var remote = new List<KeyValuePair<string, object>>(data.Count);
+                foreach (var pair in data)
+                {
+                    var formattedKey = FormatKey(pair.Key);
+                    local.Add(new KeyValuePair<string, object>(formattedKey, pair.Value));
+                    remote.Add(new KeyValuePair<string, object>(formattedKey, pair.Value));
+                }
+
+                var updateTasks = new[] {
+                    Task.Factory.StartNew(() => _backingCache.Put(data, ttl)),
+                    Task.Factory.StartNew(() => _localCache.Put(data, _localTimeoutStrategy.GetLocalTimeout(ttl))),    
+                };
+
+                Task.WaitAll(updateTasks);
+            }
+            catch (Exception ex)
+            {
+                s_log.WarnFormat(CultureInfo.InvariantCulture, "Error storing data {0}", ex,
+                    new SequenceFormatter(data.Select(p => p.Key)));
+            }
         }
 
 
