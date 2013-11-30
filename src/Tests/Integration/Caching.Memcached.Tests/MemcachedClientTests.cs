@@ -16,6 +16,8 @@
 
 #endregion
 
+using Alphacloud.Common.Core.Data;
+
 namespace Caching.Memcached.Tests
 {
     using System;
@@ -75,6 +77,19 @@ namespace Caching.Memcached.Tests
             var res = _client.Get(new[] {k1, k2});
             res.Should().ContainKey(k1).And.Subject[k1].Should().Be("1");
             res.Should().ContainKey(k2).And.Subject[k2].Should().Be("2");
+        }
+
+
+        [Test]
+        public void MultiGet_Should_SkipMissingKeys()
+        {
+            var k1 = Guid.NewGuid().ToString();
+            var k2 = "Missing.{0}".ApplyArgs(Guid.NewGuid());
+            _client.Store(StoreMode.Set, k1, "val");
+
+            var res = _client.Get(new[] {k1, k2});
+
+            res.Should().ContainKey(k1);
         }
     }
 }

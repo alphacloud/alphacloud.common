@@ -16,14 +16,17 @@
 
 #endregion
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Alphacloud.Common.Core.Data;
+using Alphacloud.Common.Infrastructure.Caching;
+using Enyim.Caching;
+using Enyim.Caching.Memcached;
+using JetBrains.Annotations;
+
 namespace Alphacloud.Common.Caching.Memcached
 {
-    using System;
-    using Enyim.Caching;
-    using Enyim.Caching.Memcached;
-    using Infrastructure.Caching;
-    using JetBrains.Annotations;
-
     /// <summary>
     ///   Memcached adapter.
     /// </summary>
@@ -76,6 +79,39 @@ namespace Alphacloud.Common.Caching.Memcached
             {
                 Log.WarnFormat("{0}: Failed to store '{1}' in cache", Name, key);
             }
+        }
+
+
+        protected override IDictionary<string, object> DoMultiGet(ICollection<string> keys)
+        {
+            var preparedKeysMap = BuildPreparedToOriginalKeyMap(keys);
+
+            var result = new Dictionary<string, object>(keys.Count);
+
+            var cached = _client.Get(preparedKeysMap.Keys);
+            foreach (var km in preparedKeysMap)
+            {
+                result[km.Value] = cached.ValueOrDefault(km.Key);
+            }
+
+            // log hits and misses
+            Log.Debug(m => m("{0}: MultiGet hit: {1}, miss: {2}", Name,
+                new SequenceFormatter(result.Where(kv => kv.Value != null).Select(kv => kv.Key)),
+                new SequenceFormatter(result.Where(kv => kv.Value == null).Select(kv => kv.Key))
+                ));
+
+            return result;
+        }
+
+
+        IDictionary<string, string> BuildPreparedToOriginalKeyMap(ICollection<string> keys)
+        {
+            var preparedkeysMap = new SortedList<string, string>(keys.Count);
+            foreach (var key in keys)
+            {
+                preparedkeysMap[PrepareCacheKey(key)] = key;
+            }
+            return preparedkeysMap;
         }
 
 

@@ -155,23 +155,33 @@ namespace Alphacloud.Common.Infrastructure.Caching
             if (keys == null) throw new ArgumentNullException("keys");
             Log.Debug(m => m("{1}: Getting data for keys '{0}'", new SequenceFormatter(keys), Name));
 
+            if (!keys.Any())
+                return new Dictionary<string, object>();
+
             CheckDisposed();
-            var res = new Dictionary<string, object>();
+            
             if (!CanGet())
             {
+                var res = new Dictionary<string, object>(keys.Count);
                 // build dictionary
                 foreach (var key in keys)
                 {
                     res[key] = null;
                 }
+                return res;
             }
-            else
+            return DoMultiGet(keys);
+            
+        }
+
+        protected virtual IDictionary<string, object> DoMultiGet(ICollection<string> keys)
+        {
+            var res = new Dictionary<string, object>();
+            foreach (var key in keys)
             {
-                foreach (var key in keys)
-                {
-                    res[key] = SafeGetWithLogging(key);
-                }
+                res[key] = SafeGetWithLogging(key);
             }
+
             return res;
         }
 
