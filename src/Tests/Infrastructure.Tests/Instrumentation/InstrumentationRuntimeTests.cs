@@ -27,12 +27,10 @@ namespace Infrastructure.Tests.Instrumentation
         [SetCulture("ru-RU")]
         [SetUICulture("ru-RU")]
         [SetPrincipal("capture-context")]
+        [Ignore("todo")]
         public void Capture_Should_CaptureCurrentContext()
         {
-            var context = InstrumentationRuntime.CaptureContext();
-
-            context.
-
+            //var context = InstrumentationRuntime.CaptureContext();
         }
     }
 }
