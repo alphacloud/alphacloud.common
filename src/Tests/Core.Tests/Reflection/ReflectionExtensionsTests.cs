@@ -29,6 +29,8 @@
 
         private class Test1
         {
+            string _field = "private-field";
+
             #region .ctor
 
             public Test1()
@@ -56,7 +58,7 @@
         }
 
         [Test]
-        public void ShouldEnumaratAllPublicProperties()
+        public void ToDataDictionary_ShouldEnumaratAllPublicProperties()
         {
             var data = new {Prop1 = "string", Prop2 = 22};
             var dic = data.ToDataDictionary();
@@ -66,19 +68,35 @@
 
 
         [Test]
-        public void ShouldSkipIndexedProperties()
+        public void ToDataDictionary_ShouldSkipIndexedProperties()
         {
             new IndexedData().ToDataDictionary().Should().HaveCount(0, "should skip indexed properties");
         }
 
 
         [Test]
-        public void ShouldSkipNonPublicProperties()
+        public void ToDataDictionary_ShouldSkipNonPublicProperties()
         {
             new Test1().ToDataDictionary()
                 .Should().ContainKey("PublicProp")
                 .And.ContainValue("public")
                 .And.HaveCount(1, "non-public properties should not be listed");
+        }
+
+
+        [Test]
+        public void PropertyValue_Should_ReturnPropertyValue()
+        {
+            new Test1().PropertyValue<string>("NonPublic")
+                .Should().Be("non-public");
+        }
+
+
+        [Test]
+        public void FieldValue_Should_ReturnFieldValue()
+        {
+            new Test1().FieldValue<string>("_field")
+                .Should().Be("private-field");
         }
     }
 }
