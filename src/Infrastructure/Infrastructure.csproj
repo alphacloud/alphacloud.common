@@ -91,10 +91,12 @@
     <Compile Include="Caching\NullCacheHealthcheckMonitor.cs" />
     <Compile Include="Caching\TransformingCacheWrapper.cs" />
     <Compile Include="Caching\UserCacheKeyTransformer.cs" />
+    <Compile Include="Instrumentation\CapturedContext.cs" />
+    <Compile Include="Instrumentation\InstrumentationEventArgs.cs" />
     <Compile Include="Instrumentation\InstrumentationRuntime.cs" />
     <Compile Include="Instrumentation\InstrumentationContext.cs" />
-    <Compile Include="Instrumentation\InstrumentationEvents.cs" />
     <Compile Include="Instrumentation\InstrumentationScope.cs" />
+    <Compile Include="Instrumentation\InstrumentationSettings.cs" />
     <Compile Include="Instrumentation\LogExtensions.cs" />
     <Compile Include="SafeServiceLocator.cs" />
     <Compile Include="Instrumentation\ThreadStaticInstrumentationContextProvider.cs" />

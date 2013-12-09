@@ -19,8 +19,6 @@
 namespace Alphacloud.Common.Infrastructure.Instrumentation
 {
     using System;
-    using System.Globalization;
-    using System.Security.Principal;
     using System.Threading;
     using Core.Instrumentation;
     using Core.Utils;
@@ -28,7 +26,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     using JetBrains.Annotations;
 
     /// <summary>
-    ///   Instrumentation and correlation context.
+    ///   Instrumentation and correlation management runtime.
     /// </summary>
     /// <remarks>
     ///   Requires following services to be registered in ServiceLocator:
@@ -48,192 +46,178 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     ///   </list>
     /// </remarks>
     [PublicAPI]
-    public static class InstrumentationRuntime
+    public class InstrumentationRuntime
     {
         static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+
+        static Lazy<InstrumentationRuntime> s_instance =
+            new Lazy<InstrumentationRuntime>(() => new InstrumentationRuntime());
+
+        static readonly InstrumentationSettings s_defaultSettings = new InstrumentationSettings();
+
+
+        Func<InstrumentationSettings> _configurationProvider;
+
+        /// <summary>
+        ///   The database call completed event.
+        /// </summary>
+        public EventHandler<InstrumentationEventArgs> DatabaseCallCompleted;
+
+        /// <summary>
+        ///   The operation completed event.
+        /// </summary>
+        public EventHandler<OperationCompletedEventArgs> OperationCompleted;
+
+        /// <summary>
+        ///   The service call completed event.
+        /// </summary>
+        public EventHandler<InstrumentationEventArgs> ServiceCallCompleted;
+
+
+        /// <summary>
+        ///   Instrumentation runtime instance.
+        /// </summary>
+        public static InstrumentationRuntime Instance
+        {
+            get { return s_instance.Value; }
+        }
+
+
+        /// <summary>
+        ///   Sets instrumentation settings provider.
+        /// </summary>
+        /// <param name="configurationProvider">Settings provider.</param>
+        /// <remarks>
+        ///   Settings returned by provider are not cached by instrumentation runtime.
+        /// </remarks>
+        public void SetConfigurationProvider([NotNull] Func<InstrumentationSettings> configurationProvider)
+        {
+            if (configurationProvider == null) throw new ArgumentNullException("configurationProvider");
+            _configurationProvider = configurationProvider;
+        }
+
+
+        public void OnOperationCompleted([CanBeNull] object sender, string operation, TimeSpan duration)
+        {
+            if (!IsEnabed())
+                return;
+
+            EventHelper.Raise(OperationCompleted, () => new OperationCompletedEventArgs {
+                Context = GetInstrumentationContext(),
+                CorrelationId = SafeServiceLocator.Resolve<ICorrelationIdProvider>().GetId(),
+                Duration = duration,
+                OperationName = operation,
+                ManagedThreadId = Thread.CurrentThread.ManagedThreadId
+            }, sender);
+        }
+
+        /// <summary>
+        /// Logs service call completion and broadcasts <see cref="ServiceCallCompleted"/> event.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="methodName">Service mathod name.</param>
+        /// <param name="duration">Call duration.</param>
+        public void OnServiceCallCompleted([CanBeNull] object sender, string methodName, TimeSpan duration)
+        {
+            if (!IsEnabed())
+                return;
+
+            GetInstrumentationContext().AddServiceCall(methodName, duration);
+
+            EventHelper.Raise(ServiceCallCompleted, () => new InstrumentationEventArgs {
+                CorrelationId = SafeServiceLocator.Resolve<ICorrelationIdProvider>().GetId(),
+                Duration = duration,
+                ManagedThreadId = Thread.CurrentThread.ManagedThreadId,
+                OperationName = methodName
+            }, sender);
+        }
+
+
+        /// <summary>
+        /// Logs database call completions and broadcasts <see cref="DatabaseCallCompleted"/> event.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="sql">Database call information.</param>
+        /// <param name="duration">Duration.</param>
+        public void OnDatabaseCallCompleted([CanBeNull] object sender, string sql, TimeSpan duration)
+        {
+            if (!IsEnabed())
+                return;
+
+            GetInstrumentationContext().AddDatabaseCall(sql, duration);
+
+            EventHelper.Raise(DatabaseCallCompleted, () => new InstrumentationEventArgs {
+                CorrelationId = SafeServiceLocator.Resolve<ICorrelationIdProvider>().GetId(),
+                Duration = duration,
+                ManagedThreadId = Thread.CurrentThread.ManagedThreadId,
+                OperationName = sql
+            }, sender);
+        }
 
 
         /// <summary>
         ///   Captures instrumentation context.
         /// </summary>
-        /// <returns></returns>
-        public static CapturedContext CaptureContext()
+        /// <returns>Captured execution context.</returns>
+        /// <remarks>
+        ///   If instrumentation is not enabled, culture info (<see cref="Thread.CurrentCulture" />,
+        ///   <see cref="Thread.CurrentUICulture" />)
+        ///   and Principal (<see cref="Thread.CurrentPrincipal" />.
+        /// </remarks>
+        public CapturedContext CaptureContext()
         {
             var currentThread = Thread.CurrentThread;
             var culture = currentThread.CurrentCulture;
             var uiCulture = currentThread.CurrentUICulture;
             var principal = Thread.CurrentPrincipal;
 
-            var correlationId = SafeServiceLocator.Resolve<ICorrelationIdProvider>().GetId();
-            var instrumentationContext =
-                SafeServiceLocator.Resolve<IInstrumentationContextProvider>().GetInstrumentationContext();
+            CapturedContext ctx;
 
-            s_log.Debug("Captured context");
-            return new CapturedContext(culture, uiCulture, principal, currentThread.ManagedThreadId, correlationId,
-                instrumentationContext);
-        }
-    }
+            if (IsEnabed())
+            {
+                var correlationId = SafeServiceLocator.Resolve<ICorrelationIdProvider>().GetId();
+                var instrumentationContext =
+                    SafeServiceLocator.Resolve<IInstrumentationContextProvider>().GetInstrumentationContext();
+                ctx = new CapturedContext(culture, uiCulture, principal, currentThread.ManagedThreadId, correlationId,
+                    instrumentationContext);
+            }
+            else
+                ctx = new CapturedContext(culture, uiCulture, principal, currentThread.ManagedThreadId);
 
-    /// <summary>
-    ///   Stores captured instrumentation context.
-    ///   Context includes:
-    ///   <list type="table">
-    ///     <item>
-    ///       <term>Culture</term>
-    ///       <description>
-    ///         <see cref="Thread.CurrentCulture" />
-    ///       </description>
-    ///     </item>
-    ///     <item>
-    ///       <term>UI Culture</term>
-    ///       <description>
-    ///         <see cref="Thread.CurrentUICulture" />
-    ///       </description>
-    ///     </item>
-    ///     <item>
-    ///       <term>Principal</term>
-    ///       <description>
-    ///         <see cref="Thread.CurrentPrincipal" />
-    ///       </description>
-    ///     </item>
-    ///     <item>
-    ///       <term>Correlation Id</term>
-    ///       <description>Correlation Id</description>
-    ///     </item>
-    ///     <item>
-    ///       <term>Instrumentation context</term>
-    ///       <description>
-    ///         <see cref="IInstrumentationContext" />
-    ///       </description>
-    ///     </item>
-    ///   </list>
-    /// </summary>
-    public class CapturedContext
-    {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
-        static readonly IDisposable s_emptyContext = new EmptyContext();
+            s_log.Debug("Captured execution context");
 
-        readonly string _correlationId;
-        readonly CultureInfo _culture;
-        readonly IInstrumentationContext _instrumentationContext;
-        readonly int _originThread;
-        readonly IPrincipal _principal;
-        readonly CultureInfo _uiCulture;
-
-
-        internal CapturedContext(
-            CultureInfo culture, CultureInfo uiCulture,
-            IPrincipal principal,
-            int originThread,
-            string correlationId, IInstrumentationContext instrumentationContext)
-        {
-            _culture = culture;
-            _uiCulture = uiCulture;
-            _principal = principal;
-            _correlationId = correlationId;
-            _instrumentationContext = instrumentationContext;
-            _originThread = originThread;
+            return ctx;
         }
 
 
         /// <summary>
-        ///   Set captured context on current thread.
+        ///   Reset runtime.
+        ///   For Debug / Testing purposes only.
         /// </summary>
-        /// <returns>Saved context handler (<see cref="IDisposable" />) used to restore old thread parameters.</returns>
-        public IDisposable Set()
+        internal static void Reset()
         {
-            var oldCulture = Thread.CurrentThread.CurrentCulture;
-            var oldUiCulture = Thread.CurrentThread.CurrentUICulture;
-            var oldPrincipal = Thread.CurrentPrincipal;
-
-            var curThread = Thread.CurrentThread;
-            var currentTid = curThread.ManagedThreadId;
-
-            if (_originThread == currentTid)
-            {
-                s_log.Debug("Using origin thread - nothing to set.");
-                return s_emptyContext;
-            }
-
-            SetOnCurrentThread(_culture, _uiCulture, _principal);
-
-            var scope = SafeServiceLocator.Resolve<ICorrelationIdProvider>().SetId(_correlationId);
-            SafeServiceLocator.Resolve<IInstrumentationContextProvider>()
-                .SetInstrumentationContext(_instrumentationContext);
-            s_log.DebugFormat("Set context of thread {0}", _originThread);
-            return new SavedContext(oldCulture, oldUiCulture, oldPrincipal, currentTid, scope);
+            s_instance = new Lazy<InstrumentationRuntime>(() => new InstrumentationRuntime());
         }
 
 
-        static void SetOnCurrentThread(CultureInfo culture, CultureInfo uiCulture, IPrincipal principal)
+        [NotNull]
+        InstrumentationSettings GetConfiguration()
         {
-            var curThread = Thread.CurrentThread;
-            curThread.CurrentCulture = culture;
-            curThread.CurrentUICulture = uiCulture;
-            Thread.CurrentPrincipal = principal;
+            return _configurationProvider != null
+                ? _configurationProvider()
+                : s_defaultSettings;
         }
 
-        #region Nested type: EmptyContext
 
-        class EmptyContext : IDisposable
+        static IInstrumentationContext GetInstrumentationContext()
         {
-            #region IDisposable Members
-
-            public void Dispose()
-            {
-                s_log.Debug("Same thread - nothing to dispose.");
-            }
-
-            #endregion
+            return SafeServiceLocator.Resolve<IInstrumentationContextProvider>().GetInstrumentationContext();
         }
 
-        #endregion
 
-        #region Nested type: SavedContext
-
-        /// <summary>
-        ///   Saved context, will be restored when disposed.
-        /// </summary>
-        class SavedContext : IDisposable
+        bool IsEnabed()
         {
-            readonly int _managedThreadId;
-            readonly CultureInfo _oldCulture;
-            readonly IPrincipal _oldPrincipal;
-            readonly CultureInfo _oldUiCulture;
-            readonly IDisposable _scope;
-
-
-            internal SavedContext(CultureInfo oldCulture, CultureInfo oldUiCulture, IPrincipal oldPrincipal,
-                int managedThreadId, IDisposable scope)
-            {
-                _oldCulture = oldCulture;
-                _oldUiCulture = oldUiCulture;
-                _oldPrincipal = oldPrincipal;
-                _managedThreadId = managedThreadId;
-                _scope = scope;
-            }
-
-            #region IDisposable Members
-
-            /// <summary>
-            ///   Restores saved context
-            /// </summary>
-            public void Dispose()
-            {
-                if (Thread.CurrentThread.ManagedThreadId != _managedThreadId)
-                {
-                    s_log.WarnFormat("Attempt to restore context saved for threadd {0} on thread {1}. Ignored",
-                        _managedThreadId, Thread.CurrentThread.ManagedThreadId);
-                    return;
-                }
-                SetOnCurrentThread(_oldCulture, _oldUiCulture, _oldPrincipal);
-                Disposer.TryDispose(_scope);
-                s_log.DebugFormat("Restored context for thread {0}", _managedThreadId);
-            }
-
-            #endregion
+            return GetConfiguration().Enabled;
         }
-
-        #endregion
     }
 }

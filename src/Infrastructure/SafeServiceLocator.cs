@@ -49,8 +49,8 @@ namespace Alphacloud.Common.Infrastructure
             catch (ActivationException ae)
             {
                 throw new ActivationException(
-                    "Requested type {0} cannot be resolved. Make sure type is registered in IOC: {1}".ApplyArgs(
-                        typeof (TService), ae.Message), ae);
+                    "Requested type {0} cannot be resolved. Make sure type is registered in IOC.".ApplyArgs(
+                        typeof (TService)), ae);
             }
         }
     }

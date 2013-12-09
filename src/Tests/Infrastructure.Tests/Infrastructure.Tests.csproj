@@ -101,7 +101,8 @@
     <Compile Include="Caching\TransformingCacheWrapperTests.cs" />
     <Compile Include="Caching\UserIdentityCacheKeyScopeTests.cs" />
     <Compile Include="Castle\CastleWindsorTests.cs" />
-    <Compile Include="Instrumentation\InstrumentationRuntimeTests.cs" />
+    <Compile Include="Instrumentation\CapturedContextTests.cs" />
+    <Compile Include="IocTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

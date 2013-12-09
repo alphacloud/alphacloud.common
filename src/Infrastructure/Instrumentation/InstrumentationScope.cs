@@ -57,7 +57,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
             {
                 _timer.Stop();
 
-                InstrumentationEvents.Instance.OnOperationCompleted(this, _operation, _timer.Elapsed);
+                InstrumentationRuntime.Instance.OnOperationCompleted(this, _operation, _timer.Elapsed);
                 SafeServiceLocator.Resolve<IInstrumentationContextProvider>().Reset();
 
                 if (_correlationId != null)
@@ -83,7 +83,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         ~InstrumentationScope()
         {
             if (!_isDisposed)
-                s_log.WarnFormat("Instrumentation scope for '{0}' was not disposed properly", _operation);
+                s_log.WarnFormat("Instrumentation scope for '{0}' was not disposed", _operation);
         }
 #endif
     }
