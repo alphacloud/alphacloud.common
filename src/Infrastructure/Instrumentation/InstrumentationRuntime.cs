@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -57,22 +57,8 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
 
         Func<InstrumentationSettings> _configurationProvider;
-
-        /// <summary>
-        ///   The database call completed event.
-        /// </summary>
-        public EventHandler<InstrumentationEventArgs> DatabaseCallCompleted;
-
-        /// <summary>
-        ///   The operation completed event.
-        /// </summary>
-        public EventHandler<OperationCompletedEventArgs> OperationCompleted;
-
-        /// <summary>
-        ///   The service call completed event.
-        /// </summary>
-        public EventHandler<InstrumentationEventArgs> ServiceCallCompleted;
-
+        readonly Lazy<ICorrelationIdProvider> _correlationIdProvider = new Lazy<ICorrelationIdProvider>(SafeServiceLocator.Resolve<ICorrelationIdProvider>);
+        readonly Lazy<IInstrumentationContextProvider> _instrumentationContextProvider = new Lazy<IInstrumentationContextProvider>(SafeServiceLocator.Resolve<IInstrumentationContextProvider>);
 
         /// <summary>
         ///   Instrumentation runtime instance.
@@ -80,6 +66,49 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         public static InstrumentationRuntime Instance
         {
             get { return s_instance.Value; }
+        }
+
+        /// <summary>
+        ///   The database call completed event.
+        /// </summary>
+        public event EventHandler<InstrumentationEventArgs> DatabaseCallCompleted;
+
+        /// <summary>
+        ///   The operation completed event.
+        /// </summary>
+        public event EventHandler<OperationCompletedEventArgs> OperationCompleted;
+
+        /// <summary>
+        ///   The service call completed event.
+        /// </summary>
+        public event EventHandler<InstrumentationEventArgs> ServiceCallCompleted;
+
+
+        /// <summary>
+        ///   Attach logger.
+        /// </summary>
+        /// <param name="instrumentationLogger">Logger.</param>
+        public void Attach([NotNull] IInstrumentationLogger instrumentationLogger)
+        {
+            if (instrumentationLogger == null) throw new ArgumentNullException("instrumentationLogger");
+
+            DatabaseCallCompleted += instrumentationLogger.DatabaseCallCompleted;
+            ServiceCallCompleted += instrumentationLogger.ServiceCallCompleted;
+            OperationCompleted += instrumentationLogger.OperationCompleted;
+        }
+
+
+        /// <summary>
+        ///   Detach logger.
+        /// </summary>
+        /// <param name="instrumentationLogger">Logger.</param>
+        public void Detach([NotNull] IInstrumentationLogger instrumentationLogger)
+        {
+            if (instrumentationLogger == null) throw new ArgumentNullException("instrumentationLogger");
+
+            DatabaseCallCompleted -= instrumentationLogger.DatabaseCallCompleted;
+            ServiceCallCompleted -= instrumentationLogger.ServiceCallCompleted;
+            OperationCompleted -= instrumentationLogger.OperationCompleted;
         }
 
 
@@ -99,58 +128,59 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
         public void OnOperationCompleted([CanBeNull] object sender, string operation, TimeSpan duration)
         {
-            if (!IsEnabed())
+            if (!IsEnabled())
                 return;
 
             EventHelper.Raise(OperationCompleted, () => new OperationCompletedEventArgs {
-                Context = GetInstrumentationContext(),
-                CorrelationId = SafeServiceLocator.Resolve<ICorrelationIdProvider>().GetId(),
+                Context = _instrumentationContextProvider.Value.GetInstrumentationContext(),
+                CorrelationId = _correlationIdProvider.Value.GetId(),
                 Duration = duration,
-                OperationName = operation,
+                Command = operation,
                 ManagedThreadId = Thread.CurrentThread.ManagedThreadId
             }, sender);
         }
 
+
         /// <summary>
-        /// Logs service call completion and broadcasts <see cref="ServiceCallCompleted"/> event.
+        ///   Logs service call completion and broadcasts <see cref="ServiceCallCompleted" /> event.
         /// </summary>
         /// <param name="sender">Sender.</param>
-        /// <param name="methodName">Service mathod name.</param>
+        /// <param name="methodName">Service method name.</param>
         /// <param name="duration">Call duration.</param>
         public void OnServiceCallCompleted([CanBeNull] object sender, string methodName, TimeSpan duration)
         {
-            if (!IsEnabed())
+            if (!IsEnabled())
                 return;
 
-            GetInstrumentationContext().AddServiceCall(methodName, duration);
+            _instrumentationContextProvider.Value.GetInstrumentationContext().AddServiceCall(methodName, duration);
 
             EventHelper.Raise(ServiceCallCompleted, () => new InstrumentationEventArgs {
-                CorrelationId = SafeServiceLocator.Resolve<ICorrelationIdProvider>().GetId(),
+                CorrelationId = _correlationIdProvider.Value.GetId(),
                 Duration = duration,
                 ManagedThreadId = Thread.CurrentThread.ManagedThreadId,
-                OperationName = methodName
+                Command = methodName
             }, sender);
         }
 
 
         /// <summary>
-        /// Logs database call completions and broadcasts <see cref="DatabaseCallCompleted"/> event.
+        ///   Logs database call completions and broadcasts <see cref="DatabaseCallCompleted" /> event.
         /// </summary>
         /// <param name="sender">Sender.</param>
         /// <param name="sql">Database call information.</param>
         /// <param name="duration">Duration.</param>
         public void OnDatabaseCallCompleted([CanBeNull] object sender, string sql, TimeSpan duration)
         {
-            if (!IsEnabed())
+            if (!IsEnabled())
                 return;
 
-            GetInstrumentationContext().AddDatabaseCall(sql, duration);
+            _instrumentationContextProvider.Value.GetInstrumentationContext().AddDatabaseCall(sql, duration);
 
             EventHelper.Raise(DatabaseCallCompleted, () => new InstrumentationEventArgs {
-                CorrelationId = SafeServiceLocator.Resolve<ICorrelationIdProvider>().GetId(),
+                CorrelationId = _correlationIdProvider.Value.GetId(),
                 Duration = duration,
                 ManagedThreadId = Thread.CurrentThread.ManagedThreadId,
-                OperationName = sql
+                Command = sql
             }, sender);
         }
 
@@ -173,11 +203,10 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
             CapturedContext ctx;
 
-            if (IsEnabed())
+            if (IsEnabled())
             {
-                var correlationId = SafeServiceLocator.Resolve<ICorrelationIdProvider>().GetId();
-                var instrumentationContext =
-                    SafeServiceLocator.Resolve<IInstrumentationContextProvider>().GetInstrumentationContext();
+                var correlationId = _correlationIdProvider.Value.GetId();
+                var instrumentationContext = _instrumentationContextProvider.Value.GetInstrumentationContext();
                 ctx = new CapturedContext(culture, uiCulture, principal, currentThread.ManagedThreadId, correlationId,
                     instrumentationContext);
             }
@@ -209,13 +238,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         }
 
 
-        static IInstrumentationContext GetInstrumentationContext()
-        {
-            return SafeServiceLocator.Resolve<IInstrumentationContextProvider>().GetInstrumentationContext();
-        }
-
-
-        bool IsEnabed()
+        bool IsEnabled()
         {
             return GetConfiguration().Enabled;
         }
