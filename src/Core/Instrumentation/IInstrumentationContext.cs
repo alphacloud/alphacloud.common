@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -24,9 +24,25 @@ namespace Alphacloud.Common.Core.Instrumentation
     using JetBrains.Annotations;
 
     /// <summary>
+    ///   Call type.
+    /// </summary>
+    public static class CallType
+    {
+        /// <summary>
+        ///   Database call.
+        /// </summary>
+        public const string Database = "Database";
+
+        /// <summary>
+        ///   Service call.
+        /// </summary>
+        public const string Service = "Service";
+    }
+
+    /// <summary>
     ///   Method call count info.
     /// </summary>
-    public class CallCountInfo
+    public class CallSummary
     {
         /// <summary>
         ///   Method name.
@@ -37,6 +53,13 @@ namespace Alphacloud.Common.Core.Instrumentation
         ///   Number of calls made.
         /// </summary>
         public int CallCount { get; set; }
+
+        /// <summary>
+        ///   Call type.
+        /// </summary>
+        public string CallType { get; set; }
+
+        public TimeSpan Duration { get; set; }
 
 
         public override string ToString()
@@ -54,63 +77,44 @@ namespace Alphacloud.Common.Core.Instrumentation
     public interface IInstrumentationContext
     {
         /// <summary>
-        ///   Number of database calls made.
+        ///   Get number of call by type.
         /// </summary>
-        int DatabaseCallCount { get; }
-
-        /// <summary>
-        ///   Total time spent waiting for database calls to complete.
-        /// </summary>
-        TimeSpan DatabaseCallsDuration { get; }
-
-        /// <summary>
-        ///   Number of external Service calls made.
-        /// </summary>
-        int ServiceCallCount { get; }
-
-        /// <summary>
-        ///   Total time spent waiting for external service calls to complete.
-        /// </summary>
-        TimeSpan ServiceCallsDuration { get; }
+        /// <param name="callType">Type filter. If <c>null</c>, total number of calls will be returned.</param>
+        /// <returns>Number of calls.</returns>
+        int GetCallCount(string callType = null);
 
 
         /// <summary>
-        ///   Total number of calls made.
+        ///   Calculate total duration of calls.
         /// </summary>
-        /// <returns>Number of DB and service calls.</returns>
-        int GetTotalCallCount();
-
-
-        /// <summary>
-        ///   Add database call statistics.
-        /// </summary>
-        /// <param name="command">SQL command</param>
-        /// <param name="duration">Duration.</param>
-        void AddDatabaseCall(string command, TimeSpan duration);
-
-
-        /// <summary>
-        ///   Add external service call sattistics.
-        /// </summary>
-        /// <param name="serviceMethod">Service method being called.</param>
-        /// <param name="duration">Duration.</param>
-        void AddServiceCall(string serviceMethod, TimeSpan duration);
-
-
-        /// <summary>
-        ///   Returns duplicated database calls.
-        /// </summary>
-        /// <param name="threshold">The threshold.</param>
+        /// <param name="callType">Type filter. If <c>null</c>, all types will be included.</param>
         /// <returns></returns>
-        IList<CallCountInfo> GetDuplicatedDbCalls(int threshold);
+        TimeSpan GetCallDuration(string callType = null);
 
 
         /// <summary>
-        ///   Returns duplicated service calls.
+        ///   Find duplicated call by type.
         /// </summary>
-        /// <param name="threshold">The threshold.</param>
-        /// <returns></returns>
-        IList<CallCountInfo> GetDuplicatedServiceCalls(int threshold);
+        /// <param name="callType">Type filter.</param>
+        /// <param name="threshold">Minimum number of duplicates.</param>
+        /// <returns>List of duplicated calls.</returns>
+        CallSummary[] GetDuplicatedCalls([NotNull] string callType, int threshold = 2);
+
+
+        /// <summary>
+        ///   Add call information.
+        /// </summary>
+        /// <param name="callType">Type.</param>
+        /// <param name="info">Information</param>
+        /// <param name="duration">Duration.</param>
+        void AddCall(string callType, string info, TimeSpan duration);
+
+
+        /// <summary>
+        ///   Return all captured call types.
+        /// </summary>
+        /// <returns>Captured call types.</returns>
+        string[] GetCallTypes();
     }
 
     /// <summary>
@@ -134,7 +138,7 @@ namespace Alphacloud.Common.Core.Instrumentation
 
 
         /// <summary>
-        /// Re-initialize context.
+        ///   Re-initialize context.
         /// </summary>
         void Reset();
     }

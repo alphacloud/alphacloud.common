@@ -68,10 +68,6 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
             get { return s_instance.Value; }
         }
 
-        /// <summary>
-        ///   The database call completed event.
-        /// </summary>
-        public event EventHandler<InstrumentationEventArgs> DatabaseCallCompleted;
 
         /// <summary>
         ///   The operation completed event.
@@ -81,7 +77,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         /// <summary>
         ///   The service call completed event.
         /// </summary>
-        public event EventHandler<InstrumentationEventArgs> ServiceCallCompleted;
+        public event EventHandler<InstrumentationEventArgs> CallCompleted;
 
 
         /// <summary>
@@ -92,8 +88,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         {
             if (listener == null) throw new ArgumentNullException("listener");
 
-            DatabaseCallCompleted += listener.DatabaseCallCompleted;
-            ServiceCallCompleted += listener.ServiceCallCompleted;
+            CallCompleted += listener.CallCompleted;
             OperationCompleted += listener.OperationCompleted;
         }
 
@@ -106,8 +101,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         {
             if (listener == null) throw new ArgumentNullException("listener");
 
-            DatabaseCallCompleted -= listener.DatabaseCallCompleted;
-            ServiceCallCompleted -= listener.ServiceCallCompleted;
+            CallCompleted -= listener.CallCompleted;
             OperationCompleted -= listener.OperationCompleted;
         }
 
@@ -141,54 +135,35 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
                 Context = _instrumentationContextProvider.Value.GetInstrumentationContext(),
                 CorrelationId = _correlationIdProvider.Value.GetId(),
                 Duration = duration,
-                Command = operation,
+                Info = operation,
                 ManagedThreadId = Thread.CurrentThread.ManagedThreadId
             }, sender);
         }
 
 
         /// <summary>
-        ///   Logs service call completion and broadcasts <see cref="ServiceCallCompleted" /> event.
+        ///   Logs service call completion and broadcasts <see cref="CallCompleted" /> event.
         /// </summary>
         /// <param name="sender">Sender.</param>
+        /// <param name="callType">Call type.</param>
         /// <param name="methodName">Service method name.</param>
         /// <param name="duration">Call duration.</param>
-        public void OnServiceCallCompleted([CanBeNull] object sender, string methodName, TimeSpan duration)
+        public void OnCallCompleted([CanBeNull] object sender, string callType, string methodName, TimeSpan duration)
         {
             if (!IsEnabled())
                 return;
 
-            _instrumentationContextProvider.Value.GetInstrumentationContext().AddServiceCall(methodName, duration);
+            _instrumentationContextProvider.Value.GetInstrumentationContext().AddCall(callType, methodName, duration);
 
-            EventHelper.Raise(ServiceCallCompleted, () => new InstrumentationEventArgs {
+            EventHelper.Raise(CallCompleted, () => new InstrumentationEventArgs {
+                CallType = callType,
                 CorrelationId = _correlationIdProvider.Value.GetId(),
                 Duration = duration,
                 ManagedThreadId = Thread.CurrentThread.ManagedThreadId,
-                Command = methodName
+                Info = methodName
             }, sender);
         }
 
-
-        /// <summary>
-        ///   Logs database call completions and broadcasts <see cref="DatabaseCallCompleted" /> event.
-        /// </summary>
-        /// <param name="sender">Sender.</param>
-        /// <param name="sql">Database call information.</param>
-        /// <param name="duration">Duration.</param>
-        public void OnDatabaseCallCompleted([CanBeNull] object sender, string sql, TimeSpan duration)
-        {
-            if (!IsEnabled())
-                return;
-
-            _instrumentationContextProvider.Value.GetInstrumentationContext().AddDatabaseCall(sql, duration);
-
-            EventHelper.Raise(DatabaseCallCompleted, () => new InstrumentationEventArgs {
-                CorrelationId = _correlationIdProvider.Value.GetId(),
-                Duration = duration,
-                ManagedThreadId = Thread.CurrentThread.ManagedThreadId,
-                Command = sql
-            }, sender);
-        }
 
 
         /// <summary>

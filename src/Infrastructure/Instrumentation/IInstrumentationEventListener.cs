@@ -20,8 +20,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 {
     public interface IInstrumentationEventListener
     {
-        void DatabaseCallCompleted(object sender, InstrumentationEventArgs eventArgs);
-        void ServiceCallCompleted(object sender, InstrumentationEventArgs eventArgs);
+        void CallCompleted(object sender, InstrumentationEventArgs eventArgs);
         void OperationCompleted(object sender, OperationCompletedEventArgs eventArgs);
     }
 }

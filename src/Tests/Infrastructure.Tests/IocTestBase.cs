@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ namespace Infrastructure.Tests
     using Moq;
     using NUnit.Framework;
 
-    [TestFixture]
     public class IocTestBase
     {
         #region Setup/Teardown
@@ -45,7 +44,7 @@ namespace Infrastructure.Tests
         public void TearDown()
         {
             DoTeardown();
-            
+
             Container.Dispose();
             ServiceLocator.SetLocatorProvider(null);
             Mockery.Verify();

@@ -19,7 +19,6 @@
 namespace Alphacloud.Common.Infrastructure.Instrumentation
 {
     using System;
-    using global::Common.Logging;
 
     /// <summary>
     ///   Instrumentation logging configuration.
@@ -62,15 +61,14 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         public DurationSettings ServiceCallLogging { get; private set; }
 
         /// <summary>
-        ///   Command logging settings.
+        ///   Operation logging settings.
         /// </summary>
         public CallCounterSettings OperationLogging { get; private set; }
 
         /// <summary>
-        /// Should duplicate service or database calls be logged.
+        ///   Should duplicate service or database calls be logged.
         /// </summary>
         public bool LogDuplicateCalls { get; set; }
-        
 
         #region Nested type: CallCounterSettings
 

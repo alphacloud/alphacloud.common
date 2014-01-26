@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -24,19 +24,26 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     using System.Threading;
     using Core.Instrumentation;
     using global::Common.Logging;
+    using JetBrains.Annotations;
 
     /// <summary>
     ///   Call information.
     /// </summary>
     public class CallInfo
     {
-        public CallInfo(string operation, TimeSpan duration, int callingThreadId)
+        public CallInfo([NotNull] string type, [NotNull] string operation, TimeSpan duration, int callingThreadId)
         {
+            if (type == null) throw new ArgumentNullException("type");
+            if (operation == null) throw new ArgumentNullException("operation");
+
+            CallType = string.Intern(type);
             Operation = operation;
             Duration = duration;
             CallingThreadId = callingThreadId;
         }
 
+
+        public string CallType { get; private set; }
 
         public string Operation { get; private set; }
         public TimeSpan Duration { get; private set; }
@@ -52,8 +59,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     {
         static readonly ILog s_log = LogManager.GetCurrentClassLogger();
 
-        readonly List<CallInfo> _dbCalls = new List<CallInfo>();
-        readonly List<CallInfo> _serviceCalls = new List<CallInfo>();
+        readonly List<CallInfo> _calls = new List<CallInfo>();
 
 
         /// <summary>
@@ -66,131 +72,80 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
         #region IInstrumentationContext Members
 
-        public int GetTotalCallCount()
+        public int GetCallCount(string callType = null)
         {
-            lock (this)
+            lock (_calls)
             {
-                return _dbCalls.Count + _serviceCalls.Count;
+                return FilterByCallType(callType).Count();
             }
         }
 
 
-        public int DatabaseCallCount
+        public TimeSpan GetCallDuration(string callType = null)
         {
-            get
+            lock (_calls)
             {
-                lock (this)
-                {
-                    return _dbCalls.Count;
-                }
-            }
-        }
-
-        public TimeSpan DatabaseCallsDuration
-        {
-            get
-            {
-                lock (this)
-                {
-                    return CalculateDuration(_dbCalls);
-                }
+                return FilterByCallType(callType).Aggregate(TimeSpan.Zero, (current, call) => current += call.Duration);
             }
         }
 
 
-        public int ServiceCallCount
-        {
-            get
-            {
-                lock (this)
-                {
-                    return _serviceCalls.Count;
-                }
-            }
-        }
-
-        public TimeSpan ServiceCallsDuration
-        {
-            get
-            {
-                lock (this)
-                {
-                    return CalculateDuration(_serviceCalls);
-                }
-            }
-        }
-
-
-        public void AddDatabaseCall(string command, TimeSpan duration)
+        public void AddCall(string callType, string info, TimeSpan duration)
         {
             int callCnt;
             lock (this)
             {
-                _dbCalls.Add(new CallInfo(command, duration, Thread.CurrentThread.ManagedThreadId));
-                callCnt = _dbCalls.Count;
+                _calls.Add(new CallInfo(callType, info, duration, Thread.CurrentThread.ManagedThreadId));
+                callCnt = _calls.Count;
             }
-            s_log.Debug(m => m("Database call: {0}, {1:#0.0} ms; total call count={2}",
-                command, duration.TotalMilliseconds, callCnt));
+            s_log.Debug(m => m("'{3}' call: '{0}', {1:#0.0} ms; total call count={2}",
+                info, duration.TotalMilliseconds, callCnt, callType));
         }
 
 
-        public void AddServiceCall(string serviceMethod, TimeSpan duration)
+        public string[] GetCallTypes()
         {
-            int callCnt;
-            lock (this)
+            lock (_calls)
             {
-                _serviceCalls.Add(new CallInfo(serviceMethod, duration, Thread.CurrentThread.ManagedThreadId));
-                callCnt = _serviceCalls.Count;
-            }
-            s_log.Debug(m => m("Service call: {0}, {1:#0.0} ms; total call count={2}",
-                serviceMethod, duration.TotalMilliseconds, callCnt));
-        }
-
-
-        public IList<CallCountInfo> GetDuplicatedDbCalls(int threshold)
-        {
-            if (threshold <= 0)
-                throw new ArgumentOutOfRangeException("threshold", threshold, @"Threshold should be positive number");
-            lock (this)
-            {
-                return CollectDuplicates(_dbCalls, threshold);
+                return _calls.Select(c => c.CallType).Distinct().ToArray();
             }
         }
 
 
-        public IList<CallCountInfo> GetDuplicatedServiceCalls(int threshold)
+        public CallSummary[] GetDuplicatedCalls([NotNull] string callType, int threshold = 2)
         {
-            if (threshold <= 0)
-                throw new ArgumentOutOfRangeException("threshold", threshold, @"Threshold should be positive number");
-            lock (this)
+            if (callType == null) throw new ArgumentNullException("callType");
+            lock (_calls)
             {
-                return CollectDuplicates(_serviceCalls, threshold);
+                return CollectDuplicates(_calls, threshold, callType).ToArray();
             }
         }
 
         #endregion
 
-        TimeSpan CalculateDuration(IList<CallInfo> callInfo)
+        static IEnumerable<CallSummary> CollectDuplicates(IEnumerable<CallInfo> callInfo, int threshold,
+            string callType)
         {
-            var duration = TimeSpan.Zero;
-            for (int i = 0; i < callInfo.Count; i++)
-            {
-                duration += callInfo[i].Duration;
-            }
-            return duration;
+            callType = string.Intern(callType);
+            return (from ci in callInfo
+                where ci.CallType == callType
+                group ci by ci.Operation
+                into key
+                select new CallSummary {
+                    Operation = key.Key,
+                    CallType = callType,
+                    CallCount = key.Count(),
+                    Duration = key.Aggregate(TimeSpan.Zero, (current, c) => current += c.Duration)
+                })
+                .Where(callSummary => callSummary.CallCount >= threshold);
         }
 
 
-        static IList<CallCountInfo> CollectDuplicates(IEnumerable<CallInfo> callInfo, int threshold)
+        IEnumerable<CallInfo> FilterByCallType(string callType)
         {
-            var calls = from call in callInfo
-                group call by call.Operation
-                into callCount
-                select new CallCountInfo {
-                    Operation = callCount.Key,
-                    CallCount = callCount.Count()
-                };
-            return calls.Where(cc => cc.CallCount >= threshold).ToList();
+            var ct = callType != null ? string.Intern(callType) : null;
+            var calls = ct != null ? _calls.Where(c => c.CallType == ct) : _calls;
+            return calls;
         }
     }
 }

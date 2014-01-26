@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2014 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,17 +37,48 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
             _configuration = configuration;
         }
 
+        #region IInstrumentationEventListener Members
 
-        public void DatabaseCallCompleted(object sender, InstrumentationEventArgs eventArgs)
+        public void CallCompleted(object sender, InstrumentationEventArgs eventArgs)
         {
-            if (!_configuration.DatabaseCallLogging.Enabled)
+            if (!_configuration.ServiceCallLogging.Enabled)
                 return;
 
-            var logLevel = LogLevelFromDuration(_configuration.DatabaseCallLogging, eventArgs.Duration);
+            var logLevel = LogLevelFromDuration(_configuration.ServiceCallLogging, eventArgs.Duration);
             s_log.Write(logLevel, m =>
-                m("Database call took {0} ms; Sql: '{1}'", eventArgs.Duration.TotalMilliseconds, eventArgs.Command));
+                m("{2} call took {0} ms, operation: '{1}'", eventArgs.Duration.TotalMilliseconds,
+                    eventArgs.Info, eventArgs.CallType));
         }
 
+
+        public void OperationCompleted(object sender, OperationCompletedEventArgs eventArgs)
+        {
+            if (_configuration.OperationLogging.Enabled)
+            {
+                int callCount = eventArgs.Context.GetCallCount();
+                var logLevel = LogLevelFromCallCount(_configuration.OperationLogging, callCount);
+                s_log.Write(logLevel,
+                    m =>
+                        m("Operation '{0}' completed in {1:#,##0.00} ms, total # of calls: {2}",
+                            eventArgs.Info, eventArgs.Duration.TotalMilliseconds, callCount, eventArgs.Info));
+
+                if (_configuration.LogDuplicateCalls)
+                {
+                    foreach (var callType in eventArgs.Context.GetCallTypes())
+                    {
+                        var dups = eventArgs.Context.GetDuplicatedCalls(callType)
+                            .Select(cs => "'{0}': {1}".ApplyArgs(cs.Operation, cs.CallCount)).ToArray();
+                        if (dups.Any())
+                        {
+                            s_log.InfoFormat(CultureInfo.InvariantCulture, "Duplicate {0} calls: '{1}'", callType,
+                                new SequenceFormatter(dups));
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         static LogLevel LogLevelFromDuration([NotNull] LoggingConfiguration.DurationSettings durationSettings,
             TimeSpan duration)
@@ -61,50 +92,6 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
                 level = LogLevel.Info;
 
             return level;
-        }
-
-
-        public void ServiceCallCompleted(object sender, InstrumentationEventArgs eventArgs)
-        {
-            if (!_configuration.ServiceCallLogging.Enabled)
-                return;
-
-            var logLevel = LogLevelFromDuration(_configuration.ServiceCallLogging, eventArgs.Duration);
-            s_log.Write(logLevel, m =>
-                m("Service call took {0} ms; Service method: '{1}'", eventArgs.Duration.TotalMilliseconds,
-                    eventArgs.Command));
-        }
-
-
-        public void OperationCompleted(object sender, OperationCompletedEventArgs eventArgs)
-        {
-            if (_configuration.OperationLogging.Enabled)
-            {
-                int callCount = eventArgs.Context.GetTotalCallCount();
-                var logLevel = LogLevelFromCallCount(_configuration.OperationLogging, callCount);
-                s_log.Write(logLevel,
-                    m =>
-                        m("Operation completed in {0} ms, # of calls: {1} Operation: '{2}'", eventArgs.Duration,
-                            callCount, eventArgs.Context));
-
-                if (_configuration.LogDuplicateCalls)
-                {
-                    var dbDups = eventArgs.Context.GetDuplicatedDbCalls(1)
-                        .Select(ci => "'{0}': {1}".ApplyArgs(ci.Operation, ci.CallCount)).ToArray();
-                    var svcDups = eventArgs.Context.GetDuplicatedServiceCalls(1)
-                        .Select(ci => "'{0}': {1}".ApplyArgs(ci.Operation, ci.CallCount)).ToArray();
-                    if (dbDups.Any())
-                    {
-                        s_log.InfoFormat(CultureInfo.InvariantCulture, "Duplicated database calls - {0}: '{1}",
-                            new SequenceFormatter(dbDups));
-                    }
-                    if (svcDups.Any())
-                    {
-                        s_log.InfoFormat(CultureInfo.InvariantCulture, "Duplicated service calls = {0}: '{1}'",
-                            new SequenceFormatter(svcDups));
-                    }
-                }
-            }
         }
 
 

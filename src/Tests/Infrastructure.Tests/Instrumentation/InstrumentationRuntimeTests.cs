@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2014 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -62,20 +62,38 @@ namespace Infrastructure.Tests.Instrumentation
 
 
         [Test]
-        public void OnDatabaseCallCompleted_Should_Broadcast_DatabaseCallCompleted()
+        public void Attach_Should_AttachEventListener()
+        {
+            var listener = Mockery.Create<IInstrumentationEventListener>();
+
+            _instrumentationRuntime.Attach(listener.Object);
+
+            _instrumentationRuntime.OnCallCompleted(this, "svc", "service-method", 1.Seconds());
+            listener.Verify(l => l.CallCompleted(this, It.IsAny<InstrumentationEventArgs>()));
+
+            _instrumentationRuntime.OnOperationCompleted(this, "op", 1.Seconds());
+            listener.Verify(l => l.OperationCompleted(this, It.IsAny<OperationCompletedEventArgs>()));
+        }
+
+
+        [Test]
+        public void OnCallCompleted_Should_Broadcast_CallCompleted()
         {
             object sender = null;
             InstrumentationEventArgs args = null;
-            _instrumentationRuntime.DatabaseCallCompleted += (aSender, anArgs) => {
+
+            _instrumentationRuntime.CallCompleted += (aSender, anArgs) => {
                 sender = aSender;
                 args = anArgs;
             };
 
-            _instrumentationRuntime.OnDatabaseCallCompleted(this, "sql", 2.Seconds());
+            _instrumentationRuntime.OnCallCompleted(this, "svc", "service-method", 2.Seconds());
 
-            sender.Should().Be(this);
+            sender.Should().Be(this, "failed to pass sender");
+
             args.Should().NotBeNull("event was not broadcasted");
-            args.Command.Should().Be("sql");
+            args.CallType.Should().Be("svc");
+            args.Info.Should().Be("service-method");
             args.CorrelationId.Should().Be(CorrelationId);
             args.Duration.Should().Be(2.Seconds());
             args.ManagedThreadId.Should().Be(Thread.CurrentThread.ManagedThreadId);
@@ -98,51 +116,10 @@ namespace Infrastructure.Tests.Instrumentation
             sender.Should().Be(this, "failed to pass sender");
 
             args.Should().NotBeNull("event was not broadcasted");
-            args.Command.Should().Be("operation");
+            args.Info.Should().Be("operation");
             args.CorrelationId.Should().Be(CorrelationId);
             args.Duration.Should().Be(5.Seconds());
             args.Context.Should().Be(_instrumentationContext.Object);
-        }
-
-
-        [Test]
-        public void OnServiceCall_Should_Broadcast_ServiceCallCompleted()
-        {
-            object sender = null;
-            InstrumentationEventArgs args = null;
-
-            _instrumentationRuntime.ServiceCallCompleted += (aSender, anArgs) => {
-                sender = aSender;
-                args = anArgs;
-            };
-
-            _instrumentationRuntime.OnServiceCallCompleted(this, "service-method", 2.Seconds());
-
-            sender.Should().Be(this, "failed to pass sender");
-
-            args.Should().NotBeNull("event was not broadcasted");
-            args.Command.Should().Be("service-method");
-            args.CorrelationId.Should().Be(CorrelationId);
-            args.Duration.Should().Be(2.Seconds());
-            args.ManagedThreadId.Should().Be(Thread.CurrentThread.ManagedThreadId);
-        }
-
-
-        [Test]
-        public void Attach_Should_AttachEventListener()
-        {
-            var listener = Mockery.Create<IInstrumentationEventListener>();
-
-            _instrumentationRuntime.Attach(listener.Object);
-
-            _instrumentationRuntime.OnDatabaseCallCompleted(this, "sql", 1.Seconds());
-            listener.Verify(l => l.DatabaseCallCompleted(this, It.IsAny<InstrumentationEventArgs>()));
-
-            _instrumentationRuntime.OnServiceCallCompleted(this, "service-method", 1.Seconds());
-            listener.Verify(l=>l.ServiceCallCompleted(this, It.IsAny<InstrumentationEventArgs>()));
-
-            _instrumentationRuntime.OnOperationCompleted(this, "op", 1.Seconds());
-            listener.Verify(l=>l.OperationCompleted(this, It.IsAny<OperationCompletedEventArgs>()));
         }
     }
 }

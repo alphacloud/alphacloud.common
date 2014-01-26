@@ -36,13 +36,15 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         /// </summary>
         public int ManagedThreadId { get; set; }
 
-        /// <summary>
-        ///   Command information.
-        /// </summary>
-        public string Command { get; set; }
+        public string CallType { get; set; }
 
         /// <summary>
-        ///   Command duration.
+        ///   Event information.
+        /// </summary>
+        public string Info { get; set; }
+
+        /// <summary>
+        ///   Info duration.
         /// </summary>
         public TimeSpan Duration { get; set; }
     }
