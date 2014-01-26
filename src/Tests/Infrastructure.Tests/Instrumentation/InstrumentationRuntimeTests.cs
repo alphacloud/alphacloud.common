@@ -1,4 +1,5 @@
 ﻿#region copyright
+
 // Copyright 2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +13,136 @@
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
+
 #endregion
+
 namespace Infrastructure.Tests.Instrumentation
 {
+    using System.Threading;
+    using Alphacloud.Common.Core.Instrumentation;
     using Alphacloud.Common.Infrastructure.Instrumentation;
+    using FluentAssertions;
+    using global::Castle.MicroKernel.Registration;
+    using Moq;
     using NUnit.Framework;
 
     [TestFixture]
-    public class InstrumentationRuntimeTests
+    public class InstrumentationRuntimeTests : IocTestBase
     {
-        [SetUp]
-        public void Setup()
+        Mock<IInstrumentationContext> _instrumentationContext;
+        Mock<ICorrelationIdProvider> _correlationIdProvider;
+        Mock<IInstrumentationContextProvider> _instrumentationContextProvider;
+        InstrumentationRuntime _instrumentationRuntime;
+        InstrumentationSettings _instrumentationSettings;
+
+        const string CorrelationId = "correlation.id";
+
+
+        protected override void DoSetup()
         {
+            base.DoSetup();
+
+            _instrumentationContext = Mockery.Create<IInstrumentationContext>();
+            _correlationIdProvider = Mockery.Create<ICorrelationIdProvider>();
+            _instrumentationContextProvider = Mockery.Create<IInstrumentationContextProvider>();
+
+            _correlationIdProvider.Setup(cp => cp.GetId()).Returns(CorrelationId);
+            _instrumentationContextProvider.Setup(ic => ic.GetInstrumentationContext())
+                .Returns(_instrumentationContext.Object);
+
+            Container.Register(
+                Component.For<ICorrelationIdProvider>().Instance(_correlationIdProvider.Object),
+                Component.For<IInstrumentationContextProvider>().Instance(_instrumentationContextProvider.Object)
+                );
+
+            _instrumentationRuntime = new InstrumentationRuntime();
+            _instrumentationSettings = new InstrumentationSettings {Enabled = true};
+            _instrumentationRuntime.SetConfigurationProvider(() => _instrumentationSettings);
         }
 
+
+        [Test]
+        public void OnDatabaseCallCompleted_Should_Broadcast_DatabaseCallCompleted()
+        {
+            object sender = null;
+            InstrumentationEventArgs args = null;
+            _instrumentationRuntime.DatabaseCallCompleted += (aSender, anArgs) => {
+                sender = aSender;
+                args = anArgs;
+            };
+
+            _instrumentationRuntime.OnDatabaseCallCompleted(this, "sql", 2.Seconds());
+
+            sender.Should().Be(this);
+            args.Should().NotBeNull("event was not broadcasted");
+            args.Command.Should().Be("sql");
+            args.CorrelationId.Should().Be(CorrelationId);
+            args.Duration.Should().Be(2.Seconds());
+            args.ManagedThreadId.Should().Be(Thread.CurrentThread.ManagedThreadId);
+        }
+
+
+        [Test]
+        public void OnOperationCompleted_Should_Broadcast_OperationCompleted()
+        {
+            object sender = null;
+            OperationCompletedEventArgs args = null;
+
+            _instrumentationRuntime.OperationCompleted += (aSender, anArgs) => {
+                sender = aSender;
+                args = anArgs;
+            };
+
+            _instrumentationRuntime.OnOperationCompleted(this, "operation", 5.Seconds());
+
+            sender.Should().Be(this, "failed to pass sender");
+
+            args.Should().NotBeNull("event was not broadcasted");
+            args.Command.Should().Be("operation");
+            args.CorrelationId.Should().Be(CorrelationId);
+            args.Duration.Should().Be(5.Seconds());
+            args.Context.Should().Be(_instrumentationContext.Object);
+        }
+
+
+        [Test]
+        public void OnServiceCall_Should_Broadcast_ServiceCallCompleted()
+        {
+            object sender = null;
+            InstrumentationEventArgs args = null;
+
+            _instrumentationRuntime.ServiceCallCompleted += (aSender, anArgs) => {
+                sender = aSender;
+                args = anArgs;
+            };
+
+            _instrumentationRuntime.OnServiceCallCompleted(this, "service-method", 2.Seconds());
+
+            sender.Should().Be(this, "failed to pass sender");
+
+            args.Should().NotBeNull("event was not broadcasted");
+            args.Command.Should().Be("service-method");
+            args.CorrelationId.Should().Be(CorrelationId);
+            args.Duration.Should().Be(2.Seconds());
+            args.ManagedThreadId.Should().Be(Thread.CurrentThread.ManagedThreadId);
+        }
+
+
+        [Test]
+        public void Attach_Should_AttachEventListener()
+        {
+            var listener = Mockery.Create<IInstrumentationEventListener>();
+
+            _instrumentationRuntime.Attach(listener.Object);
+
+            _instrumentationRuntime.OnDatabaseCallCompleted(this, "sql", 1.Seconds());
+            listener.Verify(l => l.DatabaseCallCompleted(this, It.IsAny<InstrumentationEventArgs>()));
+
+            _instrumentationRuntime.OnServiceCallCompleted(this, "service-method", 1.Seconds());
+            listener.Verify(l=>l.ServiceCallCompleted(this, It.IsAny<InstrumentationEventArgs>()));
+
+            _instrumentationRuntime.OnOperationCompleted(this, "op", 1.Seconds());
+            listener.Verify(l=>l.OperationCompleted(this, It.IsAny<OperationCompletedEventArgs>()));
+        }
     }
 }

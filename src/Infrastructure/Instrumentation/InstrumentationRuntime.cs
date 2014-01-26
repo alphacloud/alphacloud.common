@@ -87,28 +87,28 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         /// <summary>
         ///   Attach logger.
         /// </summary>
-        /// <param name="instrumentationLogger">Logger.</param>
-        public void Attach([NotNull] IInstrumentationLogger instrumentationLogger)
+        /// <param name="listener">Logger.</param>
+        public void Attach([NotNull] IInstrumentationEventListener listener)
         {
-            if (instrumentationLogger == null) throw new ArgumentNullException("instrumentationLogger");
+            if (listener == null) throw new ArgumentNullException("listener");
 
-            DatabaseCallCompleted += instrumentationLogger.DatabaseCallCompleted;
-            ServiceCallCompleted += instrumentationLogger.ServiceCallCompleted;
-            OperationCompleted += instrumentationLogger.OperationCompleted;
+            DatabaseCallCompleted += listener.DatabaseCallCompleted;
+            ServiceCallCompleted += listener.ServiceCallCompleted;
+            OperationCompleted += listener.OperationCompleted;
         }
 
 
         /// <summary>
         ///   Detach logger.
         /// </summary>
-        /// <param name="instrumentationLogger">Logger.</param>
-        public void Detach([NotNull] IInstrumentationLogger instrumentationLogger)
+        /// <param name="listener">Logger.</param>
+        public void Detach([NotNull] IInstrumentationEventListener listener)
         {
-            if (instrumentationLogger == null) throw new ArgumentNullException("instrumentationLogger");
+            if (listener == null) throw new ArgumentNullException("listener");
 
-            DatabaseCallCompleted -= instrumentationLogger.DatabaseCallCompleted;
-            ServiceCallCompleted -= instrumentationLogger.ServiceCallCompleted;
-            OperationCompleted -= instrumentationLogger.OperationCompleted;
+            DatabaseCallCompleted -= listener.DatabaseCallCompleted;
+            ServiceCallCompleted -= listener.ServiceCallCompleted;
+            OperationCompleted -= listener.OperationCompleted;
         }
 
 
@@ -126,6 +126,12 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         }
 
 
+        /// <summary>
+        /// Logs operation completion and broadcasts <see cref="OperationCompletedEventArgs"/> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="operation">The operation.</param>
+        /// <param name="duration">The duration.</param>
         public void OnOperationCompleted([CanBeNull] object sender, string operation, TimeSpan duration)
         {
             if (!IsEnabled())

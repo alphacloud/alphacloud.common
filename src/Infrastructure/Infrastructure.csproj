@@ -92,7 +92,7 @@
     <Compile Include="Caching\TransformingCacheWrapper.cs" />
     <Compile Include="Caching\UserCacheKeyTransformer.cs" />
     <Compile Include="Instrumentation\CapturedContext.cs" />
-    <Compile Include="Instrumentation\IInstrumentationLogger.cs" />
+    <Compile Include="Instrumentation\IInstrumentationEventListener.cs" />
     <Compile Include="Instrumentation\InstrumentationEventArgs.cs" />
     <Compile Include="Instrumentation\InstrumentationLogger.cs" />
     <Compile Include="Instrumentation\InstrumentationRuntime.cs" />

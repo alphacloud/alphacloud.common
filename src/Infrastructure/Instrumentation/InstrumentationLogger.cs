@@ -25,7 +25,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     using global::Common.Logging;
     using JetBrains.Annotations;
 
-    public class InstrumentationLogger : IInstrumentationLogger
+    public class InstrumentationLogger : IInstrumentationEventListener
     {
         static readonly ILog s_log = LogManager.GetCurrentClassLogger();
         readonly LoggingConfiguration _configuration;
