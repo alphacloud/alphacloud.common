@@ -10,12 +10,12 @@
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Fix named instance resolution.</releaseNotes>
+    <releaseNotes>Update Castle.Core to 3.2.2 and Castle.Windsor to 3.2.1.</releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>alphacloud castle windsor microkernel signed dependencyInjection inversionOfControl</tags>
     <dependencies>
-      <dependency id="Castle.Core" version="[3.2.0,4.0.0)" />
-      <dependency id="Castle.Windsor" version="[3.2.0,4.0.0)" />
+      <dependency id="Castle.Core" version="[3.2.2,4.0.0)" />
+      <dependency id="Castle.Windsor" version="[3.2.1,4.0.0)" />
       <dependency id="CommonServiceLocator" version="1.0"  />
     </dependencies>
   </metadata>
