@@ -79,7 +79,7 @@ namespace Infrastructure.Tests.Logging
         [Test]
         public void LogChecker_Should_CaptureLogMessages()
         {
-            using (var lc = new CaptureLog4NetMessages(GetType(), Level.All))
+            using (var lc = new CaptureLog4NetEvents(GetType(), Level.All))
             {
                 const string testMessage = @"test- 12648923654";
                 s_log.Info(testMessage);

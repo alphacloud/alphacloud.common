@@ -41,10 +41,11 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
         public void CallCompleted(object sender, InstrumentationEventArgs eventArgs)
         {
-            if (!_configuration.ServiceCallLogging.Enabled)
+            var cfg = _configuration.GetCallDurationSettings(eventArgs.CallType);
+            if (!cfg.Enabled)
                 return;
 
-            var logLevel = LogLevelFromDuration(_configuration.ServiceCallLogging, eventArgs.Duration);
+            var logLevel = LogLevelFromDuration(cfg, eventArgs.Duration);
             s_log.Write(logLevel, m =>
                 m("{2} call took {0} ms, operation: '{1}'", eventArgs.Duration.TotalMilliseconds,
                     eventArgs.Info, eventArgs.CallType));
@@ -59,7 +60,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
                 var logLevel = LogLevelFromCallCount(_configuration.OperationLogging, callCount);
                 s_log.Write(logLevel,
                     m =>
-                        m("Operation '{0}' completed in {1:#,##0.00} ms, total # of calls: {2}",
+                        m("Operation '{0}' completed in {1:0.00} ms, total # of calls: {2}",
                             eventArgs.Info, eventArgs.Duration.TotalMilliseconds, callCount, eventArgs.Info));
 
                 if (_configuration.LogDuplicateCalls)
@@ -67,11 +68,11 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
                     foreach (var callType in eventArgs.Context.GetCallTypes())
                     {
                         var dups = eventArgs.Context.GetDuplicatedCalls(callType)
-                            .Select(cs => "'{0}': {1}".ApplyArgs(cs.Operation, cs.CallCount)).ToArray();
+                            .Select(cs => "'{0}': {1}/{2:0.00} ms".ApplyArgs(cs.Operation, cs.CallCount, cs.Duration.TotalMilliseconds)).ToArray();
                         if (dups.Any())
                         {
-                            s_log.InfoFormat(CultureInfo.InvariantCulture, "Duplicate {0} calls: '{1}'", callType,
-                                new SequenceFormatter(dups));
+                            s_log.InfoFormat(CultureInfo.InvariantCulture, "Duplicate {0} calls {1}: {2}", 
+                                callType, dups.Count(), new SequenceFormatter(dups));
                         }
                     }
                 }

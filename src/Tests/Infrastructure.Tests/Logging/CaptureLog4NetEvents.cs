@@ -33,7 +33,7 @@ namespace Infrastructure.Tests.Logging
     /// <remarks>
     ///   Code from http://www.limilabs.com/blog/programmatically-check-log4net
     /// </remarks>
-    public class CaptureLog4NetMessages : IDisposable
+    public class CaptureLog4NetEvents : IDisposable
     {
         readonly MemoryAppender _appender = new MemoryAppender();
         readonly Logger _logger;
@@ -45,7 +45,7 @@ namespace Infrastructure.Tests.Logging
         /// </summary>
         /// <param name="logName">Log name</param>
         /// <param name="levelToCheck">Logging level to capture on logger.</param>
-        public CaptureLog4NetMessages(string logName, Level levelToCheck)
+        public CaptureLog4NetEvents(string logName, Level levelToCheck)
             : this(LogManager.GetLogger(logName), levelToCheck)
         {
         }
@@ -56,13 +56,13 @@ namespace Infrastructure.Tests.Logging
         /// </summary>
         /// <param name="logClass">Class to retrieve logger for.</param>
         /// <param name="levelToCheck">Logging level to capture on logger.</param>
-        public CaptureLog4NetMessages(Type logClass, Level levelToCheck)
+        public CaptureLog4NetEvents(Type logClass, Level levelToCheck)
             : this(LogManager.GetLogger(logClass), levelToCheck)
         {
         }
 
 
-        protected CaptureLog4NetMessages([NotNull] ILog log, [NotNull] Level levelToCheck)
+        protected CaptureLog4NetEvents([NotNull] ILog log, [NotNull] Level levelToCheck)
         {
             if (log == null) throw new ArgumentNullException("log");
             if (levelToCheck == null) throw new ArgumentNullException("levelToCheck");

@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2014 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -19,6 +19,9 @@
 namespace Alphacloud.Common.Infrastructure.Instrumentation
 {
     using System;
+    using System.Collections.Generic;
+    using Core.Data;
+    using JetBrains.Annotations;
 
     /// <summary>
     ///   Instrumentation logging configuration.
@@ -26,18 +29,21 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     [Serializable]
     public class LoggingConfiguration
     {
+        const string DefaultSettingsKey = "Default";
+        readonly IDictionary<string, DurationSettings> _durationSettings;
+
+
         public LoggingConfiguration()
         {
-            DatabaseCallLogging = new DurationSettings {
-                Enabled = false,
-                InfoLevelThreshold = TimeSpan.FromMilliseconds(200),
-                WarningLevelThreshold = TimeSpan.FromSeconds(2)
-            };
-
-            ServiceCallLogging = new DurationSettings {
-                Enabled = false,
-                InfoLevelThreshold = TimeSpan.FromMilliseconds(200),
-                WarningLevelThreshold = TimeSpan.FromSeconds(2)
+            _durationSettings = new Dictionary<string, DurationSettings> {
+                {
+                    DefaultSettingsKey,
+                    new DurationSettings {
+                        Enabled = false,
+                        InfoLevelThreshold = TimeSpan.FromMilliseconds(500),
+                        WarningLevelThreshold = TimeSpan.FromSeconds(5)
+                    }
+                }
             };
 
             OperationLogging = new CallCounterSettings {
@@ -51,16 +57,6 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
 
         /// <summary>
-        ///   Database call logging settings.
-        /// </summary>
-        public DurationSettings DatabaseCallLogging { get; private set; }
-
-        /// <summary>
-        ///   Service call logging settings.
-        /// </summary>
-        public DurationSettings ServiceCallLogging { get; private set; }
-
-        /// <summary>
         ///   Operation logging settings.
         /// </summary>
         public CallCounterSettings OperationLogging { get; private set; }
@@ -69,6 +65,23 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         ///   Should duplicate service or database calls be logged.
         /// </summary>
         public bool LogDuplicateCalls { get; set; }
+
+
+        public DurationSettings GetCallDurationSettings(string callType = null)
+        {
+            callType = string.IsNullOrEmpty(callType) ? DefaultSettingsKey : callType;
+            var settings = _durationSettings.ValueOrDefault(callType);
+            return settings ?? _durationSettings[DefaultSettingsKey];
+        }
+
+
+        public void AddDurationSettings([NotNull] string callType, [NotNull] DurationSettings settings)
+        {
+            if (settings == null) throw new ArgumentNullException("settings");
+            if (string.IsNullOrEmpty(callType)) throw new ArgumentNullException("callType");
+
+            _durationSettings.Add(callType, settings);
+        }
 
         #region Nested type: CallCounterSettings
 
