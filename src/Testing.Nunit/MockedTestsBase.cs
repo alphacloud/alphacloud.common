@@ -37,7 +37,7 @@ namespace Alphacloud.Common.Testing.Nunit
         [SetUp]
         public void SetUp()
         {
-            _mockery = new MockRepository(MockBehavior.Default);
+            Mockery = new MockRepository(MockBehavior.Default);
             DoSetup();
         }
 
@@ -54,15 +54,10 @@ namespace Alphacloud.Common.Testing.Nunit
 
         #endregion
 
-        private MockRepository _mockery;
-
         /// <summary>
         ///   Mock repository.
         /// </summary>
-        protected MockRepository Mockery
-        {
-            get { return _mockery; }
-        }
+        protected MockRepository Mockery { get; private set; }
 
 
         /// <summary>

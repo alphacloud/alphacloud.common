@@ -21,11 +21,13 @@ namespace Alphacloud.Common.Testing.Nunit
     using System.Collections.Generic;
     using System.Linq;
     using Core.Data;
+    using JetBrains.Annotations;
     using Moq;
 
     /// <summary>
     ///   Custom argument matchers
     /// </summary>
+    [PublicAPI]
     public static class Argument
     {
         /// <summary>
