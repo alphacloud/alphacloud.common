@@ -10,14 +10,13 @@
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial version.</releaseNotes>
+    <releaseNotes>Updated to latest MOQ with embedded Castle.Windsor.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>alphacloud signed testing nunit moq</tags>
     <dependencies>
       <dependency id="FluentAssertions" version="[2.2.0.0,3.0.0.0)" />
-      <dependency id="Moq.WithoutCastle" version="[4.0.10827.2,5.0.0.0)" />
+      <dependency id="Moq" version="[4.0.0.0,5.0.0.0)" />
       <dependency id="NUnit" version="2.6.3" />
-      <dependency id="ReSharper.Annotations" version="7.1.3.130415" />
     </dependencies>
   </metadata>
 </package>

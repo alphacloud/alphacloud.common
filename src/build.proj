@@ -22,7 +22,8 @@
     <InfrastructureDir>$(RootDir)\Infrastructure</InfrastructureDir>
     <MemcachedAdapterDir>$(RootDir)\Integration\Caching.Memcached</MemcachedAdapterDir>
     <MemcachedCommonLoggingAdapterDir>$(RootDir)\Integration\Caching.Memcached</MemcachedCommonLoggingAdapterDir>
-	<CastleWindsorAdapterDir>$(RootDir)\ServiceLocator.Castle</CastleWindsorAdapterDir>
+	  <CastleWindsorAdapterDir>$(RootDir)\ServiceLocator.Castle</CastleWindsorAdapterDir>
+	  <TestingNunitDir>$(RootDir)\Testing.Nunit</TestingNunitDir>
   </PropertyGroup>
 
   <Target Name="BuildAll">
@@ -58,6 +59,10 @@
 
   <Target Name="PackCastleWindsorAdapter" DependsOnTargets="CreatePackagesDir">
     <Exec Command="$(NuGetExe) pack ServiceLocator.Castle.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(CastleWindsorAdapterDir)" />
+  </Target>
+
+  <Target Name="PackTestingNunit" DependsOnTargets="CreatePackagesDir">
+    <Exec Command="$(NuGetExe) pack Testing.Nunit.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(TestingNunitDir)" />
   </Target>
 
 </Project>
