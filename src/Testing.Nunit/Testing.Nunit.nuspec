@@ -14,8 +14,8 @@
     <copyright>Copyright 2014</copyright>
     <tags>alphacloud signed testing nunit moq</tags>
     <dependencies>
-      <dependency id="FluentAssertions" version="[2.2.0.0,3.0.0.0)" />
-      <dependency id="Moq" version="[4.0.0.0,5.0.0.0)" />
+      <dependency id="FluentAssertions" version="2.2.0.0" />
+      <dependency id="Moq" version="[4.2.1402.2112,5.0.0.0)" />
       <dependency id="NUnit" version="2.6.3" />
     </dependencies>
   </metadata>

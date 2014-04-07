@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <Target Name="BuildAll">
-    <MSBuild Projects="$(RootDir)\Alphacloud.Common.sln" Properties="Configuration=$(BuildConfig)" Targets="$(BuildTarget)"
+    <MSBuild Projects="$(RootDir)\Alphacloud.Common.sln" Properties="Configuration=$(BuildConfig);CreateHardLinksForCopyLocalIfPossible=true" Targets="$(BuildTarget)"
              BuildInParallel="true" />
   </Target>
 
