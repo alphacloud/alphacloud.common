@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial release.</releaseNotes>
+    <releaseNotes>Update dependencies.</releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>alphacloud enyim memcached</tags>
     <dependencies>
