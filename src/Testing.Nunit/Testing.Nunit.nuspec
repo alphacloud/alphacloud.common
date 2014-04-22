@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Updated to latest MOQ with embedded Castle.Windsor.</releaseNotes>
+    <releaseNotes>Add ResetAutoMapperAttribute.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>alphacloud signed testing nunit moq</tags>
     <dependencies>
