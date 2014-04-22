@@ -16,7 +16,7 @@ Also, removed CommonServiceLocator dependency.
     <copyright>Copyright 2013</copyright>
     <tags>alphacloud infrastructure caching</tags>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System.Runtime.Caching" targetFramework="net40" />
+      <frameworkAssembly assemblyName="System.Runtime.Caching" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
       <dependency id="Alphacloud.Common.Core" version="[0.3.0.0,2.0.0.0)" />
