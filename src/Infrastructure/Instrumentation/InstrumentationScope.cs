@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 {
     using System;
     using System.Diagnostics;
-    using Core.Instrumentation;
     using global::Common.Logging;
     using JetBrains.Annotations;
+
 
     /// <summary>
     ///   Creates instrumentation operation scope
@@ -43,7 +43,8 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         {
             _operation = operation;
             _correlationId = correlationId;
-            SafeServiceLocator.Resolve<IInstrumentationContextProvider>().Reset();
+            if (InstrumentationRuntime.Instance.IsEnabled())
+                InstrumentationRuntime.Instance.GetInstrumentationContextProvider().Reset();
 
             _timer = Stopwatch.StartNew();
             s_log.InfoFormat("Starting operation '{0}'", _operation);
@@ -58,7 +59,8 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
                 _timer.Stop();
 
                 InstrumentationRuntime.Instance.OnOperationCompleted(this, _operation, _timer.Elapsed);
-                SafeServiceLocator.Resolve<IInstrumentationContextProvider>().Reset();
+                if (InstrumentationRuntime.Instance.IsEnabled())
+                    InstrumentationRuntime.Instance.GetInstrumentationContextProvider().Reset();
 
                 if (_correlationId != null)
                     _correlationId.Dispose();

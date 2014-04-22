@@ -111,8 +111,8 @@
             var scope = s_emptyContext;
             if (_instrumentationEnabled)
             {
-                scope = SafeServiceLocator.Resolve<ICorrelationIdProvider>().SetId(_correlationId);
-                SafeServiceLocator.Resolve<IInstrumentationContextProvider>()
+                scope = InstrumentationRuntime.Instance.GetCorrelationIdProvider().SetId(_correlationId);
+                InstrumentationRuntime.Instance.GetInstrumentationContextProvider()
                     .SetInstrumentationContext(_instrumentationContext);
             }
             s_log.DebugFormat("Set captured context of thread {0}", _originThread);

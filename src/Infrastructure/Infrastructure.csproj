@@ -54,10 +54,6 @@
     <Reference Include="JetBrains.Annotations, Version=7.1.3000.2254, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\ReSharper.Annotations.7.1.3.130415\lib\net\JetBrains.Annotations.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -105,7 +101,9 @@
     <Compile Include="Instrumentation\InstrumentationSettings.cs" />
     <Compile Include="Instrumentation\LogExtensions.cs" />
     <Compile Include="Instrumentation\LoggingConfiguration.cs" />
-    <Compile Include="SafeServiceLocator.cs" />
+    <Compile Include="Instrumentation\NullCorrelationIdProvider.cs" />
+    <Compile Include="Instrumentation\NullInstrumentaionContext.cs" />
+    <Compile Include="Instrumentation\NullInstrumentationContextProvider.cs" />
     <Compile Include="Instrumentation\ThreadStaticInstrumentationContextProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transformations\AdhocEncoder.cs" />

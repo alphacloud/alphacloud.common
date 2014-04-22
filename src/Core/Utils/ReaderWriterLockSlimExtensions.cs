@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -22,13 +22,12 @@ namespace Alphacloud.Common.Core.Utils
 
     using System;
     using System.Threading;
-
     using JetBrains.Annotations;
 
     #endregion
 
     /// <summary>
-    /// <see cref="ReaderWriterLockSlim"/> extensions.
+    ///   <see cref="ReaderWriterLockSlim" /> extensions.
     /// </summary>
     [PublicAPI]
     public static class ReaderWriterLockSlimExtensions
@@ -62,7 +61,7 @@ namespace Alphacloud.Common.Core.Utils
         /// </summary>
         /// <param name="locker"></param>
         /// <param name="read">operation</param>
-        public static T Read <T>([NotNull] this ReaderWriterLockSlim locker, [NotNull] Func<T> read)
+        public static T Read<T>([NotNull] this ReaderWriterLockSlim locker, [NotNull] Func<T> read)
         {
             if (locker == null)
                 throw new ArgumentNullException("locker");

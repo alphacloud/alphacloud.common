@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -20,13 +20,11 @@ namespace Infrastructure.Tests.Caching
 {
     using System.Collections.Specialized;
     using Alphacloud.Common.Infrastructure.Caching;
-    using Alphacloud.Common.ServiceLocator.Castle;
     using FluentAssertions;
-    using Microsoft.Practices.ServiceLocation;
-    using Moq;
-    using NUnit.Framework;
     using global::Castle.MicroKernel.Registration;
     using global::Castle.Windsor;
+    using Moq;
+    using NUnit.Framework;
 
     //// ReSharper disable InconsistentNaming
 
@@ -35,41 +33,14 @@ namespace Infrastructure.Tests.Caching
     #endregion
 
     [TestFixture]
-    internal class CompositeCacheFactoryTests
+    class CompositeCacheFactoryTests
     {
-
-        class CacheFactoryWrapper: ICacheFactory
-        {
-            private readonly ICacheFactory _innerFactory;
-
-
-            public CacheFactoryWrapper(ICacheFactory innerFactory)
-            {
-                _innerFactory = innerFactory;
-            }
-
-
-            public ICache GetCache(string instance = null)
-            {
-                return _innerFactory.GetCache(instance);
-            }
-
-
-            public void Initialize()
-            {
-                _innerFactory.Initialize();
-            }
-        }
-
         #region Setup/Teardown
 
         [SetUp]
         public void SetUp()
         {
             _kernel = new WindsorContainer();
-            var locator = new WindsorServiceLocatorAdapter(_kernel);
-            ServiceLocator.SetLocatorProvider(() => locator);
-
             _mockery = new MockRepository(MockBehavior.Default);
 
             _localCache = _mockery.Create<ICache>();
@@ -79,13 +50,14 @@ namespace Infrastructure.Tests.Caching
             _kernel.Register(
                 Component.For<ICacheFactory>()
                     .Instance(new CacheFactoryWrapper(_localCacheFactory.Object))
-                .Named(CompositeCache.LocalCacheInstanceName));
-
+                    .Named(CompositeCache.LocalCacheInstanceName));
 
             _remoteCache = _mockery.Create<ICache>();
             _remoteCacheFactory = _mockery.Create<ICacheFactory>();
             _remoteCacheFactory.Setup(f => f.GetCache(It.IsAny<string>()))
                 .Returns(_remoteCache.Object);
+
+            _timeoutStrategy = new FixedTimeoutStrategy(5.Seconds());
 
             _kernel.Register(
                 Component.For<ICacheFactory>()
@@ -102,20 +74,45 @@ namespace Infrastructure.Tests.Caching
 
         #endregion
 
-        private MockRepository _mockery;
-        private Mock<ICache> _localCache;
-        private Mock<ICache> _remoteCache;
-        private WindsorContainer _kernel;
-        private Mock<ICacheFactory> _localCacheFactory;
-        private Mock<ICacheFactory> _remoteCacheFactory;
+        class CacheFactoryWrapper : ICacheFactory
+        {
+            readonly ICacheFactory _innerFactory;
+
+
+            public CacheFactoryWrapper(ICacheFactory innerFactory)
+            {
+                _innerFactory = innerFactory;
+            }
+
+            #region ICacheFactory Members
+
+            public ICache GetCache(string instance = null)
+            {
+                return _innerFactory.GetCache(instance);
+            }
+
+
+            public void Initialize()
+            {
+                _innerFactory.Initialize();
+            }
+
+            #endregion
+        }
+
+
+        MockRepository _mockery;
+        Mock<ICache> _localCache;
+        Mock<ICache> _remoteCache;
+        WindsorContainer _kernel;
+        Mock<ICacheFactory> _localCacheFactory;
+        Mock<ICacheFactory> _remoteCacheFactory;
+        FixedTimeoutStrategy _timeoutStrategy;
+
 
         [Test]
         public void EnsureCacheFactoiesResolved()
-        {
-            var local = ServiceLocator.Current.GetInstance<ICacheFactory>(CompositeCache.LocalCacheInstanceName);
-            var remote = ServiceLocator.Current.GetInstance<ICacheFactory>(CompositeCache.BackingCacheInstanceName);
-            local.Should().NotBeSameAs(remote);
-        }
+        {}
 
 
         [Test]
@@ -123,7 +120,8 @@ namespace Infrastructure.Tests.Caching
         {
             var settings = new NameValueCollection();
             settings["cacheName"] = "cache1";
-            var factory = new CompositeCacheFactory(settings);
+            var factory = new CompositeCacheFactory(settings, _timeoutStrategy, _localCacheFactory.Object,
+                _remoteCacheFactory.Object);
             factory.Initialize();
             factory.GetCache();
 
@@ -135,7 +133,8 @@ namespace Infrastructure.Tests.Caching
         [Test]
         public void GetCache_WithNameSpecified_Should_CreateCacheWithCustomName()
         {
-            var factory = new CompositeCacheFactory(new NameValueCollection());
+            var factory = new CompositeCacheFactory(new NameValueCollection(), _timeoutStrategy,
+                _localCacheFactory.Object, _remoteCacheFactory.Object);
             factory.Initialize();
             factory.GetCache("customCache");
 
@@ -157,11 +156,13 @@ namespace Infrastructure.Tests.Caching
         [Test]
         public void Should_ReadParameters_FromAppConfig()
         {
-            var factory = new CompositeCacheFactory();
+            var factory = new CompositeCacheFactory(_timeoutStrategy, _localCacheFactory.Object,
+                _remoteCacheFactory.Object);
             factory.Initialize();
             factory.IsEnabled.Should().BeTrue();
         }
     }
+
 
     //// ReSharper restore InconsistentNaming
 }

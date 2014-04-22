@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Add EnumHelper class.</releaseNotes>
+    <releaseNotes>Changes to support CommonServiceLocator dependency removal.</releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>alphacloud</tags>
     <dependencies>

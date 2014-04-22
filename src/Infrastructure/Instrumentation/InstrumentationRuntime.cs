@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2014 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@
 namespace Alphacloud.Common.Infrastructure.Instrumentation
 {
     using System;
+    using System.Management.Instrumentation;
     using System.Threading;
     using Core.Instrumentation;
     using Core.Utils;
     using global::Common.Logging;
     using JetBrains.Annotations;
+
 
     /// <summary>
     ///   Instrumentation and correlation management runtime.
@@ -53,12 +55,11 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         static Lazy<InstrumentationRuntime> s_instance =
             new Lazy<InstrumentationRuntime>(() => new InstrumentationRuntime());
 
-        static readonly InstrumentationSettings s_defaultSettings = new InstrumentationSettings();
+        static readonly InstrumentationSettings s_defaultSettings =
+            new InstrumentationSettings(new NullInstrumentationContextProvider(), new NullCorrelationIdProvider());
 
 
         Func<InstrumentationSettings> _configurationProvider;
-        readonly Lazy<ICorrelationIdProvider> _correlationIdProvider = new Lazy<ICorrelationIdProvider>(SafeServiceLocator.Resolve<ICorrelationIdProvider>);
-        readonly Lazy<IInstrumentationContextProvider> _instrumentationContextProvider = new Lazy<IInstrumentationContextProvider>(SafeServiceLocator.Resolve<IInstrumentationContextProvider>);
 
         /// <summary>
         ///   Instrumentation runtime instance.
@@ -121,7 +122,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
 
         /// <summary>
-        /// Logs operation completion and broadcasts <see cref="OperationCompletedEventArgs"/> event.
+        ///   Logs operation completion and broadcasts <see cref="OperationCompletedEventArgs" /> event.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="operation">The operation.</param>
@@ -132,8 +133,8 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
                 return;
 
             EventHelper.Raise(OperationCompleted, () => new OperationCompletedEventArgs {
-                Context = _instrumentationContextProvider.Value.GetInstrumentationContext(),
-                CorrelationId = _correlationIdProvider.Value.GetId(),
+                Context = GetInstrumentationContextProvider().GetInstrumentationContext(),
+                CorrelationId = GetCorrelationIdProvider().GetId(),
                 Duration = duration,
                 Info = operation,
                 ManagedThreadId = Thread.CurrentThread.ManagedThreadId
@@ -153,17 +154,16 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
             if (!IsEnabled())
                 return;
 
-            _instrumentationContextProvider.Value.GetInstrumentationContext().AddCall(callType, methodName, duration);
+            GetInstrumentationContextProvider().GetInstrumentationContext().AddCall(callType, methodName, duration);
 
             EventHelper.Raise(CallCompleted, () => new InstrumentationEventArgs {
                 CallType = callType,
-                CorrelationId = _correlationIdProvider.Value.GetId(),
+                CorrelationId = GetCorrelationIdProvider().GetId(),
                 Duration = duration,
                 ManagedThreadId = Thread.CurrentThread.ManagedThreadId,
                 Info = methodName
             }, sender);
         }
-
 
 
         /// <summary>
@@ -186,8 +186,8 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
             if (IsEnabled())
             {
-                var correlationId = _correlationIdProvider.Value.GetId();
-                var instrumentationContext = _instrumentationContextProvider.Value.GetInstrumentationContext();
+                var correlationId = GetCorrelationIdProvider().GetId();
+                var instrumentationContext = GetInstrumentationContextProvider().GetInstrumentationContext();
                 ctx = new CapturedContext(culture, uiCulture, principal, currentThread.ManagedThreadId, correlationId,
                     instrumentationContext);
             }
@@ -207,6 +207,45 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         internal static void Reset()
         {
             s_instance = new Lazy<InstrumentationRuntime>(() => new InstrumentationRuntime());
+            s_log.Info("Instrumentation runtime was reset.");
+        }
+
+
+        /// <summary>
+        ///   Gets the instrumentation context provider.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="System.Management.Instrumentation.InstrumentationException">
+        ///   InstrumentationContext provider is not set
+        ///   correctly. Ensure it was initialized with InstrumentationContext.SetConfigurationProvider().
+        /// </exception>
+        [NotNull]
+        public IInstrumentationContextProvider GetInstrumentationContextProvider()
+        {
+            var provider = GetConfiguration().InstrumentationContextProvider;
+            if (provider == null)
+                throw new InstrumentationException(
+                    "InstrumentationContext provider is not set correctly. Ensure it was initialized with InstrumentationContext.SetConfigurationProvider().");
+            return provider;
+        }
+
+
+        /// <summary>
+        ///   Gets the correlation identifier provider.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="System.Management.Instrumentation.InstrumentationException">
+        ///   CorrelationId provider is not set
+        ///   correctly. Ensure it was initialized with InstrumentationContext.SetConfigurationProvider().
+        /// </exception>
+        [NotNull]
+        public ICorrelationIdProvider GetCorrelationIdProvider()
+        {
+            var provider = GetConfiguration().CorrelationIdProvider;
+            if (provider == null)
+                throw new InstrumentationException(
+                    "CorrelationId provider is not set correctly. Ensure it was initialized with InstrumentationContext.SetConfigurationProvider().");
+            return provider;
         }
 
 
@@ -219,7 +258,10 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         }
 
 
-        bool IsEnabled()
+        /// <summary>
+        ///   Determines whether Instrumentation Runtime is enabled.
+        /// </summary>
+        public bool IsEnabled()
         {
             return GetConfiguration().Enabled;
         }
