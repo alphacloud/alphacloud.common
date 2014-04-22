@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F69E87C-76F0-48C8-B4B0-C2EB68931D89}"
 	ProjectSection(SolutionItems) = preProject
 		Alphacloud.Common.snk = Alphacloud.Common.snk
@@ -38,6 +40,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.Memcached.Tests", "Tests\Integration\Caching.Memcached.Tests\Caching.Memcached.Tests.csproj", "{8DF06376-2BE9-454F-A06F-AF6381B6125D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLocator.Castle.Tests", "Tests\ServiceLocator.Castle.Tests\ServiceLocator.Castle.Tests.csproj", "{F33F2379-0D62-477A-824A-61D6E5AAE990}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{F5F4F3E9-B563-4AE2-A50D-FD22014B1C71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Mvc", "Web\Web.Mvc\Web.Mvc.csproj", "{D6291A8E-398D-469A-B997-5A17D5CB4F71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +91,10 @@ Global
 		{F33F2379-0D62-477A-824A-61D6E5AAE990}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F33F2379-0D62-477A-824A-61D6E5AAE990}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F33F2379-0D62-477A-824A-61D6E5AAE990}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6291A8E-398D-469A-B997-5A17D5CB4F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6291A8E-398D-469A-B997-5A17D5CB4F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6291A8E-398D-469A-B997-5A17D5CB4F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6291A8E-398D-469A-B997-5A17D5CB4F71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,5 +106,6 @@ Global
 		{F33F2379-0D62-477A-824A-61D6E5AAE990} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
 		{54E6D657-D9AB-45FD-B06E-05625D60821E} = {825AAA21-8078-4548-A565-B0C76E2EE0FB}
 		{F9E6CF1B-50A1-436F-A509-B97832A74346} = {825AAA21-8078-4548-A565-B0C76E2EE0FB}
+		{D6291A8E-398D-469A-B997-5A17D5CB4F71} = {F5F4F3E9-B563-4AE2-A50D-FD22014B1C71}
 	EndGlobalSection
 EndGlobal
