@@ -39,6 +39,10 @@ namespace Alphacloud.Common.Web.Mvc.Caching
             ConcurrentDictionary<string, bool>(8, 100);
 
 
+        /// <summary>
+        ///   Sets HTTP cahce properties.
+        /// </summary>
+        /// <param name="filterContext">The filter context.</param>
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             if (filterContext.IsChildAction)

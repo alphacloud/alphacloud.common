@@ -30,6 +30,11 @@ namespace Alphacloud.Common.Web.Mvc.Caching
     {
         #region Overrides of ActionFilterAttribute
 
+
+        /// <summary>
+        /// Sets HTTP cache properties.
+        /// </summary>
+        /// <param name="filterContext">The filter context.</param>
         public override void OnResultExecuting(ResultExecutingContext filterContext)
         {
             filterContext.HttpContext.Response.Cache.SetAllowResponseInBrowserHistory(true);

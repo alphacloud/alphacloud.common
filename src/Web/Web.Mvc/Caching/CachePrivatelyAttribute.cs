@@ -38,6 +38,10 @@ namespace Alphacloud.Common.Web.Mvc.Caching
 
         #region Overrides of ActionFilterAttribute
 
+        /// <summary>
+        /// Set HTTP cache parameters.
+        /// </summary>
+        /// <param name="filterContext">The filter context.</param>
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
             if (!filterContext.IsChildAction)

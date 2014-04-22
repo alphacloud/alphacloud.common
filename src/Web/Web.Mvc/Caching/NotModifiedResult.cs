@@ -29,6 +29,10 @@ namespace Alphacloud.Common.Web.Mvc.Caching
     [PublicAPI]
     public class NotModifiedResult : ActionResult
     {
+        /// <summary>
+        /// Returns HTTP 304 (not modified) status.
+        /// </summary>
+        /// <param name="context">The context in which the result is executed. The context information includes the controller, HTTP content, request context, and route data.</param>
         public override void ExecuteResult(ControllerContext context)
         {
             var response = context.HttpContext.Response;
