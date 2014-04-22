@@ -16,8 +16,8 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("ba321126-5c95-4959-9f5b-43c1b249a2ea")]
 
-[assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyVersion("0.1.1.0")]
+[assembly: AssemblyFileVersion("0.1.1.0")]
 
 [assembly: InternalsVisibleTo("Infrastructure.Tests, PublicKey="
     + "002400000480000094000000060200000024000052534131000400000100010013c2547ac065d2"
