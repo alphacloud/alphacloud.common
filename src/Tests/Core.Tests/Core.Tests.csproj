@@ -66,6 +66,7 @@
     <Compile Include="Data\ChartHelperTests.cs" />
     <Compile Include="Data\CollectionExtensionsTests.cs" />
     <Compile Include="Data\DictionaryExtensionsTests.cs" />
+    <Compile Include="Data\EnumHelperTests.cs" />
     <Compile Include="Data\EnumResourceBinderTests.cs" />
     <Compile Include="Data\NumberExtensionsTests.cs" />
     <Compile Include="Data\NumberFormattingExtensionsTests.cs" />

@@ -173,7 +173,7 @@ namespace Alphacloud.Common.Core.Resources
 
         internal static string GetResourceKey(MemberInfo fieldInfo, ResourceBindingAttribute attr)
         {
-            var key = attr.Key ?? "{0}_{1}".ApplyArgs(fieldInfo.DeclaringType.Name, fieldInfo.Name);
+            var key = attr.Key ?? string.Concat(fieldInfo.DeclaringType.Name, "_", fieldInfo.Name);
             return key;
         }
 

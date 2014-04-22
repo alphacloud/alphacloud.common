@@ -62,6 +62,7 @@
     <Compile Include="Data\CollectionExtensions.cs" />
     <Compile Include="Data\DictionaryExtensions.cs" />
     <Compile Include="Data\BinaryFormattingExtensions.cs" />
+    <Compile Include="Data\EnumHelper.cs" />
     <Compile Include="Data\IChartData.cs" />
     <Compile Include="Data\IPagedList.cs" />
     <Compile Include="Data\NumberExtensions.cs" />
