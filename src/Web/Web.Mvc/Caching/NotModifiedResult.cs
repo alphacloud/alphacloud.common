@@ -39,6 +39,9 @@ namespace Alphacloud.Common.Web.Mvc.Caching
 
         #region Overrides of Object
 
+        /// <summary>
+        /// Returns human readable status for HTTP 304.
+        /// </summary>
         public override string ToString()
         {
             return "HTTP 304 Not Modified.";
