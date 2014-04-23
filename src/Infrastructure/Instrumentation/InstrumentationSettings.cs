@@ -59,5 +59,6 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         {
             get { return _correlationIdProvider; }
         }
+
     }
 }

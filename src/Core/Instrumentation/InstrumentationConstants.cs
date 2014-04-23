@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ namespace Alphacloud.Common.Core.Instrumentation
         public const string CorrelationIdItemKey = "alphacloud.instrumentation.correlationId";
 
         /// <summary>
-        ///   Activity trace log source.
+        ///   Activity trace logger name.
         /// </summary>
-        public const string ActivityTrace = "alphacloud.instrumentation.activity.trace";
+        public const string ActivityTraceLogger = "alphacloud.instrumentation.activity";
 
         /// <summary>
-        ///   Performance instrumentation log source.
+        ///   Performance instrumentation logger name.
         /// </summary>
-        public const string Instrumentation = "alphacloud.instrumentation.performance";
+        public const string InstrumentationLogger = "alphacloud.instrumentation.performance";
     }
 }

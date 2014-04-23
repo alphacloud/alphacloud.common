@@ -21,6 +21,7 @@
     <MainSolution>$(SrcDir)\Alphacloud.Common.sln</MainSolution>
     <CoreDir>$(SrcDir)\Core</CoreDir>
     <InfrastructureDir>$(SrcDir)\Infrastructure</InfrastructureDir>
+    <IntegrationDir>$(SrcDir)\Integration</IntegrationDir>
     <MemcachedAdapterDir>$(SrcDir)\Integration\Caching.Memcached</MemcachedAdapterDir>
     <MemcachedCommonLoggingAdapterDir>$(SrcDir)\Integration\Caching.Memcached.CommonLogging</MemcachedCommonLoggingAdapterDir>
     <CastleWindsorAdapterDir>$(SrcDir)\ServiceLocator.Castle</CastleWindsorAdapterDir>
@@ -63,6 +64,11 @@
     <Exec Command="$(NuGetExe) pack ServiceLocator.Castle.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(CastleWindsorAdapterDir)" />
   </Target>
 
+  <Target Name="PackInstrumentationLog4Net" DependsOnTargets="CreatePackagesDir">
+    <Exec Command="$(NuGetExe) pack Instrumentation.Log4Net.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(IntegrationDir)\Instrumentation.Log4Net" />
+  </Target>
+
+
   <Target Name="PackTestingNunit" DependsOnTargets="CreatePackagesDir">
     <Exec Command="$(NuGetExe) pack Testing.Nunit.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(TestingNunitDir)" />
   </Target>
@@ -71,7 +77,7 @@
     <Exec Command="$(NuGetExe) pack Web.Mvc.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(WebProjectsDir)\Web.Mvc" />
   </Target>
 
-  <Target Name="PackAll" DependsOnTargets="PackCore; PackInfrastructure; PackMemcachedCommonLoggingAdapter; PackMemcachedAdapter; PackCastleWindsorAdapter; PackWebMvc; PackTestingNunit">
+  <Target Name="PackAll" DependsOnTargets="PackCore; PackInfrastructure; PackMemcachedCommonLoggingAdapter; PackMemcachedAdapter; PackCastleWindsorAdapter; PackWebMvc; PackInstrumentationLog4Net; PackTestingNunit">
   </Target>
 
 </Project>

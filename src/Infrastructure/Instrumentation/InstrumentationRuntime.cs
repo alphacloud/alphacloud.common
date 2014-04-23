@@ -250,7 +250,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
 
         [NotNull]
-        InstrumentationSettings GetConfiguration()
+        public InstrumentationSettings GetConfiguration()
         {
             return _configurationProvider != null
                 ? _configurationProvider()

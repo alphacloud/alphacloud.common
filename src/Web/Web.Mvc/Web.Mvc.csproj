@@ -40,6 +40,13 @@
     <AssemblyOriginatorKeyFile>..\..\Alphacloud.Common.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\packages\Common.Logging.2.2.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Common.Logging.Core.2.2.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Annotations, Version=7.1.3000.2254, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\ReSharper.Annotations.7.1.3.130415\lib\net\JetBrains.Annotations.dll</HintPath>
@@ -92,6 +99,11 @@
     <Compile Include="Caching\ExcludeFromBrowserHistory.cs" />
     <Compile Include="Caching\HttpRequestExtensions.cs" />
     <Compile Include="Caching\HttpResponseExtensions.cs" />
+    <Compile Include="Instrumentation\ActionDiagnosticsHelper.cs" />
+    <Compile Include="Instrumentation\CorrelationIdAttribute.cs" />
+    <Compile Include="Instrumentation\HttpCorrelationIdProvider.cs" />
+    <Compile Include="Instrumentation\HttpInstrumentationContextProvider.cs" />
+    <Compile Include="Instrumentation\InstrumentActionAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
