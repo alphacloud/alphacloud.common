@@ -16,39 +16,42 @@
 
 #endregion
 
-namespace Infrastructure.Tests.Logging
+namespace Infrastructure.Tests.Instrumentation
 {
+    using System;
+    using System.Diagnostics;
+    using System.Threading.Tasks;
     using Common.Logging;
-    using FluentAssertions;
-    using log4net.Core;
+    using Logging;
     using NUnit.Framework;
 
     [TestFixture]
-    class CaptureLog4NetMessagesTests : Log4NetTestsBase
+    class CorrelationManagerTests : Log4NetTestsBase
     {
         static readonly ILog s_log = LogManager.GetCurrentClassLogger();
 
-        [Test]
-        public void CanCaptureLogMessage()
-        {
-            var log = LogManager.GetLogger("InstrumentationLoggerTests");
-            log.Info("Captured info message");
 
-            var messages = MemoryAppender.GetEvents();
-            messages.Should().Contain(m => m.RenderedMessage == "Captured info message");
+        [Test]
+        public void ShouldPass_ActivityId_To_ChildThread()
+        {
+            Trace.CorrelationManager.StartLogicalOperation("Load");
+
+            Trace.CorrelationManager.ActivityId = Guid.NewGuid();
+
+            LogCorrelation("");
+
+            var t = new Task(() => LogCorrelation(""));
+            t.Start();
+            t.Wait();
+
+            Trace.CorrelationManager.StopLogicalOperation();
+            s_log.InfoFormat("ActivityID after logical operation: {0}", Trace.CorrelationManager.ActivityId);
         }
 
 
-        [Test]
-        public void LogChecker_Should_CaptureLogMessages()
+        static void LogCorrelation(string msg)
         {
-            using (var lc = new CaptureLog4NetEvents(GetType(), Level.All))
-            {
-                const string testMessage = @"test- 12648923654";
-                s_log.Info(testMessage);
-
-                lc.Messages.Should().Contain(testMessage);
-            }
+            s_log.InfoFormat("{0} ActivityId: {1}, Stack{2}: ", Trace.CorrelationManager.ActivityId);
         }
     }
 }

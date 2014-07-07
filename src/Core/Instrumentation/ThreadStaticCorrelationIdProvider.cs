@@ -25,16 +25,16 @@ namespace Alphacloud.Common.Core.Instrumentation
     {
         [ThreadStatic] static string s_correlationId;
 
-        readonly IDiagnosticContext _diagnosticContext;
+        readonly ILoggingContext _loggingContext;
 
 
-        public ThreadStaticCorrelationIdProvider([NotNull] IDiagnosticContext diagnosticContext)
+        public ThreadStaticCorrelationIdProvider([NotNull] ILoggingContext loggingContext)
         {
-            if (diagnosticContext == null)
+            if (loggingContext == null)
             {
-                throw new ArgumentNullException("diagnosticContext");
+                throw new ArgumentNullException("loggingContext");
             }
-            _diagnosticContext = diagnosticContext;
+            _loggingContext = loggingContext;
         }
 
         #region ICorrelationIdProvider Members
@@ -55,14 +55,14 @@ namespace Alphacloud.Common.Core.Instrumentation
         public virtual void Clear()
         {
             s_correlationId = null;
-            _diagnosticContext.Clear();
+            _loggingContext.Clear();
         }
 
         #endregion
 
         protected IDisposable SetNdc(string correlationId)
         {
-            return _diagnosticContext.Push(correlationId);
+            return _loggingContext.Push(correlationId);
         }
     }
 }

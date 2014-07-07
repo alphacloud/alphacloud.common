@@ -77,7 +77,7 @@
     <Compile Include="Data\WeekDays.cs" />
     <Compile Include="Instrumentation\CorrelationIdGenerator.cs" />
     <Compile Include="Instrumentation\ICorrelationIdProvider.cs" />
-    <Compile Include="Instrumentation\IDiagnosticContext.cs" />
+    <Compile Include="Instrumentation\ILoggingContext.cs" />
     <Compile Include="Instrumentation\IInstrumentationContext.cs" />
     <Compile Include="Instrumentation\InstrumentationConstants.cs" />
     <Compile Include="Instrumentation\ThreadStaticCorrelationIdProvider.cs" />

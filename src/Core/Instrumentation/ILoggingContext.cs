@@ -25,7 +25,7 @@ namespace Alphacloud.Common.Core.Instrumentation
     ///   Diagnostic context
     /// </summary>
     [PublicAPI]
-    public interface IDiagnosticContext
+    public interface ILoggingContext
     {
         /// <summary>
         ///   Set new context.
