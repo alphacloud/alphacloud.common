@@ -19,7 +19,7 @@
 namespace ServiceLocator.Castle.Tests
 {
     using Alphacloud.Common.ServiceLocator.Castle;
-    using FluentAssertions;
+    using global::FluentAssertions;
     using global::Castle.MicroKernel.Registration;
     using global::Castle.Windsor;
     using NUnit.Framework;

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Alphacloud.Common.Infrastructure")]
-[assembly: AssemblyDescription("Alphacloud infrastructure")]
+[assembly: AssemblyDescription("Alphacloud infrastructure includes caching abstraction layer and instrumentation runtime.")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -16,8 +16,8 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("ba321126-5c95-4959-9f5b-43c1b249a2ea")]
 
-[assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyVersion("0.2.0.0")]
+[assembly: AssemblyFileVersion("0.2.0.0")]
 
 [assembly: InternalsVisibleTo("Infrastructure.Tests, PublicKey="
     + "002400000480000094000000060200000024000052534131000400000100010013c2547ac065d2"

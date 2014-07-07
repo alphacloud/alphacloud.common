@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2014 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@
 namespace Alphacloud.Common.Core.Instrumentation
 {
     using System;
-    using System.Collections.Generic;
     using Data;
     using JetBrains.Annotations;
+
 
     /// <summary>
     ///   Call type.
@@ -38,6 +38,7 @@ namespace Alphacloud.Common.Core.Instrumentation
         /// </summary>
         public const string Service = "Service";
     }
+
 
     /// <summary>
     ///   Method call count info.
@@ -115,31 +116,5 @@ namespace Alphacloud.Common.Core.Instrumentation
         /// </summary>
         /// <returns>Captured call types.</returns>
         string[] GetCallTypes();
-    }
-
-    /// <summary>
-    ///   Instrumentation Context provider.
-    /// </summary>
-    public interface IInstrumentationContextProvider
-    {
-        /// <summary>
-        ///   Returns current instrumentation context.
-        /// </summary>
-        /// <returns></returns>
-        [NotNull]
-        IInstrumentationContext GetInstrumentationContext();
-
-
-        /// <summary>
-        ///   Set current instrumentation context.
-        /// </summary>
-        /// <param name="instrumentationContext"></param>
-        void SetInstrumentationContext([CanBeNull] IInstrumentationContext instrumentationContext);
-
-
-        /// <summary>
-        ///   Re-initialize context.
-        /// </summary>
-        void Reset();
     }
 }

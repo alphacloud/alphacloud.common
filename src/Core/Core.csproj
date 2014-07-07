@@ -62,6 +62,7 @@
     <Compile Include="Data\CollectionExtensions.cs" />
     <Compile Include="Data\DictionaryExtensions.cs" />
     <Compile Include="Data\BinaryFormattingExtensions.cs" />
+    <Compile Include="Data\EnumHelper.cs" />
     <Compile Include="Data\IChartData.cs" />
     <Compile Include="Data\IPagedList.cs" />
     <Compile Include="Data\NumberExtensions.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Instrumentation\ICorrelationIdProvider.cs" />
     <Compile Include="Instrumentation\IDiagnosticContext.cs" />
     <Compile Include="Instrumentation\IInstrumentationContext.cs" />
+    <Compile Include="Instrumentation\IInstrumentationContextProvider.cs" />
     <Compile Include="Instrumentation\InstrumentationConstants.cs" />
     <Compile Include="Instrumentation\ThreadStaticCorrelationIdProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="Utils\EventHelper.cs" />
     <Compile Include="Utils\IServiceFactory.cs" />
     <Compile Include="Utils\MaybeMonad.cs" />
+    <Compile Include="Utils\NullDisposable.cs" />
     <Compile Include="Utils\ReaderWriterLockSlimExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

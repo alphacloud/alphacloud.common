@@ -31,7 +31,7 @@ namespace Alphacloud.Common.Core.Data.Hash
     ///   https://github.com/enyim/EnyimMemcached/blob/master/Enyim.Caching/HashkitMurmur.cs
     ///   http://blog.teamleadnet.com/2012/08/murmurhash3-ultra-fast-hash-algorithm.html
     /// </remarks>
-    internal class Murmur3 : IUintHash
+    internal class Murmur3 : ISimpleHasher
     {
         private const uint M = 0x5bd1e995;
         private const int R = 24;

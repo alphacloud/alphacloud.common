@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@
 
 namespace Alphacloud.Common.Core.Data.Hash
 {
-    using System;
     using JetBrains.Annotations;
+
 
     /// <summary>
     ///   Fast non-cryptographic algorithms.
@@ -27,15 +27,16 @@ namespace Alphacloud.Common.Core.Data.Hash
     [PublicAPI]
     public static class FastHashAlgorithms
     {
-        private static readonly Lazy<IUintHash> s_murmur3 = new Lazy<IUintHash>(() => new Murmur3());
+        static readonly ISimpleHasher s_murmur3 = new Murmur3();
 
         /// <summary>
         ///   Murmur3 hash.
         /// </summary>
-        public static IUintHash Murmur3
+        public static ISimpleHasher Murmur3
         {
-            get { return s_murmur3.Value; }
+            get { return s_murmur3; }
         }
+
 
         /// <summary>
         ///   Computes hash of byte array.
@@ -45,7 +46,7 @@ namespace Alphacloud.Common.Core.Data.Hash
         /// <returns>
         ///   <c>0</c> in case data is <c>null</c> or empty array; hash otherwise.
         /// </returns>
-        public static uint Compute([NotNull] this IUintHash hash, [CanBeNull] byte[] data)
+        public static uint Compute([NotNull] this ISimpleHasher hash, [CanBeNull] byte[] data)
         {
             if (data == null || data.Length == 0)
                 return 0;

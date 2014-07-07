@@ -12,22 +12,24 @@
     <PrgToolsRoot>$(ProgramFiles)\Prg</PrgToolsRoot>
 
     <RootDir>$(MSBuildProjectDirectory)</RootDir>
-    <NuGetExe>$(RootDir)\.nuget\nuget.exe</NuGetExe>
-    <PackagesOutDir>$(RootDir)\out\packages</PackagesOutDir>
+    <SrcDir>$(RootDir)</SrcDir>
+    <NuGetExe>$(SrcDir)\.nuget\nuget.exe</NuGetExe>
+    <PackagesOutDir>$(SrcDir)\out\packages</PackagesOutDir>
   </PropertyGroup>
 
   <PropertyGroup>
-    <MainSolution>$(RootDir)\Alphacloud.Common.sln</MainSolution>
-    <CoreDir>$(RootDir)\Core</CoreDir>
-    <InfrastructureDir>$(RootDir)\Infrastructure</InfrastructureDir>
-    <MemcachedAdapterDir>$(RootDir)\Integration\Caching.Memcached</MemcachedAdapterDir>
-    <MemcachedCommonLoggingAdapterDir>$(RootDir)\Integration\Caching.Memcached</MemcachedCommonLoggingAdapterDir>
-    <CastleWindsorAdapterDir>$(RootDir)\ServiceLocator.Castle</CastleWindsorAdapterDir>
-    <TestingNunitDir>$(RootDir)\Testing.Nunit</TestingNunitDir>
+    <MainSolution>$(SrcDir)\Alphacloud.Common.sln</MainSolution>
+    <CoreDir>$(SrcDir)\Core</CoreDir>
+    <InfrastructureDir>$(SrcDir)\Infrastructure</InfrastructureDir>
+    <MemcachedAdapterDir>$(SrcDir)\Integration\Caching.Memcached</MemcachedAdapterDir>
+    <MemcachedCommonLoggingAdapterDir>$(SrcDir)\Integration\Caching.Memcached.CommonLogging</MemcachedCommonLoggingAdapterDir>
+    <CastleWindsorAdapterDir>$(SrcDir)\ServiceLocator.Castle</CastleWindsorAdapterDir>
+    <TestingNunitDir>$(SrcDir)\Testing.Nunit</TestingNunitDir>
+    <WebProjectsDir>$(SrcDir)\Web</WebProjectsDir>
   </PropertyGroup>
 
   <Target Name="BuildAll">
-    <MSBuild Projects="$(RootDir)\Alphacloud.Common.sln" Properties="Configuration=$(BuildConfig)" Targets="$(BuildTarget)"
+    <MSBuild Projects="$(SrcDir)\Alphacloud.Common.sln" Properties="Configuration=$(BuildConfig);CreateHardLinksForCopyLocalIfPossible=true" Targets="$(BuildTarget)"
              BuildInParallel="true" />
   </Target>
 
@@ -40,7 +42,7 @@
   <Target Name="CreatePackagesDir">
     <MakeDir Directories="$(PackagesOutDir)" ContinueOnError="true" />
   </Target>
-  
+
   <Target Name="PackCore" DependsOnTargets="CreatePackagesDir">
     <Exec Command="$(NuGetExe) pack Core.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(CoreDir)" />
   </Target>
@@ -63,6 +65,13 @@
 
   <Target Name="PackTestingNunit" DependsOnTargets="CreatePackagesDir">
     <Exec Command="$(NuGetExe) pack Testing.Nunit.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(TestingNunitDir)" />
+  </Target>
+
+  <Target Name="PackWebMvc" DependsOnTargets="CreatePackagesDir">
+    <Exec Command="$(NuGetExe) pack Web.Mvc.csproj -OutputDirectory $(PackagesOutDir) -Build -Prop Configuration=Release"  WorkingDirectory="$(WebProjectsDir)\Web.Mvc" />
+  </Target>
+
+  <Target Name="PackAll" DependsOnTargets="PackCore; PackInfrastructure; PackMemcachedCommonLoggingAdapter; PackMemcachedAdapter; PackCastleWindsorAdapter; PackWebMvc; PackTestingNunit">
   </Target>
 
 </Project>

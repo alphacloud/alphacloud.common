@@ -21,13 +21,14 @@ namespace Infrastructure.Tests.Instrumentation
     using System.Threading;
     using Alphacloud.Common.Core.Instrumentation;
     using Alphacloud.Common.Infrastructure.Instrumentation;
+    using Alphacloud.Common.Testing.Nunit;
     using FluentAssertions;
-    using global::Castle.MicroKernel.Registration;
     using Moq;
     using NUnit.Framework;
 
+
     [TestFixture]
-    public class InstrumentationRuntimeTests : IocTestBase
+    class InstrumentationRuntimeTests : MockedTestsBase
     {
         Mock<IInstrumentationContext> _instrumentationContext;
         Mock<ICorrelationIdProvider> _correlationIdProvider;
@@ -40,7 +41,6 @@ namespace Infrastructure.Tests.Instrumentation
 
         protected override void DoSetup()
         {
-            base.DoSetup();
 
             _instrumentationContext = Mockery.Create<IInstrumentationContext>();
             _correlationIdProvider = Mockery.Create<ICorrelationIdProvider>();
@@ -50,13 +50,11 @@ namespace Infrastructure.Tests.Instrumentation
             _instrumentationContextProvider.Setup(ic => ic.GetInstrumentationContext())
                 .Returns(_instrumentationContext.Object);
 
-            Container.Register(
-                Component.For<ICorrelationIdProvider>().Instance(_correlationIdProvider.Object),
-                Component.For<IInstrumentationContextProvider>().Instance(_instrumentationContextProvider.Object)
-                );
-
             _instrumentationRuntime = new InstrumentationRuntime();
-            _instrumentationSettings = new InstrumentationSettings {Enabled = true};
+            _instrumentationSettings = new InstrumentationSettings(
+                _instrumentationContextProvider.Object,
+                _correlationIdProvider.Object
+                ) {Enabled = true};
             _instrumentationRuntime.SetConfigurationProvider(() => _instrumentationSettings);
         }
 

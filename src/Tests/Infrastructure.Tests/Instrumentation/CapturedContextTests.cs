@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2014 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -24,17 +24,18 @@ namespace Infrastructure.Tests.Instrumentation
     using Alphacloud.Common.Core.Instrumentation;
     using Alphacloud.Common.Core.Reflection;
     using Alphacloud.Common.Infrastructure.Instrumentation;
+    using Alphacloud.Common.Testing.Nunit;
     using Alphacloud.Common.Testing.Nunit.Attributes;
     using FluentAssertions;
-    using global::Castle.MicroKernel.Registration;
     using Moq;
     using NUnit.Framework;
+
 
     [TestFixture]
     [SetCulture("ru-RU")]
     [SetUICulture("uk-UA")]
     [SetPrincipal("capture-context")]
-    public class CapturedContextTests : IocTestBase
+    class CapturedContextTests : MockedTestsBase
     {
         Mock<IInstrumentationContextProvider> _contextProvider;
         Mock<IInstrumentationContext> _instrumentationContext;
@@ -43,37 +44,13 @@ namespace Infrastructure.Tests.Instrumentation
 
         protected override void DoSetup()
         {
-            base.DoSetup();
-
             InstrumentationRuntime.Reset();
 
             _contextProvider = Mockery.Create<IInstrumentationContextProvider>();
             _instrumentationContext = Mockery.Create<IInstrumentationContext>();
             _correlationIdProvider = Mockery.Create<ICorrelationIdProvider>();
-
-            Container.Register(Component.For<IInstrumentationContextProvider>().Instance(_contextProvider.Object));
-            Container.Register(Component.For<ICorrelationIdProvider>().Instance(_correlationIdProvider.Object));
         }
 
-
-        [Test]
-        public void CaptureContext_When_InstrumentationEnabled_Should_CaptureInstrumentationAndCorrelationId()
-        {
-            InstrumentationRuntime.Instance.SetConfigurationProvider(() => new InstrumentationSettings {
-                Enabled = true
-            });
-
-            _contextProvider.Setup(p => p.GetInstrumentationContext()).Returns(_instrumentationContext.Object)
-                .Verifiable("instrumentation context was not captured");
-            _correlationIdProvider.Setup(p => p.GetId()).Returns("correlation-id")
-                .Verifiable("correlation id not was not captured");
-
-            var context = InstrumentationRuntime.Instance.CaptureContext();
-
-            context.FieldValue<string>("_correlationId").Should().Be("correlation-id");
-            context.FieldValue<IInstrumentationContext>("_instrumentationContext")
-                .Should().Be(_instrumentationContext.Object);
-        }
 
         [Test]
         public void CaptureContext_Set_When_InstrumentationEnabled_Should_SetInstrumentationAndCorrelationId()
@@ -93,6 +70,28 @@ namespace Infrastructure.Tests.Instrumentation
             Thread.CurrentPrincipal.Should().Be(principal);
         }
 
+
+        [Test]
+        public void CaptureContext_When_InstrumentationEnabled_Should_CaptureInstrumentationAndCorrelationId()
+        {
+            InstrumentationRuntime.Instance.SetConfigurationProvider(() => new InstrumentationSettings(
+                _contextProvider.Object,
+                _correlationIdProvider.Object
+                ) {
+                    Enabled = true,
+                });
+
+            _contextProvider.Setup(p => p.GetInstrumentationContext()).Returns(_instrumentationContext.Object)
+                .Verifiable("instrumentation context was not captured");
+            _correlationIdProvider.Setup(p => p.GetId()).Returns("correlation-id")
+                .Verifiable("correlation id not was not captured");
+
+            var context = InstrumentationRuntime.Instance.CaptureContext();
+
+            context.FieldValue<string>("_correlationId").Should().Be("correlation-id");
+            context.FieldValue<IInstrumentationContext>("_instrumentationContext")
+                .Should().Be(_instrumentationContext.Object);
+        }
 
 
         [Test]
@@ -121,7 +120,8 @@ namespace Infrastructure.Tests.Instrumentation
             var culture = new CultureInfo("en-US");
             var uiCulture = new CultureInfo("en-GB");
             var ctx = new CapturedContext(culture, uiCulture,
-                new GenericPrincipal(new GenericIdentity("captured"), new string[0]), Thread.CurrentThread.ManagedThreadId+1);
+                new GenericPrincipal(new GenericIdentity("captured"), new string[0]),
+                Thread.CurrentThread.ManagedThreadId + 1);
 
             ctx.Set();
 
