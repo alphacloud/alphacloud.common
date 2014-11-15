@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-Updated Common.Logging reference;
+Updated Common.Logging reference.
     </releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>alphacloud enyim memcached</tags>
