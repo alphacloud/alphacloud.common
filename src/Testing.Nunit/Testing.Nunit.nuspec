@@ -10,12 +10,16 @@
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Add ResetAutoMapperAttribute.</releaseNotes>
+    <releaseNotes>
+Updated third-party dependencies.
+1. FluentAssertions 3.2.1;
+2. MOQ 4.2.1409.
+    </releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>alphacloud signed testing nunit moq</tags>
     <dependencies>
-      <dependency id="FluentAssertions" version="2.2.0.0" />
-      <dependency id="Moq" version="[4.2.1402.2112,5.0.0.0)" />
+      <dependency id="FluentAssertions" version="[3.2.1,4.0.0)" />
+      <dependency id="Moq" version="[4.2.1409.1722,5.0.0.0)" />
       <dependency id="NUnit" version="2.6.3" />
     </dependencies>
   </metadata>
