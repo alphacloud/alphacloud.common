@@ -10,16 +10,18 @@
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Update dependencies.</releaseNotes>
-    <copyright>Copyright 2013</copyright>
+    <releaseNotes>
+Updated Common.Logging reference;
+    </releaseNotes>
+    <copyright>Copyright 2014</copyright>
     <tags>alphacloud enyim memcached</tags>
     <dependencies>
       <dependency id="ReSharper.Annotations" version="[7.1.3,8.0.0)" />
-      <dependency id="Common.Logging" version="[2.2.0,3.0.0)" />
+      <dependency id="Common.Logging" version="[2.3.1,3.0.0)" />
       <dependency id="EnyimMemcached" version="[2.12,3.0)" />
       <dependency id="Alphacloud.Common.Core" version="[0.2.0.0,2.0.0.0)" />
-      <dependency id="Alphacloud.Common.Infrastructure" version="[0.1.1.0,2.0.0.0)" />
-      <dependency id="Alphacloud.Common.Caching.Memcached.CommonLogging" version="[0.1.2.0,2.0.0.0)" />
+      <dependency id="Alphacloud.Common.Infrastructure" version="[0.2.0.0,2.0.0.0)" />
+      <dependency id="Alphacloud.Common.Caching.Memcached.CommonLogging" version="[0.2.0.0,2.0.0.0)" />
     </dependencies>
   </metadata>
 </package>

@@ -10,12 +10,14 @@
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial release.</releaseNotes>
+    <releaseNotes>
+ Updated Common.Logging reference.
+    </releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>alphacloud enyim memcached common logging</tags>
     <dependencies>
       <dependency id="ReSharper.Annotations" version="[7.1.3,8.0.0)" />
-      <dependency id="Common.Logging" version="[2.1.2,3.0.0)" />
+      <dependency id="Common.Logging" version="[2.3.1,3.0.0)" />
       <dependency id="EnyimMemcached" version="[2.12,3.0)" />
     </dependencies>
   </metadata>
