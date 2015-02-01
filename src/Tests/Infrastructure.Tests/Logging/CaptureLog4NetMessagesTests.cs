@@ -46,7 +46,7 @@ namespace Infrastructure.Tests.Logging
 
         #endregion
 
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger(); // initialize log system.
+        static readonly ILog s_log = LogManager.GetLogger<CaptureLog4NetEvents>(); // initialize log system.
 
 
         MemoryAppender _memoryAppender;
