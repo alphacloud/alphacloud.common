@@ -64,7 +64,7 @@ namespace Alphacloud.Common.Core.Utils
         /// <param name="evaluator">Evaluation callback.</param>
         /// <param name="failureValue">Default value.</param>
         /// <returns>
-        ///   Evaluation result if <paramref name="op"/> is assigned; <see cref="failureValue" /> otherwise.
+        ///   Evaluation result if <paramref name="op"/> is assigned; <paramref name="failureValue" /> otherwise.
         /// </returns>
         public static TResult Return<TInput, TResult>(
             [CanBeNull] this TInput op, [NotNull] Func<TInput, TResult> evaluator, TResult failureValue)
@@ -81,7 +81,15 @@ namespace Alphacloud.Common.Core.Utils
             return evaluator(op);
         }
 
-
+        /// <summary>
+        /// Continue chain if expression evaluates to <c>true</c>.
+        /// Returns <paramref name="op"/> if expression evaluates to <c>true</c>.
+        /// </summary>
+        /// <typeparam name="TInput">The type of the input.</typeparam>
+        /// <param name="op">The input value.</param>
+        /// <param name="evaluator">The evaluator.</param>
+        /// <returns><paramref name="op"/> if expression evaluaes to <c>true</c>; <c>null</c> otherwise.</returns>
+        /// <exception cref="System.ArgumentNullException">evaluator</exception>
         public static TInput If<TInput>(this TInput op, [NotNull] Func<TInput, bool> evaluator)
             where TInput : class
         {
@@ -97,6 +105,15 @@ namespace Alphacloud.Common.Core.Utils
         }
 
 
+        /// <summary>
+        /// Break chain if expression evaluates to <c>true</c>.
+        /// Returns <c>null</c> if expression evaluates to true.
+        /// </summary>
+        /// <typeparam name="TInput">The type of the input.</typeparam>
+        /// <param name="op">The input value.</param>
+        /// <param name="evaluator">The evaluator.</param>
+        /// <returns><c>null</c> if expression evaluates to <c>true</c>; <paramref name="op"/> otherwise.</returns>
+        /// <exception cref="System.ArgumentNullException">evaluator</exception>
         public static TInput Unless<TInput>(this TInput op, [NotNull] Func<TInput, bool> evaluator)
             where TInput : class
         {
@@ -119,7 +136,7 @@ namespace Alphacloud.Common.Core.Utils
         /// <param name="o"></param>
         /// <param name="action"></param>
         /// <returns>
-        ///   Source (<see cref="o" />) or <c>null</c>
+        ///   Source (<see paramref="o" />) or <c>null</c>
         /// </returns>
         public static TInput Do<TInput>(this TInput o, [NotNull] Action<TInput> action)
             where TInput : class
