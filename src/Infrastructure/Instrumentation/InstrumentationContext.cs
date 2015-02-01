@@ -57,7 +57,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     [Serializable]
     public class InstrumentationContext : IInstrumentationContext
     {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<InstrumentationContext>();
 
         readonly List<CallInfo> _calls = new List<CallInfo>();
 

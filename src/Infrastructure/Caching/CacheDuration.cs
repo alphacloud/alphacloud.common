@@ -34,7 +34,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         static readonly Lazy<CacheDuration> s_duration = new Lazy<CacheDuration>(LoadDurationSettings);
 
 
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<CacheDuration>();
 
 
         /// <summary>

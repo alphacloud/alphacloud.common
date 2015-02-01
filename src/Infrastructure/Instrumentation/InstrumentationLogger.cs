@@ -27,7 +27,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
     public class InstrumentationLogger : IInstrumentationEventListener
     {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<InstrumentationLogger>();
         readonly LoggingConfiguration _configuration;
 
 

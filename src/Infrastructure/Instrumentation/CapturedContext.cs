@@ -45,7 +45,7 @@
     /// Instrumentation context and correlation Id captuted only if instrumentation is enabled.
     public class CapturedContext
     {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<CapturedContext>();
         static readonly IDisposable s_emptyContext = new EmptyContext();
 
         readonly string _correlationId;

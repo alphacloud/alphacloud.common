@@ -29,7 +29,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     /// </summary>
     public class InstrumentationScope : IDisposable
     {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<InstrumentationScope>();
 
         readonly string _operation;
         readonly IDisposable _correlationId;
