@@ -32,7 +32,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
     public sealed class NullCacheFactory : ICacheFactory
 
     {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<NullCacheFactory>();
 
         #region ICacheFactory Members
 

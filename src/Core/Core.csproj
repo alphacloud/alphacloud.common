@@ -83,6 +83,7 @@
     <Compile Include="Instrumentation\IInstrumentationContextProvider.cs" />
     <Compile Include="Instrumentation\InstrumentationConstants.cs" />
     <Compile Include="Instrumentation\ThreadStaticCorrelationIdProvider.cs" />
+    <Compile Include="IO\FormattingStreamWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\Property.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />

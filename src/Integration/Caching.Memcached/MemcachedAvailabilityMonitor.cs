@@ -27,7 +27,7 @@ namespace Alphacloud.Common.Caching.Memcached
     /// </summary>
     class MemcachedAvailabilityMonitor : ICacheHealthcheckMonitor
     {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<MemcachedAvailabilityMonitor>();
 
         #region ICacheHealthcheckMonitor Members
 
