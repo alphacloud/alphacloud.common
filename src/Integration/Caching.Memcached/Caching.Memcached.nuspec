@@ -17,11 +17,11 @@ Updated Common.Logging reference.
     <tags>alphacloud enyim memcached</tags>
     <dependencies>
       <dependency id="ReSharper.Annotations" version="[7.1.3,8.0.0)" />
-      <dependency id="Common.Logging" version="[2.3.1,3.0.0)" />
+      <dependency id="Common.Logging" version="[3.0.0,4.0.0)" />
       <dependency id="EnyimMemcached" version="[2.12,3.0)" />
-      <dependency id="Alphacloud.Common.Core" version="[0.2.0.0,2.0.0.0)" />
-      <dependency id="Alphacloud.Common.Infrastructure" version="[0.2.0.0,2.0.0.0)" />
-      <dependency id="Alphacloud.Common.Caching.Memcached.CommonLogging" version="[0.2.0.0,2.0.0.0)" />
+      <dependency id="Alphacloud.Common.Core" version="[0.3.0.0,2.0.0.0)" />
+      <dependency id="Alphacloud.Common.Infrastructure" version="[0.4.0.0,2.0.0.0)" />
+      <dependency id="Alphacloud.Common.Caching.Memcached.CommonLogging" version="[0.3.0.0,2.0.0.0)" />
     </dependencies>
   </metadata>
 </package>
