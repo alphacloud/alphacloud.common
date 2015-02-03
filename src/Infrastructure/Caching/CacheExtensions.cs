@@ -39,7 +39,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
     [PublicAPI]
     public static class CacheExtensions
     {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger(typeof(CacheExtensions));
 
 
         /// <summary>

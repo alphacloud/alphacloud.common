@@ -103,5 +103,15 @@
             return result;
         }
 
+        /// <summary>
+        /// Returns date part of given date time marked as UTC.
+        /// This is not same as <c>dateTime.ToUniversalTime().Date></c> because source date is not converted to UTC timezone.
+        /// </summary>
+        /// <param name="dataTime">DateTime</param>
+        /// <returns>Date marked as UTC.</returns>
+        public static DateTime AsUtcDate(this DateTime dataTime)
+        {
+            return new DateTime(dataTime.Year, dataTime.Month, dataTime.Day, 0, 0,0, DateTimeKind.Utc);
+        }
     }
 }

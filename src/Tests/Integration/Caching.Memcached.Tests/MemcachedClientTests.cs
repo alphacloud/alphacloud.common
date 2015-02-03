@@ -38,7 +38,7 @@ namespace Caching.Memcached.Tests
         [SetUp]
         public void SetUp()
         {
-            _log = Common.Logging.LogManager.GetCurrentClassLogger();
+            _log = Common.Logging.LogManager.GetLogger<MemcachedClientTests>();
             _client = new MemcachedClient();
         }
 

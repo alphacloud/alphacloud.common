@@ -46,7 +46,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </summary>
         public const string BackingCacheInstanceName = "BackingCache";
 
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<CompositeCache>();
         readonly ICache _backingCache;
         readonly bool _devMode;
         readonly ICache _localCache;

@@ -50,7 +50,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     [PublicAPI]
     public class InstrumentationRuntime
     {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<InstrumentationRuntime>();
 
         static Lazy<InstrumentationRuntime> s_instance =
             new Lazy<InstrumentationRuntime>(() => new InstrumentationRuntime());
