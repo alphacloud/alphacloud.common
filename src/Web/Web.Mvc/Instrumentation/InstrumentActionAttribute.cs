@@ -25,7 +25,6 @@ namespace Alphacloud.Common.Web.Mvc.Instrumentation
     using Infrastructure.Instrumentation;
     using JetBrains.Annotations;
 
-
     /// <summary>
     ///   Instrument Controller Action attribute.
     /// </summary>
@@ -34,9 +33,9 @@ namespace Alphacloud.Common.Web.Mvc.Instrumentation
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public sealed class InstrumentActionAttribute : ActionFilterAttribute
     {
-        const string TimerKey = "lpl.common.instrumentation.actionTimer";
-        const string ActionNameKey = "lpl.common.instrumentation.actionName";
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        const string TimerKey = "alphacloud.common.instrumentation.actionTimer";
+        const string ActionNameKey = "alphacloud.common.instrumentation.actionName";
+        static readonly ILog s_log = LogManager.GetLogger<InstrumentActionAttribute>();
 
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)

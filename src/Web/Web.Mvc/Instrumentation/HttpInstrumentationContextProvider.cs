@@ -31,7 +31,7 @@ namespace Alphacloud.Common.Web.Mvc.Instrumentation
     public class HttpInstrumentationContextProvider : ThreadStaticInstrumentationContextProvider
     {
         const string ContextKey = "Alphacloud.Instrumentation.Context";
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<HttpInstrumentationContextProvider>();
 
 
         /// <summary>

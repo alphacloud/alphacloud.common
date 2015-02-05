@@ -31,7 +31,7 @@ namespace Alphacloud.Common.Web.Mvc.Instrumentation
     [UsedImplicitly]
     public class HttpCorrelationIdProvider : ThreadStaticCorrelationIdProvider
     {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<HttpCorrelationIdProvider>();
 
 
         /// <summary>
