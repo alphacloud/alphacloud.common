@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2014 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ namespace WebMvcSample
     using System.Web.Optimization;
     using System.Web.Routing;
 
-
     public class MvcApplication : HttpApplication
     {
         protected void Application_Start()
@@ -34,8 +33,6 @@ namespace WebMvcSample
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            
         }
     }
 }

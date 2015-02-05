@@ -1,0 +1,16 @@
+﻿@model dynamic
+
+<div class="row">
+    <table>
+        <tr>
+            <td>Response</td>
+            <td>
+                <pre>@(((string) ViewBag.Response).Substring(0, 50))</pre>
+            </td>
+        </tr>
+        <tr>
+            <td>Length</td>
+            <td>@ViewBag.ResponseLength</td>
+        </tr>
+    </table>
+</div>
