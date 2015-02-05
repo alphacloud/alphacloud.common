@@ -21,10 +21,18 @@ namespace Alphacloud.Common.Instrumentation.Log4Net
     using System;
     using Core.Instrumentation;
     using log4net;
+    using log4net.Util;
 
-
+    /// <summary>
+    ///   Nested diagnostic context for Log4Net.
+    /// </summary>
     public class Log4NetDiagnosticContext : IDiagnosticContext
     {
+        static ThreadContextStack Ndc
+        {
+            get { return LogicalThreadContext.Stacks["NDC"]; }
+        }
+
         #region IDiagnosticContext Members
 
         /// <summary>
@@ -34,7 +42,7 @@ namespace Alphacloud.Common.Instrumentation.Log4Net
         /// <returns>Context handle.</returns>
         public IDisposable Push(string id)
         {
-            return NDC.Push(id);
+            return Ndc.Push(id);
         }
 
 
@@ -43,7 +51,7 @@ namespace Alphacloud.Common.Instrumentation.Log4Net
         /// </summary>
         public void Pop()
         {
-            NDC.Pop();
+            Ndc.Pop();
         }
 
 
@@ -52,7 +60,17 @@ namespace Alphacloud.Common.Instrumentation.Log4Net
         /// </summary>
         public void Clear()
         {
-            NDC.Clear();
+            Ndc.Clear();
+        }
+
+
+        /// <summary>
+        ///   Gets full context.
+        /// </summary>
+        /// <returns></returns>
+        public string Get()
+        {
+            return Ndc.ToString();
         }
 
         #endregion

@@ -10,8 +10,10 @@
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial release.</releaseNotes>
-    <copyright>Copyright 2014</copyright>
+    <releaseNotes>
+Use LogicalThreadContext.      
+    </releaseNotes>
+    <copyright>Copyright 2014-2015</copyright>
     <tags>alphacloud instrumentation log4net</tags>
     <dependencies>
       <dependency id="ReSharper.Annotations" version="7.1.3" />
