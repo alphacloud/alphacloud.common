@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F69E87C-76F0-48C8-B4B0-C2EB68931D89}"
 	ProjectSection(SolutionItems) = preProject
@@ -44,6 +44,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C44573
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{E2F12D63-713C-4001-B85B-68812CBAB208}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMvcSample", "Samples\WebMvcSample\WebMvcSample.csproj", "{73B212CE-9AD0-40CD-BCBD-34AA0001A449}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Instrumentation.Log4Net", "Integration\Instrumentation.Log4Net\Instrumentation.Log4Net.csproj", "{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +101,14 @@ Global
 		{D6291A8E-398D-469A-B997-5A17D5CB4F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6291A8E-398D-469A-B997-5A17D5CB4F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6291A8E-398D-469A-B997-5A17D5CB4F71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73B212CE-9AD0-40CD-BCBD-34AA0001A449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73B212CE-9AD0-40CD-BCBD-34AA0001A449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73B212CE-9AD0-40CD-BCBD-34AA0001A449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73B212CE-9AD0-40CD-BCBD-34AA0001A449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,5 +121,7 @@ Global
 		{8DF06376-2BE9-454F-A06F-AF6381B6125D} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
 		{F33F2379-0D62-477A-824A-61D6E5AAE990} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
 		{D6291A8E-398D-469A-B997-5A17D5CB4F71} = {F5F4F3E9-B563-4AE2-A50D-FD22014B1C71}
+		{73B212CE-9AD0-40CD-BCBD-34AA0001A449} = {E2F12D63-713C-4001-B85B-68812CBAB208}
+		{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116} = {825AAA21-8078-4548-A565-B0C76E2EE0FB}
 	EndGlobalSection
 EndGlobal
