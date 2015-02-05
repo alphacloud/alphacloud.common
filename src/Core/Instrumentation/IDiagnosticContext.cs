@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -45,5 +45,12 @@ namespace Alphacloud.Common.Core.Instrumentation
         ///   Clear context.
         /// </summary>
         void Clear();
+
+
+        /// <summary>
+        ///   Gets full context information.
+        /// </summary>
+        /// <returns></returns>
+        string Get();
     }
 }
