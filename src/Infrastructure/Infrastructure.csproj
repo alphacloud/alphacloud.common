@@ -102,10 +102,10 @@
     <Compile Include="Instrumentation\InstrumentationSettings.cs" />
     <Compile Include="Instrumentation\LogExtensions.cs" />
     <Compile Include="Instrumentation\LoggingConfiguration.cs" />
+    <Compile Include="Instrumentation\LogicalThreadInstrumentationContextProvider.cs" />
     <Compile Include="Instrumentation\NullCorrelationIdProvider.cs" />
     <Compile Include="Instrumentation\NullInstrumentaionContext.cs" />
     <Compile Include="Instrumentation\NullInstrumentationContextProvider.cs" />
-    <Compile Include="Instrumentation\ThreadStaticInstrumentationContextProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transformations\AdhocEncoder.cs" />
     <Compile Include="Transformations\IEncoder.cs" />

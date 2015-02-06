@@ -56,7 +56,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
             new Lazy<InstrumentationRuntime>(() => new InstrumentationRuntime());
 
         static readonly InstrumentationSettings s_defaultSettings =
-            new InstrumentationSettings(new NullInstrumentationContextProvider(), new NullCorrelationIdProvider());
+            new InstrumentationSettings(new NullInstrumentationContextProvider(), new NullDiagnosticContext());
 
 
         Func<InstrumentationSettings> _configurationProvider;
@@ -134,11 +134,13 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
             EventHelper.Raise(OperationCompleted, () => new OperationCompletedEventArgs {
                 Context = GetInstrumentationContextProvider().GetInstrumentationContext(),
-                CorrelationId = GetCorrelationIdProvider().GetId(),
+                CorrelationId = GetDiagnosticContext().Get(),
                 Duration = duration,
                 Info = operation,
                 ManagedThreadId = Thread.CurrentThread.ManagedThreadId
+         
             }, sender);
+
         }
 
 
@@ -158,7 +160,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
             EventHelper.Raise(CallCompleted, () => new InstrumentationEventArgs {
                 CallType = callType,
-                CorrelationId = GetCorrelationIdProvider().GetId(),
+                CorrelationId = GetDiagnosticContext().Get(),
                 Duration = duration,
                 ManagedThreadId = Thread.CurrentThread.ManagedThreadId,
                 Info = methodName
@@ -186,7 +188,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
             if (IsEnabled())
             {
-                var correlationId = GetCorrelationIdProvider().GetId();
+                var correlationId = GetDiagnosticContext().Get();
                 var instrumentationContext = GetInstrumentationContextProvider().GetInstrumentationContext();
                 ctx = new CapturedContext(culture, uiCulture, principal, currentThread.ManagedThreadId, correlationId,
                     instrumentationContext);
@@ -239,13 +241,9 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         ///   correctly. Ensure it was initialized with InstrumentationContext.SetConfigurationProvider().
         /// </exception>
         [NotNull]
-        public ICorrelationIdProvider GetCorrelationIdProvider()
+        public IDiagnosticContext GetDiagnosticContext()
         {
-            var provider = GetConfiguration().CorrelationIdProvider;
-            if (provider == null)
-                throw new InstrumentationException(
-                    "CorrelationId provider is not set correctly. Ensure it was initialized with InstrumentationContext.SetConfigurationProvider().");
-            return provider;
+            return  GetConfiguration().DiagnosticContext;
         }
 
 

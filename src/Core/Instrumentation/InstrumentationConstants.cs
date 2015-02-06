@@ -23,16 +23,16 @@ namespace Alphacloud.Common.Core.Instrumentation
     /// </summary>
     public static class InstrumentationConstants
     {
-        public const string CorrelationIdItemKey = "alphacloud.instrumentation.correlationId";
-
         /// <summary>
         ///   Activity trace logger name.
         /// </summary>
-        public const string ActivityTraceLogger = "alphacloud.instrumentation.activity";
+        public const string ActivityTraceLogger = "Alphacloud.Instrumentation.Activity";
 
         /// <summary>
         ///   Performance instrumentation logger name.
         /// </summary>
-        public const string InstrumentationLogger = "alphacloud.instrumentation.performance";
+        public const string InstrumentationLogger = "Alphacloud.Instrumentation.Performance";
+
+        public const string Context = "Alphacloud.Instrumentation.Context";
     }
 }

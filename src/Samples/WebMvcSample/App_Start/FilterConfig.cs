@@ -27,6 +27,7 @@ namespace WebMvcSample
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+
             // Add correlation id generator
             filters.Add(new CorrelationIdAttribute());
             // Add ASP.NET MVC Action instrumentation

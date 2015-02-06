@@ -35,6 +35,7 @@ namespace Infrastructure.Tests.Instrumentation
         Mock<IInstrumentationContextProvider> _instrumentationContextProvider;
         InstrumentationRuntime _instrumentationRuntime;
         InstrumentationSettings _instrumentationSettings;
+        Mock<IDiagnosticContext> _diagnosticContext;
 
         const string CorrelationId = "correlation.id";
 
@@ -49,11 +50,13 @@ namespace Infrastructure.Tests.Instrumentation
             _correlationIdProvider.Setup(cp => cp.GetId()).Returns(CorrelationId);
             _instrumentationContextProvider.Setup(ic => ic.GetInstrumentationContext())
                 .Returns(_instrumentationContext.Object);
+            _diagnosticContext = Mockery.Create<IDiagnosticContext>();
+
 
             _instrumentationRuntime = new InstrumentationRuntime();
             _instrumentationSettings = new InstrumentationSettings(
                 _instrumentationContextProvider.Object,
-                _correlationIdProvider.Object
+                _diagnosticContext.Object
                 ) {Enabled = true};
             _instrumentationRuntime.SetConfigurationProvider(() => _instrumentationSettings);
         }

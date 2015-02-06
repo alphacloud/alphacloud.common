@@ -101,8 +101,6 @@
     <Compile Include="Caching\HttpResponseExtensions.cs" />
     <Compile Include="Instrumentation\ActionDiagnosticsHelper.cs" />
     <Compile Include="Instrumentation\CorrelationIdAttribute.cs" />
-    <Compile Include="Instrumentation\HttpCorrelationIdProvider.cs" />
-    <Compile Include="Instrumentation\HttpInstrumentationContextProvider.cs" />
     <Compile Include="Instrumentation\InstrumentActionAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

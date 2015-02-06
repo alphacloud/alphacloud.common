@@ -20,6 +20,7 @@ namespace Alphacloud.Common.Core.Instrumentation
 {
     using System;
     using JetBrains.Annotations;
+    using Utils;
 
     /// <summary>
     ///   Diagnostic context
@@ -52,5 +53,48 @@ namespace Alphacloud.Common.Core.Instrumentation
         /// </summary>
         /// <returns></returns>
         string Get();
+    }
+
+    public class NullDiagnosticContext : IDiagnosticContext
+    {
+        #region IDiagnosticContext Members
+
+        /// <summary>
+        ///   Set new context.
+        /// </summary>
+        /// <param name="id">Context Id</param>
+        /// <returns>Context handle.</returns>
+        public IDisposable Push(string id)
+        {
+            return new NullDisposable();
+        }
+
+
+        /// <summary>
+        ///   Pop context.
+        /// </summary>
+        public void Pop()
+        {
+        }
+
+
+        /// <summary>
+        ///   Clear context.
+        /// </summary>
+        public void Clear()
+        {
+        }
+
+
+        /// <summary>
+        ///   Gets full context information.
+        /// </summary>
+        /// <returns></returns>
+        public string Get()
+        {
+            return String.Empty;
+        }
+
+        #endregion
     }
 }

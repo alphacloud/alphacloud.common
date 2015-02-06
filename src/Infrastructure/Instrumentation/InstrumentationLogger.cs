@@ -22,12 +22,13 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     using System.Globalization;
     using System.Linq;
     using Core.Data;
+    using Core.Instrumentation;
     using global::Common.Logging;
     using JetBrains.Annotations;
 
     public class InstrumentationLogger : IInstrumentationEventListener
     {
-        static readonly ILog s_log = LogManager.GetLogger<InstrumentationLogger>();
+        static readonly ILog s_log = LogManager.GetLogger(InstrumentationConstants.InstrumentationLogger);
         readonly LoggingConfiguration _configuration;
 
 

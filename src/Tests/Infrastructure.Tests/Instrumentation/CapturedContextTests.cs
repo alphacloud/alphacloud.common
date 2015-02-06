@@ -39,7 +39,7 @@ namespace Infrastructure.Tests.Instrumentation
     {
         Mock<IInstrumentationContextProvider> _contextProvider;
         Mock<IInstrumentationContext> _instrumentationContext;
-        Mock<ICorrelationIdProvider> _correlationIdProvider;
+        Mock<IDiagnosticContext> _diagnosticContext;
 
 
         protected override void DoSetup()
@@ -48,7 +48,7 @@ namespace Infrastructure.Tests.Instrumentation
 
             _contextProvider = Mockery.Create<IInstrumentationContextProvider>();
             _instrumentationContext = Mockery.Create<IInstrumentationContext>();
-            _correlationIdProvider = Mockery.Create<ICorrelationIdProvider>();
+            _diagnosticContext = Mockery.Create<IDiagnosticContext>();
         }
 
 
@@ -76,14 +76,14 @@ namespace Infrastructure.Tests.Instrumentation
         {
             InstrumentationRuntime.Instance.SetConfigurationProvider(() => new InstrumentationSettings(
                 _contextProvider.Object,
-                _correlationIdProvider.Object
+                _diagnosticContext.Object
                 ) {
                     Enabled = true,
                 });
 
             _contextProvider.Setup(p => p.GetInstrumentationContext()).Returns(_instrumentationContext.Object)
                 .Verifiable("instrumentation context was not captured");
-            _correlationIdProvider.Setup(p => p.GetId()).Returns("correlation-id")
+            _diagnosticContext.Setup(p => p.Get()).Returns("correlation-id")
                 .Verifiable("correlation id not was not captured");
 
             var context = InstrumentationRuntime.Instance.CaptureContext();
@@ -109,7 +109,7 @@ namespace Infrastructure.Tests.Instrumentation
 
             _contextProvider.Verify(p => p.GetInstrumentationContext(), Times.Never(),
                 "should not capture insurumentation context when Instrumentation Runtime is not enabled/initialized.");
-            _correlationIdProvider.Verify(p => p.GetId(), Times.Never(),
+            _diagnosticContext.Verify(p => p.Get(), Times.Never(),
                 "should not capture correlation id when Instrumentation Runtime is not enabled/initialzed.");
         }
 

@@ -109,12 +109,12 @@
             SetOnCurrentThread(_culture, _uiCulture, _principal);
 
             var scope = s_emptyContext;
-            if (_instrumentationEnabled)
-            {
-                scope = InstrumentationRuntime.Instance.GetCorrelationIdProvider().SetId(_correlationId);
-                InstrumentationRuntime.Instance.GetInstrumentationContextProvider()
-                    .SetInstrumentationContext(_instrumentationContext);
-            }
+            //if (_instrumentationEnabled)
+            //{
+            //    scope = InstrumentationRuntime.Instance.GetCorrelationIdProvider().SetId(_correlationId);
+            //    InstrumentationRuntime.Instance.GetInstrumentationContextProvider()
+            //        .SetInstrumentationContext(_instrumentationContext);
+            //}
             s_log.DebugFormat("Set captured context of thread {0}", _originThread);
             return new SavedContext(oldCulture, oldUiCulture, oldPrincipal, currentTid, scope);
         }

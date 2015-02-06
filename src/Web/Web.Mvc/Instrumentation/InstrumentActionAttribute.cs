@@ -21,21 +21,22 @@ namespace Alphacloud.Common.Web.Mvc.Instrumentation
     using System;
     using System.Diagnostics;
     using System.Web.Mvc;
+    using Core.Instrumentation;
     using global::Common.Logging;
     using Infrastructure.Instrumentation;
     using JetBrains.Annotations;
 
     /// <summary>
-    ///   Instrument Controller Action attribute.
+    ///   Instruments action execution on ASP.NET MVC controller.
     /// </summary>
     [PublicAPI]
     [BaseTypeRequired(typeof (IController))]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public sealed class InstrumentActionAttribute : ActionFilterAttribute
     {
-        const string TimerKey = "alphacloud.common.instrumentation.actionTimer";
-        const string ActionNameKey = "alphacloud.common.instrumentation.actionName";
-        static readonly ILog s_log = LogManager.GetLogger<InstrumentActionAttribute>();
+        const string TimerKey = "Alphacloud.Instrumentation.ActionTimer";
+        const string ActionNameKey = "Alphacloud.Instrumentation.ActionName";
+        static readonly ILog s_log = LogManager.GetLogger(InstrumentationConstants.InstrumentationLogger);
 
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -47,6 +48,7 @@ namespace Alphacloud.Common.Web.Mvc.Instrumentation
                 filterContext.RequestContext.HttpContext.Items[TimerKey] = Stopwatch.StartNew();
                 filterContext.RequestContext.HttpContext.Items[ActionNameKey] =
                     ActionDiagnosticsHelper.GetExecutingActionName(filterContext);
+                InstrumentationRuntime.Instance.GetInstrumentationContextProvider().Reset();
             }
         }
 

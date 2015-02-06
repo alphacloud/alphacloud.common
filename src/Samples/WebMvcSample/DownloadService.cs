@@ -19,9 +19,11 @@
 namespace WebMvcSample
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Net;
     using System.Threading.Tasks;
+    using Alphacloud.Common.Infrastructure.Instrumentation;
     using Common.Logging;
     using JetBrains.Annotations;
 
@@ -47,7 +49,7 @@ namespace WebMvcSample
             {
                 s_log.InfoFormat("Preparing to download {0}", _uri);
                 var req = WebRequest.CreateHttp(_uri);
-
+                var sw = Stopwatch.StartNew();
                 var resp = await req.GetResponseAsync().ConfigureAwait(false);
                 s_log.InfoFormat("Request sent");
                 using (var s = resp.GetResponseStream())
@@ -56,6 +58,7 @@ namespace WebMvcSample
                     {
                         var str = await sr.ReadToEndAsync().ConfigureAwait(false);
                         s_log.Info("response received");
+                        InstrumentationRuntime.Instance.OnCallCompleted(this, "WebRequest", "DownloadFile", sw.Elapsed);
                         return str;
                     }
                 }

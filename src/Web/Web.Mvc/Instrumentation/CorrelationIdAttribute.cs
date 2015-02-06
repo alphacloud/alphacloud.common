@@ -51,9 +51,9 @@ namespace Alphacloud.Common.Web.Mvc.Instrumentation
             if (!filterContext.IsChildAction)
             {
                 string correlationid = CorrelationIdGenerator.NewId();
-                var correlationProvider = InstrumentationRuntime.Instance.GetCorrelationIdProvider();
-                correlationProvider.Clear();
-                correlationProvider.SetId(correlationid);
+                var diagnosticContext = InstrumentationRuntime.Instance.GetDiagnosticContext();
+                diagnosticContext.Clear();
+                diagnosticContext.Push(correlationid);
 
                 s_log.Debug(m => m("Executing Action '{0}', params: {1}", 
                     executingActionName, ActionDiagnosticsHelper.GetActionMethodSignature(filterContext)));
@@ -82,7 +82,7 @@ namespace Alphacloud.Common.Web.Mvc.Instrumentation
 
             if (!filterContext.IsChildAction)
             {
-                InstrumentationRuntime.Instance.GetCorrelationIdProvider().Clear();
+                InstrumentationRuntime.Instance.GetDiagnosticContext().Clear();
             }
             else
             {

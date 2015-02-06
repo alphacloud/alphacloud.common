@@ -92,9 +92,9 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         [Serializable]
         public class CallCounterSettings
         {
-            public bool Enabled { get; internal set; }
-            public int InfoLevelThreshold { get; internal set; }
-            public int WarningLevelThreshold { get; internal set; }
+            public bool Enabled { get; set; }
+            public int InfoLevelThreshold { get; set; }
+            public int WarningLevelThreshold { get; set; }
         }
 
         #endregion
@@ -108,9 +108,9 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         [Serializable]
         public class DurationSettings
         {
-            public bool Enabled { get; internal set; }
-            public TimeSpan InfoLevelThreshold { get; internal set; }
-            public TimeSpan WarningLevelThreshold { get; internal set; }
+            public bool Enabled { get; set; }
+            public TimeSpan InfoLevelThreshold { get; set; }
+            public TimeSpan WarningLevelThreshold { get; set; }
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2014 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ namespace WebMvcSample
     using System.Web.Mvc;
     using Alphacloud.Common.Infrastructure.Instrumentation;
     using Alphacloud.Common.Instrumentation.Log4Net;
-    using Alphacloud.Common.Web.Mvc.Instrumentation;
     using Autofac;
     using Autofac.Integration.Mvc;
     using Common.Logging;
@@ -34,10 +33,9 @@ namespace WebMvcSample
     using JetBrains.Annotations;
     using Owin;
 
-
     public class Startup
     {
-        static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        static readonly ILog s_log = LogManager.GetLogger<Startup>();
         internal static IContainer Container;
 
 
@@ -58,12 +56,20 @@ namespace WebMvcSample
         static void ConfigureInstrumentation()
         {
             var settings = new InstrumentationSettings(
-                new HttpInstrumentationContextProvider(),
-                new HttpCorrelationIdProvider(new Log4NetDiagnosticContext())
+                new LogicalThreadInstrumentationContextProvider(), 
+                new Log4NetDiagnosticContext()
                 ) {
-                    Enabled = true,
+                    Enabled = true
                 };
             InstrumentationRuntime.Instance.SetConfigurationProvider(() => settings);
+            var loggingConfiguration = new LoggingConfiguration {
+                LogDuplicateCalls = true,
+                OperationLogging = { Enabled = true}
+            };
+            loggingConfiguration.GetCallDurationSettings().Enabled = true;
+
+            InstrumentationRuntime.Instance.Attach(
+                new InstrumentationLogger(loggingConfiguration));
         }
 
 

@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2014 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading;
     using Core.Instrumentation;
@@ -29,6 +30,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     /// <summary>
     ///   Call information.
     /// </summary>
+    [Serializable]
     public class CallInfo
     {
         public CallInfo([NotNull] string type, [NotNull] string operation, TimeSpan duration, int callingThreadId)
@@ -44,10 +46,8 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
 
 
         public string CallType { get; private set; }
-
         public string Operation { get; private set; }
         public TimeSpan Duration { get; private set; }
-
         public int CallingThreadId { get; private set; }
     }
 
@@ -55,10 +55,9 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     ///   Instrumentation context implementation.
     /// </summary>
     [Serializable]
-    public class InstrumentationContext : IInstrumentationContext
+    public sealed class InstrumentationContext : IInstrumentationContext
     {
-        static readonly ILog s_log = LogManager.GetLogger<InstrumentationContext>();
-
+        static readonly ILog s_log = LogManager.GetLogger(InstrumentationConstants.Context);
         readonly List<CallInfo> _calls = new List<CallInfo>();
 
 
@@ -85,7 +84,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         {
             lock (_calls)
             {
-                return FilterByCallType(callType).Aggregate(TimeSpan.Zero, (current, call) => current += call.Duration);
+                return FilterByCallType(callType).Aggregate(TimeSpan.Zero, (current, call) => current + call.Duration);
             }
         }
 
@@ -98,8 +97,13 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
                 _calls.Add(new CallInfo(callType, info, duration, Thread.CurrentThread.ManagedThreadId));
                 callCnt = _calls.Count;
             }
-            s_log.Debug(m => m("'{3}' call: '{0}', {1:#0.0} ms; total call count={2}",
-                info, duration.TotalMilliseconds, callCnt, callType));
+
+            if (s_log.IsDebugEnabled)
+            {
+                s_log.DebugFormat(CultureInfo.InvariantCulture,
+                    "'{3}' call: '{0}', {1:#0.0} ms; current call count= {2}",
+                    info, duration.TotalMilliseconds, callCnt, callType);
+            }
         }
 
 

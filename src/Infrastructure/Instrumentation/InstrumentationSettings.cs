@@ -28,7 +28,7 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     /// </summary>
     public class InstrumentationSettings
     {
-        readonly ICorrelationIdProvider _correlationIdProvider;
+        readonly IDiagnosticContext _diagnosticContext;
         readonly IInstrumentationContextProvider _instrumentationContextProvider;
 
 
@@ -36,15 +36,14 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         ///   Initializes a new instance of the <see cref="T:System.Object" /> class.
         /// </summary>
         public InstrumentationSettings([NotNull] IInstrumentationContextProvider instrumentationContextProvider,
-            [NotNull] ICorrelationIdProvider correlationIdProvider)
+            [NotNull] IDiagnosticContext diagnosticContext)
         {
             if (instrumentationContextProvider == null)
                 throw new ArgumentNullException("instrumentationContextProvider");
-            if (correlationIdProvider == null) 
-                throw new ArgumentNullException("correlationIdProvider");
+            if (diagnosticContext == null) throw new ArgumentNullException("diagnosticContext");
 
             _instrumentationContextProvider = instrumentationContextProvider;
-            _correlationIdProvider = correlationIdProvider;
+            _diagnosticContext = diagnosticContext;
         }
 
 
@@ -55,10 +54,9 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
             get { return _instrumentationContextProvider; }
         }
 
-        public ICorrelationIdProvider CorrelationIdProvider
+        public IDiagnosticContext DiagnosticContext
         {
-            get { return _correlationIdProvider; }
+            get { return _diagnosticContext; }
         }
-
     }
 }
