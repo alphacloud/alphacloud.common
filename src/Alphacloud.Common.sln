@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMvcSample", "Samples\Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Instrumentation.Log4Net", "Integration\Instrumentation.Log4Net\Instrumentation.Log4Net.csproj", "{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiSelfHost", "Samples\WebApiSelfHost\WebApiSelfHost.csproj", "{09B49291-3669-4F8D-BD48-2C4B5E6F1B67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09B49291-3669-4F8D-BD48-2C4B5E6F1B67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09B49291-3669-4F8D-BD48-2C4B5E6F1B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09B49291-3669-4F8D-BD48-2C4B5E6F1B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09B49291-3669-4F8D-BD48-2C4B5E6F1B67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,5 +129,6 @@ Global
 		{D6291A8E-398D-469A-B997-5A17D5CB4F71} = {F5F4F3E9-B563-4AE2-A50D-FD22014B1C71}
 		{73B212CE-9AD0-40CD-BCBD-34AA0001A449} = {E2F12D63-713C-4001-B85B-68812CBAB208}
 		{705BE14F-4B7A-4BD2-AAAC-7AFB957BA116} = {825AAA21-8078-4548-A565-B0C76E2EE0FB}
+		{09B49291-3669-4F8D-BD48-2C4B5E6F1B67} = {E2F12D63-713C-4001-B85B-68812CBAB208}
 	EndGlobalSection
 EndGlobal
