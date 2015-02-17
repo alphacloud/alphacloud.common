@@ -139,14 +139,26 @@ namespace Alphacloud.Common.Infrastructure.Caching
             try
             {
                 var data = DoGet(PrepareCacheKey(key));
-                Log.InfoFormat("{2}: Get('{0}'): {1}", key, data != null ? "Hit" : "Miss", Name);
+                LogGetSucceed(key, data);
                 return data;
             }
             catch (Exception ex)
             {
-                Log.WarnFormat("{0}: Get('{1}')", ex, Name, key);
+                LogGetFaiulre(key, ex);
                 return null;
             }
+        }
+
+
+        protected void LogGetFaiulre(string key, Exception ex)
+        {
+            Log.WarnFormat("{0}: Get('{1}')", ex, Name, key);
+        }
+
+
+        protected void LogGetSucceed(string key, object data)
+        {
+            Log.InfoFormat("{2}: Get('{0}'): {1}", key, data != null ? "Hit" : "Miss", Name);
         }
 
 

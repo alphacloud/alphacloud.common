@@ -39,7 +39,7 @@ namespace Alphacloud.Common.Caching.Memcached
 
         public void Start()
         {
-            s_log.Info("Start cache healthcheck");
+            s_log.Info("Started cache healthcheck");
         }
 
         #endregion

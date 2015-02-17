@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2014 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,25 +16,29 @@
 
 #endregion
 
-namespace Caching.Redis.Tests
+namespace Alphacloud.Common.Caching.Redis
 {
-    using NUnit.Framework;
+    using global::Common.Logging;
+    using Infrastructure.Caching;
 
-    [TestFixture]
-    [Category("Integration")]
-    class RedisTests
+    /// <summary>
+    ///   Redis Cache availability monitor stub.
+    /// </summary>
+    public class RedisAvailabilityMonitor : ICacheHealthcheckMonitor
     {
-        #region Setup/Teardown
+        static readonly ILog s_log = LogManager.GetLogger<RedisAvailabilityMonitor>();
 
-        [SetUp]
-        public void SetUp()
+        #region ICacheHealthcheckMonitor Members
+
+        public bool IsCacheAvailable
         {
+            get { return true; }
         }
 
 
-        [TearDown]
-        public void TearDown()
+        public void Start()
         {
+            s_log.Info("Started cache healthcheck");
         }
 
         #endregion

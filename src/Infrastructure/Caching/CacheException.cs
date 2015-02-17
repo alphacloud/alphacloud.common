@@ -35,7 +35,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <summary>
         /// Initializes a new instance of the <see cref="CacheException"/> class.
         /// </summary>
-        public CacheException()
+        protected CacheException()
         {
         }
 
