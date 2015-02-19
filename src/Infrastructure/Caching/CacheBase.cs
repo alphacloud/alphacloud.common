@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,15 +16,14 @@
 
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Alphacloud.Common.Infrastructure.Caching
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Core.Data;
-    using JetBrains.Annotations;
     using global::Common.Logging;
+    using JetBrains.Annotations;
 
     /// <summary>
     ///   Basic cache functionality.
@@ -33,8 +32,16 @@ namespace Alphacloud.Common.Infrastructure.Caching
     public abstract class CacheBase : ICache, IDisposable
     {
         static readonly ICache s_nullCache = new NullCache();
-        readonly ILog _log;
 
+        /// <summary>
+        ///   Cache key separator.
+        /// </summary>
+        /// <remarks>
+        ///   Pre-allocate value to avoid boxing.
+        /// </remarks>
+        static readonly object s_separator = '.';
+
+        readonly ILog _log;
         readonly ICacheHealthcheckMonitor _monitor;
 
 
@@ -134,34 +141,6 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
-        object SafeGetWithLogging(string key)
-        {
-            try
-            {
-                var data = DoGet(PrepareCacheKey(key));
-                LogGetSucceed(key, data);
-                return data;
-            }
-            catch (Exception ex)
-            {
-                LogGetFaiulre(key, ex);
-                return null;
-            }
-        }
-
-
-        protected void LogGetFaiulre(string key, Exception ex)
-        {
-            Log.WarnFormat("{0}: Get('{1}')", ex, Name, key);
-        }
-
-
-        protected void LogGetSucceed(string key, object data)
-        {
-            Log.InfoFormat("{2}: Get('{0}'): {1}", key, data != null ? "Hit" : "Miss", Name);
-        }
-
-
         public IDictionary<string, object> Get([NotNull] ICollection<string> keys)
         {
             if (keys == null) throw new ArgumentNullException("keys");
@@ -171,7 +150,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
                 return new Dictionary<string, object>();
 
             CheckDisposed();
-            
+
             if (!CanGet())
             {
                 var res = new Dictionary<string, object>(keys.Count);
@@ -183,18 +162,6 @@ namespace Alphacloud.Common.Infrastructure.Caching
                 return res;
             }
             return DoMultiGet(keys);
-            
-        }
-
-        protected virtual IDictionary<string, object> DoMultiGet(ICollection<string> keys)
-        {
-            var res = new Dictionary<string, object>();
-            foreach (var key in keys)
-            {
-                res[key] = SafeGetWithLogging(key);
-            }
-
-            return res;
         }
 
 
@@ -295,13 +262,18 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
         }
 
+
         public virtual void Put([NotNull] ICollection<KeyValuePair<string, object>> data, TimeSpan ttl)
         {
             if (data == null) throw new ArgumentNullException("data");
             if (ttl < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException("ttl", ttl, @"Cache timeout should be positive");
+                throw new ArgumentOutOfRangeException("ttl", ttl, @"Cache timeout must be positive");
 
-            Log.Debug(m=>m("{0}: Adding {1}, expires after {2}", Name, new SequenceFormatter(data.Select(kvp=>kvp.Key)), ttl));
+            if (Log.IsDebugEnabled)
+            {
+                Log.DebugFormat("{0}: Adding {1}, expires after {2}",
+                    Name, new SequenceFormatter(data.Select(kvp => kvp.Key)), ttl);
+            }
             CheckDisposed();
 
             if (!CanPut() || !data.Any())
@@ -323,6 +295,47 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
         }
 
+        #endregion
+
+        object SafeGetWithLogging(string key)
+        {
+            try
+            {
+                var data = DoGet(PrepareCacheKey(key));
+                LogGetSucceed(key, data);
+                return data;
+            }
+            catch (Exception ex)
+            {
+                LogGetFaiulre(key, ex);
+                return null;
+            }
+        }
+
+
+        protected void LogGetFaiulre(string key, Exception ex)
+        {
+            Log.WarnFormat("{0}: Get('{1}')", ex, Name, key);
+        }
+
+
+        protected void LogGetSucceed(string key, object data)
+        {
+            Log.InfoFormat("{2}: Get('{0}'): {1}", key, data != null ? "Hit" : "Miss", Name);
+        }
+
+
+        protected virtual IDictionary<string, object> DoMultiGet(ICollection<string> keys)
+        {
+            var res = new Dictionary<string, object>();
+            foreach (var key in keys)
+            {
+                res[key] = SafeGetWithLogging(key);
+            }
+
+            return res;
+        }
+
 
         protected virtual void DoPutOrRemove(IEnumerable<KeyValuePair<string, object>> data, TimeSpan ttl)
         {
@@ -335,7 +348,6 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
         }
 
-        #endregion
 
         /// <summary>
         ///   Checks if cache is disposed.
@@ -367,7 +379,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         {
             return string.IsNullOrEmpty(Name)
                 ? key
-                : "{0}.{1}".ApplyArgs(Name, key);
+                : string.Concat(Name, s_separator, key);
         }
 
 
@@ -469,6 +481,22 @@ namespace Alphacloud.Common.Infrastructure.Caching
             }
 
             return true;
+        }
+
+
+        /// <summary>
+        ///   Logs cache hits and cache misses (in debug mode).
+        /// </summary>
+        /// <param name="result">Cache Key-Value map.</param>
+        protected void LogMultiGetStatistics(Dictionary<string, object> result)
+        {
+            if (!Log.IsDebugEnabled)
+                return;
+
+            Log.DebugFormat("{0}: MultiGet hit: {1}, miss: {2}", Name,
+                new SequenceFormatter(result.Where(kv => kv.Value != null).Select(kv => kv.Key)),
+                new SequenceFormatter(result.Where(kv => kv.Value == null).Select(kv => kv.Key))
+                );
         }
 
         #region Implementation of IDisposable
