@@ -28,21 +28,30 @@ namespace Alphacloud.Common.Caching.Redis
 
     class RedisAdapter : CacheBase
     {
-        readonly ConnectionMultiplexer _connection;
         readonly IDatabase _db;
-        readonly IObjectPool<CompactBinarySerializer> _serializers;
+        readonly IObjectPool<IBinarySerializer> _serializers;
 
 
-        public RedisAdapter([NotNull] ICacheHealthcheckMonitor monitor, string instanceName,
-            [NotNull] ConnectionMultiplexer connection, int databaseId,
-            [NotNull] IObjectPool<CompactBinarySerializer> serializers) : base(monitor, instanceName)
+        /// <summary>
+        ///   Initializes a new instance of the <see cref="RedisAdapter" /> class.
+        /// </summary>
+        /// <param name="monitor">The healthcheck monitor.</param>
+        /// <param name="instanceName">Name of the instance.</param>
+        /// <param name="redisDatabase">The redis database reference.</param>
+        /// <param name="serializers">The serializers pool.</param>
+        /// <exception cref="System.ArgumentNullException">
+        ///   redisDatabase or serializers is <c>null</c>.
+        /// </exception>
+        public RedisAdapter(
+            [NotNull] ICacheHealthcheckMonitor monitor,
+            string instanceName, [NotNull] IDatabase redisDatabase,
+            [NotNull] IObjectPool<IBinarySerializer> serializers) : base(monitor, instanceName)
         {
-            if (connection == null) throw new ArgumentNullException("connection");
+            if (redisDatabase == null) throw new ArgumentNullException("redisDatabase");
             if (serializers == null) throw new ArgumentNullException("serializers");
 
-            _connection = connection;
             _serializers = serializers;
-            _db = _connection.GetDatabase(databaseId);
+            _db = redisDatabase;
         }
 
 
@@ -75,14 +84,12 @@ namespace Alphacloud.Common.Caching.Redis
             keys.ForAll((k, i) => preparedKeys[i] = PrepareCacheKey(k));
 
             var data = _db.StringGet(preparedKeys);
-            
-            var result = new Dictionary<string, object>();
+
+            IDictionary<string, object> result;
             var serializer = _serializers.GetObject();
             try
             {
-                keys.ForAll((k, i) => {
-                    result[k] = SafeGetValue(data[i], k, serializer);
-                });
+                result = BuildResultDictionary(keys, data, (k, v) => SafeGetValue(v, k, serializer));
             }
             finally
             {
@@ -92,16 +99,33 @@ namespace Alphacloud.Common.Caching.Redis
         }
 
 
-        object SafeGetValue(RedisValue data, string key, CompactBinarySerializer serializer)
+        static IDictionary<string, object> BuildResultDictionary<TCachedValue>(ICollection<string> keys,
+            IList<TCachedValue> cachedValues,
+            Func<string, TCachedValue, object> retrieveValue)
+        {
+            if (keys.Count != cachedValues.Count)
+            {
+                throw new InvalidOperationException(
+                    "Result values count does not match key count, keys: {0}, values: {1}".ApplyArgs(keys.Count,
+                        cachedValues.Count));
+            }
+
+            var res = new SortedList<string, object>(keys.Count);
+            keys.ForAll((k, i) => { res[k] = retrieveValue(k, cachedValues[i]); });
+
+            return res;
+        }
+
+
+        object SafeGetValue(RedisValue data, string key, IBinarySerializer serializer)
         {
             try
             {
                 object item = null;
                 if (!data.IsNull)
                 {
-                    item = serializer.Deserialize(data);
+                    return serializer.Deserialize(data);
                 }
-                LogGetSucceed(key, item);
             }
             catch (Exception ex)
             {

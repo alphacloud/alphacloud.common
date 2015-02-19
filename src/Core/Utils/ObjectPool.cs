@@ -68,17 +68,14 @@ namespace Alphacloud.Common.Core.Utils
         }
 
 
-        public PooledObjectWrapper<T> Get()
+        public PooledObjectWrapper<T> GetWrappedObject()
         {
             return new PooledObjectWrapper<T>(this, GetObject());
         }
 
 
-        public void ReturnObject(T obj)
+        public void ReturnObject([NotNull] T obj)
         {
-            if (obj == null)
-                return;
-
             if (ShouldStore(obj))
             {
                 _pool.Add(obj);
@@ -91,9 +88,9 @@ namespace Alphacloud.Common.Core.Utils
 
         #endregion
 
-        protected virtual bool ShouldStore(T obj)
+        protected virtual bool ShouldStore([CanBeNull] T obj)
         {
-            return _pool.Count < _maxPoolSize;
+            return (obj != null) && _pool.Count < _maxPoolSize;
         }
     }
 
@@ -127,7 +124,7 @@ namespace Alphacloud.Common.Core.Utils
         ///   Retrieve or create object and return wrapper <see cref="PooledObjectWrapper{T}" />.
         /// </summary>
         /// <returns>Wrapped object.</returns>
-        PooledObjectWrapper<T> Get();
+        PooledObjectWrapper<T> GetWrappedObject();
 
 
         /// <summary>

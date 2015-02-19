@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,21 +16,30 @@
 
 #endregion
 
-using System;
-using Alphacloud.Common.Infrastructure.Caching;
-using Alphacloud.Common.Testing.Nunit;
-using FluentAssertions;
-using Moq;
-using NUnit.Framework;
-
 namespace Infrastructure.Tests.Caching
 {
+    using System;
+    using System.Collections.Generic;
+    using Alphacloud.Common.Infrastructure.Caching;
+    using Alphacloud.Common.Testing.Nunit;
+    using FluentAssertions;
+    using Moq;
+    using NUnit.Framework;
+
     //// ReSharper disable InconsistentNaming
 
 
     [TestFixture]
     class CacheBaseTests : MockedTestsBase
     {
+        const string Key = "key";
+        const string CacheName = "BaseCache";
+        const string CacheKey = CacheName + "." + Key;
+        CacheBase _cache;
+        Mock<CacheBase> _cacheMock;
+        Mock<ICacheHealthcheckMonitor> _healthcheckMock;
+
+
         protected override void DoSetup()
         {
             _healthcheckMock = Mockery.Create<ICacheHealthcheckMonitor>();
@@ -43,15 +52,6 @@ namespace Infrastructure.Tests.Caching
         {
             _cache = null;
         }
-
-
-        const string Key = "key";
-        const string CacheName = "BaseCache";
-        const string CacheKey = CacheName + "." + Key;
-
-        Mock<ICacheHealthcheckMonitor> _healthcheckMock;
-        Mock<CacheBase> _cacheMock;
-        CacheBase _cache;
 
 
         void SetCacheUnavailable()
@@ -153,7 +153,7 @@ namespace Infrastructure.Tests.Caching
                 .Returns("val");
 
             var res = _cache.Get(new[] {"err", "key"});
-            res.Should().ContainKeys(new[] {"err", "key"});
+            res.Should().ContainKeys("err", "key");
 
             res["err"].Should().BeNull("exception occured in underlying cache");
             res["key"].Should().Be("val");
@@ -271,6 +271,18 @@ namespace Infrastructure.Tests.Caching
 
             _cache.Remove(Key);
             _cacheMock.Verify();
+        }
+
+
+        [Test]
+        public void DictionaryShouldKeepKeysForNullValues()
+        {
+            // used in Log MultiGet statistics. Make sure we are returning missing cache values as nulls.
+            var d = new Dictionary<string, object> {
+                {"1", 1},
+                {"null", null}
+            };
+            d.Keys.Should().Contain("null");
         }
     }
 

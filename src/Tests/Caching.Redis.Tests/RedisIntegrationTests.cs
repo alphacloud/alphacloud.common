@@ -19,12 +19,11 @@
 namespace Caching.Redis.Tests
 {
     using System;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
     using Alphacloud.Common.Core.Data;
     using Alphacloud.Common.Core.Utils;
     using FluentAssertions;
+    using JetBrains.Annotations;
     using NUnit.Framework;
     using StackExchange.Redis;
 
@@ -40,7 +39,7 @@ namespace Caching.Redis.Tests
         public async Task CanStoreString()
         {
             var res = await _db.StringSetAsync("key1", "value1", TimeSpan.FromSeconds(10))
-                    .ContinueWith(c => _db.StringGet("key1"), TaskContinuationOptions.OnlyOnRanToCompletion);
+                .ContinueWith(c => _db.StringGet("key1"), TaskContinuationOptions.OnlyOnRanToCompletion);
             res.ToString().Should().Be("value1");
         }
 
@@ -65,6 +64,18 @@ namespace Caching.Redis.Tests
             newValue.Should().Equal(serializedValue);
         }
 
+        #region Nested type: CachedItem
+
+        [Serializable]
+        class CachedItem
+        {
+            [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+            public string Id { get; set; }
+            [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+            public string Name { get; set; }
+        }
+
+        #endregion
 
         #region Setup/Teardown
 
@@ -102,12 +113,5 @@ namespace Caching.Redis.Tests
         }
 
         #endregion
-
-        [Serializable]
-        public class CachedItem
-        {
-            public string Id { get; set; }
-            public string Name { get; set; }
-        }
     }
 }

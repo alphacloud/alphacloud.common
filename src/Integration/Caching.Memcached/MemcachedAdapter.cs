@@ -85,7 +85,6 @@ namespace Alphacloud.Common.Caching.Memcached
         protected override IDictionary<string, object> DoMultiGet(ICollection<string> keys)
         {
             var preparedKeysMap = BuildPreparedToOriginalKeyMap(keys);
-
             var result = new Dictionary<string, object>(keys.Count);
 
             var cached = _client.Get(preparedKeysMap.Keys);
@@ -94,12 +93,7 @@ namespace Alphacloud.Common.Caching.Memcached
                 result[km.Value] = cached.ValueOrDefault(km.Key);
             }
 
-            // log hits and misses
-            Log.Debug(m => m("{0}: MultiGet hit: {1}, miss: {2}", Name,
-                new SequenceFormatter(result.Where(kv => kv.Value != null).Select(kv => kv.Key)),
-                new SequenceFormatter(result.Where(kv => kv.Value == null).Select(kv => kv.Key))
-                ));
-
+            LogMultiGetStatistics(result);
             return result;
         }
 

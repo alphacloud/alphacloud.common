@@ -1,5 +1,6 @@
 ﻿#region copyright
-// Copyright 2013-2014 Alphacloud.Net
+
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -12,7 +13,9 @@
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
+
 #endregion
+
 namespace Alphacloud.Common.Caching.Redis
 {
     using System;
@@ -53,14 +56,22 @@ namespace Alphacloud.Common.Caching.Redis
 
 
     [PublicAPI]
-    public class RedisFactory: CacheFactoryBase
+    public class RedisFactory : CacheFactoryBase
     {
         IDictionary<string, RedisConfiguration> _configurationByInstance;
-
         // todo: customize pool to reject object based on memory size
-        IObjectPool<CompactBinarySerializer> _serializers = new ObjectPool<CompactBinarySerializer>(16, () => new CompactBinarySerializer());
+        IObjectPool<IBinarySerializer> _serializers = new ObjectPool<IBinarySerializer>(16,
+            () => new CompactBinarySerializer());
 
-        public RedisFactory([NotNull] IEnumerable<RedisConfiguration> configurationOptions): base()
+
+        public RedisFactory([NotNull] IEnumerable<RedisConfiguration> configurationOptions)
+        {
+            InitInstanceConfiguration(configurationOptions);
+        }
+
+
+        public RedisFactory([NotNull] IEnumerable<RedisConfiguration> configurationOptions,
+            [NotNull] NameValueCollection settings) : base(settings)
         {
             InitInstanceConfiguration(configurationOptions);
         }
@@ -74,13 +85,8 @@ namespace Alphacloud.Common.Caching.Redis
                 k => string.IsNullOrEmpty(k.InstanceName) ? DefaultInstanceName : k.InstanceName);
 
             if (!_configurationByInstance.ContainsKey(DefaultInstanceName))
-                throw new CacheConfigurationException("Default instance configuration was not specified. Add instance with empty name.");
-        }
-
-
-        public RedisFactory([NotNull] IEnumerable<RedisConfiguration> configurationOptions, [NotNull] NameValueCollection settings) : base(settings)
-        {
-            InitInstanceConfiguration(configurationOptions);
+                throw new CacheConfigurationException(
+                    "Default instance configuration was not specified. Add instance with empty name.");
         }
 
 
@@ -102,7 +108,8 @@ namespace Alphacloud.Common.Caching.Redis
             }
 
             var connection = config.Connection ?? ConnectionMultiplexer.Connect(config.Options);
-            return new RedisAdapter(NullCacheHealthcheckMonitor.Instance, instance, connection, config.DatabaseId, _serializers);
+            return new RedisAdapter(NullCacheHealthcheckMonitor.Instance, instance,
+                connection.GetDatabase(config.DatabaseId), _serializers);
         }
     }
 }

@@ -63,9 +63,9 @@ namespace Core.Tests.Utils
 
 
         [Test]
-        void PooledObjectWrapperShouldReturnObjectToPoolOnDisposal()
+        public void PooledObjectWrapperShouldReturnObjectToPoolOnDisposal()
         {
-            using (var obj = _pool.Get())
+            using (_pool.GetWrappedObject())
             {
                 _pool.Count.Should().Be(0);
             }

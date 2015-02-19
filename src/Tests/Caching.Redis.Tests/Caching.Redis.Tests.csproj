@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RedisAdapterTests.cs" />
     <Compile Include="RedisIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -86,9 +87,17 @@
       <Project>{dc27c4e6-4fba-4d02-b7b4-bb9a48cf25b2}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Infrastructure.csproj">
+      <Project>{d40ed75d-018a-42d0-8a45-011bf25031bb}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\Caching.Redis\Caching.Redis.csproj">
       <Project>{97796fa0-a5ac-43ee-a9b7-95909e2c0d8e}</Project>
       <Name>Caching.Redis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Testing.Nunit\Testing.Nunit.csproj">
+      <Project>{b94885e3-6d45-47d3-b9b5-c78bd45653f4}</Project>
+      <Name>Testing.Nunit</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -18,6 +18,7 @@
 
 namespace Alphacloud.Common.Testing.Nunit
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Core.Data;
@@ -34,11 +35,11 @@ namespace Alphacloud.Common.Testing.Nunit
         ///   Collection matcher.
         /// </summary>
         /// <typeparam name="T">Value type</typeparam>
-        /// <param name="expectation">Expected collection.</param>
+        /// <param name="expected">Expected collection.</param>
         /// <returns>Matcher.</returns>
-        public static IEnumerable<T> IsCollection<T>(IEnumerable<T> expectation)
+        public static IEnumerable<T> IsCollection<T>(IEnumerable<T> expected)
         {
-            return Match.Create<IEnumerable<T>>(inputCollection => expectation.All(inputCollection.Contains));
+            return Match.Create<IEnumerable<T>>(inputCollection => expected.All(inputCollection.Contains));
         }
 
 
@@ -48,15 +49,35 @@ namespace Alphacloud.Common.Testing.Nunit
         /// <typeparam name="T">Value type</typeparam>
         /// <param name="expected">Expected collection.</param>
         /// <returns>Matcher.</returns>
-        public static ICollection<T> IsCollection<T>(ICollection<T> expected)
+        public static ICollection<T> IsCollection<T>([NotNull] ICollection<T> expected)
         {
+            if (expected == null) throw new ArgumentNullException("expected");
             return Match.Create<ICollection<T>>(inputCollection => expected.All(inputCollection.Contains));
         }
 
-
-        public static IDictionary<TKey, TValue> IsDictionary<TKey, TValue>(IDictionary<TKey, TValue> expected)
+        /// <summary>
+        ///   Array matcher.
+        /// </summary>
+        /// <typeparam name="T">Value type</typeparam>
+        /// <param name="expected">Expected collection.</param>
+        /// <returns>Matcher.</returns>
+        public static T[] IsArray<T>([NotNull] IEnumerable<T> expected)
         {
-            return Match.Create<IDictionary<TKey, TValue>>(actual => SameDictionary(actual, expected));
+            if (expected == null) throw new ArgumentNullException("expected");
+            return Match.Create<T[]>(inputCollection => expected.All(inputCollection.Contains));
+        }
+
+
+        /// <summary>
+        ///   Dictionary matcher.
+        /// </summary>
+        /// <typeparam name="TKey">Key type</typeparam>
+        /// <typeparam name="TValue ">Value type</typeparam>
+        /// <param name="expected">Expected dictionary.</param>
+        /// <returns>Matcher.</returns>
+        public static Dictionary<TKey, TValue> IsDictionary<TKey, TValue>(IDictionary<TKey, TValue> expected)
+        {
+            return Match.Create<Dictionary<TKey, TValue>>(actual => SameDictionary(actual, expected));
         }
 
 

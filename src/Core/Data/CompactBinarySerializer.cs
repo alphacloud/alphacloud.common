@@ -22,9 +22,46 @@ namespace Alphacloud.Common.Core.Data
     using System.IO;
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.Serialization.Formatters.Binary;
+    using System.Text;
     using JetBrains.Annotations;
 
-    public class CompactBinarySerializer : IDisposable
+    public interface IBinarySerializer
+    {
+        int MemoryAllocated { get; }
+        byte[] Serialize([NotNull] object obj);
+        object Deserialize([NotNull] byte[] buffer);
+    }
+
+    public class StringSerializer : IBinarySerializer
+    {
+        #region IBinarySerializer Members
+
+        public int MemoryAllocated
+        {
+            get { return 1; }
+        }
+
+
+        public byte[] Serialize(object obj)
+        {
+            if (obj == null) throw new ArgumentNullException("obj");
+            return Encoding.UTF8.GetBytes(obj.ToString());
+        }
+
+
+        public object Deserialize(byte[] buffer)
+        {
+            if (buffer == null) throw new ArgumentNullException("buffer");
+            if (buffer.Length == 0)
+                return string.Empty;
+
+            return Encoding.UTF8.GetString(buffer);
+        }
+
+        #endregion
+    }
+
+    public class CompactBinarySerializer : IDisposable, IBinarySerializer
     {
         readonly BinaryFormatter _formatter;
         readonly MemoryStream _stream;
@@ -39,23 +76,13 @@ namespace Alphacloud.Common.Core.Data
             _stream = new MemoryStream();
         }
 
+        #region IBinarySerializer Members
 
         public int MemoryAllocated
         {
             get { return _stream.Capacity; }
         }
 
-        #region IDisposable Members
-
-        /// <summary>
-        ///   Dispose internal memory stream.
-        /// </summary>
-        public void Dispose()
-        {
-            _stream.Dispose();
-        }
-
-        #endregion
 
         public byte[] Serialize([NotNull] object obj)
         {
@@ -79,5 +106,19 @@ namespace Alphacloud.Common.Core.Data
                 return _formatter.Deserialize(ms);
             }
         }
+
+        #endregion
+
+        #region IDisposable Members
+
+        /// <summary>
+        ///   Dispose internal memory stream.
+        /// </summary>
+        public void Dispose()
+        {
+            _stream.Dispose();
+        }
+
+        #endregion
     }
 }
