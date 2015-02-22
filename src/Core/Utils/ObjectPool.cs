@@ -20,6 +20,7 @@ namespace Alphacloud.Common.Core.Utils
 {
     using System;
     using System.Collections.Concurrent;
+    using Data;
     using JetBrains.Annotations;
 
     /// <summary>
@@ -151,13 +152,14 @@ namespace Alphacloud.Common.Core.Utils
         bool _isDisposed;
         T _value;
 
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="PooledObjectWrapper{T}"/> class.
+        ///   Initializes a new instance of the <see cref="PooledObjectWrapper{T}" /> class.
         /// </summary>
         /// <param name="owner">The owning pool.</param>
         /// <param name="obj">The object.</param>
         /// <exception cref="System.ArgumentNullException">
-        /// owner or obj is null.
+        ///   owner or obj is null.
         /// </exception>
         public PooledObjectWrapper([NotNull] IObjectPool<T> owner, [NotNull] T obj)
         {
@@ -205,5 +207,32 @@ namespace Alphacloud.Common.Core.Utils
         }
 
         #endregion
+    }
+
+    /// <summary>
+    ///   Object serializer pool.
+    /// </summary>
+    /// <remarks>
+    ///   This pools won't store object if allocated memory stream size exceeds specified.
+    /// </remarks>
+    public sealed class SerializerPool : ObjectPool<ISerializer>
+    {
+        readonly int _maxPooledMemoryBlockToStore;
+
+
+        public SerializerPool(int maxPoolSize, [NotNull] Func<ISerializer> objectConstructor,
+            int maxPooledMemoryBlockSize) : base(maxPoolSize, objectConstructor)
+        {
+            if (maxPooledMemoryBlockSize <= 0)
+                throw new ArgumentOutOfRangeException("maxPooledMemoryBlockSize", maxPooledMemoryBlockSize,
+                    @"Memory block size must ebe positive number.");
+            _maxPooledMemoryBlockToStore = maxPooledMemoryBlockSize;
+        }
+
+
+        protected override bool ShouldStore(ISerializer obj)
+        {
+            return base.ShouldStore(obj) && obj.MemoryAllocated <= _maxPooledMemoryBlockToStore;
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace Alphacloud.Common.Caching.Redis
     class RedisAdapter : CacheBase
     {
         readonly IDatabase _db;
-        readonly IObjectPool<IBinarySerializer> _serializers;
+        readonly IObjectPool<ISerializer> _serializers;
 
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Alphacloud.Common.Caching.Redis
         public RedisAdapter(
             [NotNull] ICacheHealthcheckMonitor monitor,
             string instanceName, [NotNull] IDatabase redisDatabase,
-            [NotNull] IObjectPool<IBinarySerializer> serializers) : base(monitor, instanceName)
+            [NotNull] IObjectPool<ISerializer> serializers) : base(monitor, instanceName)
         {
             if (redisDatabase == null) throw new ArgumentNullException("redisDatabase");
             if (serializers == null) throw new ArgumentNullException("serializers");
@@ -117,7 +117,7 @@ namespace Alphacloud.Common.Caching.Redis
         }
 
 
-        object SafeGetValue(RedisValue data, string key, IBinarySerializer serializer)
+        object SafeGetValue(RedisValue data, string key, ISerializer serializer)
         {
             try
             {

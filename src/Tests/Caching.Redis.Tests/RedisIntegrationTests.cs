@@ -19,9 +19,12 @@
 namespace Caching.Redis.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Alphacloud.Common.Caching.Redis;
     using Alphacloud.Common.Core.Data;
     using Alphacloud.Common.Core.Utils;
+    using Alphacloud.Common.Infrastructure.Caching;
     using FluentAssertions;
     using JetBrains.Annotations;
     using NUnit.Framework;
@@ -31,7 +34,13 @@ namespace Caching.Redis.Tests
     [Category("Integration")]
     class RedisIntegrationTests
     {
+        const string CacheInstance = "Alphacloud.Caching.Redis.Tests";
+        ICache _cache;
         IDatabase _db;
+        RedisFactory _factory;
+        string _g;
+        string _key1;
+        string _key2;
         ConnectionMultiplexer _redis;
 
 
@@ -64,6 +73,72 @@ namespace Caching.Redis.Tests
             newValue.Should().Equal(serializedValue);
         }
 
+
+        [Test]
+        public async void CanMultiGet()
+        {
+            _db.StringSet(_key2, "value", 10.Seconds());
+            var res = await _db.StringGetAsync(new RedisKey[] {_key1, _key2});
+
+            res[0].IsNull.Should().BeTrue();
+            res[1].ToString().Should().Be("value");
+        }
+
+
+        [Test]
+        public void Put_Should_AddItemToCache()
+        {
+            var key = Guid.NewGuid().ToString("D");
+            var value = "val." + key;
+            _cache.Put(key, value, 3.Seconds());
+            _cache.Get<string>(key).Should().Be(value, "failed to retrieve value");
+        }
+
+
+        [Test]
+        public async void Put_Should_AddItemToCacheWithExpiration()
+        {
+            var key = Guid.NewGuid().ToString("D");
+            var value = "val." + key;
+            _cache.Put(key, value, 3.Seconds());
+
+            await Task.Delay(3.Seconds());
+            _cache.Get<string>(key).Should().BeNull("expired key received from cache");
+        }
+
+
+        [Test]
+        public void MultiPut_Should_StoreAllItems()
+        {
+            var g = Guid.NewGuid().ToString("N");
+            var k1 = "key1-" + g;
+            var k2 = "key2-" + g;
+            _cache.Put(
+                new[] {new KeyValuePair<string, object>(k1, "val1"), new KeyValuePair<string, object>(k2, "val2")},
+                3.Seconds());
+
+            _cache.Get<string>(k1).Should().Be("val1");
+            _cache.Get<string>(k2).Should().Be("val2");
+        }
+
+
+        [Test]
+        public void MultiGet_Should_RetrieveMultipleItems()
+        {
+            var g = Guid.NewGuid().ToString("N");
+            var k1 = "key1-" + g;
+            var k2 = "key2-" + g;
+
+            _cache.Put(k1, "val1", 3.Seconds());
+            _cache.Put(k2, "val2", 3.Seconds());
+
+            var res = _cache.Get(new[] {k1, k2});
+
+            res.Should().HaveCount(2);
+            res[k1].Should().Be("val1");
+            res[k2].Should().Be("val2");
+        }
+
         #region Nested type: CachedItem
 
         [Serializable]
@@ -71,6 +146,7 @@ namespace Caching.Redis.Tests
         {
             [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
             public string Id { get; set; }
+
             [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
             public string Name { get; set; }
         }
@@ -82,14 +158,17 @@ namespace Caching.Redis.Tests
         [SetUp]
         public void SetUp()
         {
-            _db = _redis.GetDatabase();
+            _cache = _factory.GetCache(CacheInstance);
+            _g = Guid.NewGuid().ToString("D");
+            _key1 = "key1-" + _g;
+            _key2 = "key2_" + _g;
         }
 
 
         [TearDown]
         public void TearDown()
         {
-            _db = null;
+            _cache = null;
         }
 
 
@@ -98,11 +177,15 @@ namespace Caching.Redis.Tests
         {
             var configurationOptions = new ConfigurationOptions {
                 ClientName = "Alphacloud.Redis.Tests",
-                Password = "Redis--PASS$MSKDF92837bdsh--$dd",
-                EndPoints = {"localhost"}
+                EndPoints = {"alphacloud-test"}
             };
 
             _redis = ConnectionMultiplexer.Connect(configurationOptions, Console.Out);
+            _db = _redis.GetDatabase();
+            _factory = new RedisFactory(new[] {
+                new RedisConfiguration(CacheInstance, _redis, 0)
+            });
+            _factory.Initialize();
         }
 
 

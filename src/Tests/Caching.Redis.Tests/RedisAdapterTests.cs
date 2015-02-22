@@ -31,12 +31,12 @@ namespace Caching.Redis.Tests
     using StackExchange.Redis;
 
     [TestFixture]
-    public class RedisAdapterTests : MockedTestsBase
+    class RedisAdapterTests : MockedTestsBase
     {
         RedisAdapter _adapter;
         Mock<IDatabase> _databaseMock;
         Mock<ICacheHealthcheckMonitor> _healthcheckMock;
-        IBinarySerializer _serializer;
+        ISerializer _serializer;
 
 
         protected override void DoSetup()
@@ -47,8 +47,7 @@ namespace Caching.Redis.Tests
             _databaseMock = Mockery.Create<IDatabase>();
             _databaseMock.As<IDatabaseAsync>();
 
-            IObjectPool<IBinarySerializer> serializers = new ObjectPool<IBinarySerializer>(10,
-                () => new StringSerializer());
+            var serializers = new ObjectPool<ISerializer>(10, () => new StringSerializer());
             _serializer = serializers.GetObject();
 
             _adapter = new RedisAdapter(_healthcheckMock.Object, "redisTest", _databaseMock.Object, serializers);
@@ -73,6 +72,24 @@ namespace Caching.Redis.Tests
 
 
         [Test]
+        public void MultiPut_Should_PerformPutWithTransformedKeys()
+        {
+            var data = new[] {
+                new KeyValuePair<string, object>("key1", "value1"),
+                new KeyValuePair<string, object>("key2", "value2")
+            };
+
+            _adapter.Put(data, 3.Seconds());
+
+            _databaseMock.Verify(db => db.StringSet("redisTest.key1", Serialized("value1"), 3.Seconds(), When.Always,
+                CommandFlags.FireAndForget));
+
+            _databaseMock.Verify(db => db.StringSet("redisTest.key2", Serialized("value2"), 3.Seconds(), When.Always,
+                CommandFlags.FireAndForget));
+        }
+
+
+        [Test]
         public void MultiGet_Should_PerformMultiGetWithTransformedKeys()
         {
             var cachedData = new[] {
@@ -80,13 +97,32 @@ namespace Caching.Redis.Tests
                 Serialized("val2")
             };
 
-            var transformedKeys = new RedisKey[] { "redisTest.key1", "redisTest.key2" };
+            var transformedKeys = new RedisKey[] {"redisTest.key1", "redisTest.key2"};
             _databaseMock.Setup(c => c.StringGet(Argument.IsArray(transformedKeys), CommandFlags.None))
                 .Returns(cachedData)
                 .Verifiable();
 
             var res = _adapter.Get(new[] {"key1", "key2"});
             res.Should().Contain(new KeyValuePair<string, object>("key1", "val1"))
+                .And.Contain(new KeyValuePair<string, object>("key2", "val2"));
+        }
+
+
+        [Test]
+        public void MultiGet_Should_ReturnNullForMissingItems()
+        {
+            var cachedData = new[] {
+                RedisValue.Null,
+                Serialized("val2")
+            };
+
+            _databaseMock.Setup(c => c.StringGet(It.IsAny<RedisKey[]>(), CommandFlags.None))
+                .Returns(cachedData)
+                .Verifiable();
+
+            var res = _adapter.Get(new[] {"key1", "key2"});
+            res.Should()
+                .Contain(new KeyValuePair<string, object>("key1", null))
                 .And.Contain(new KeyValuePair<string, object>("key2", "val2"));
         }
 
@@ -99,6 +135,15 @@ namespace Caching.Redis.Tests
             _databaseMock.Verify(db =>
                 db.StringSet("redisTest.key-d", It.Is<RedisValue>(v => Encoding.UTF8.GetString(v) == "value"),
                     3.Seconds(), When.Always, CommandFlags.FireAndForget));
+        }
+
+
+        [Test]
+        public void Remove_Should_DeleteItemFromCache()
+        {
+            _adapter.Remove("key1");
+
+            _databaseMock.Verify(db => db.KeyDelete("redisTest.key1", CommandFlags.FireAndForget), "key was not removed");
         }
     }
 }

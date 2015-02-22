@@ -34,7 +34,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <summary>
         ///   Default cache instance name.
         /// </summary>
-        protected const string DefaultInstanceName = "default";
+        public const string DefaultInstanceName = "default";
 
         const string CacheParametersConfigPath = "alphacloud/cache/parameters";
         readonly IDictionary<string, ICache> _caches = new SortedList<string, ICache>(16);

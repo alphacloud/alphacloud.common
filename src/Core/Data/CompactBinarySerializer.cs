@@ -25,16 +25,16 @@ namespace Alphacloud.Common.Core.Data
     using System.Text;
     using JetBrains.Annotations;
 
-    public interface IBinarySerializer
+    public interface ISerializer
     {
         int MemoryAllocated { get; }
         byte[] Serialize([NotNull] object obj);
         object Deserialize([NotNull] byte[] buffer);
     }
 
-    public class StringSerializer : IBinarySerializer
+    public class StringSerializer : ISerializer
     {
-        #region IBinarySerializer Members
+        #region ISerializer Members
 
         public int MemoryAllocated
         {
@@ -61,7 +61,7 @@ namespace Alphacloud.Common.Core.Data
         #endregion
     }
 
-    public class CompactBinarySerializer : IDisposable, IBinarySerializer
+    public class CompactBinarySerializer : IDisposable, ISerializer
     {
         readonly BinaryFormatter _formatter;
         readonly MemoryStream _stream;
@@ -76,7 +76,7 @@ namespace Alphacloud.Common.Core.Data
             _stream = new MemoryStream();
         }
 
-        #region IBinarySerializer Members
+        #region ISerializer Members
 
         public int MemoryAllocated
         {
