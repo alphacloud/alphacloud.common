@@ -44,11 +44,13 @@
     <Reference Include="Common.Logging.Core">
       <HintPath>..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.Annotations">
-      <HintPath>..\..\packages\JetBrains.Annotations.8.0.5.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="JetBrains.Annotations, Version=9.1.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
-    <Reference Include="StackExchange.Redis.StrongName">
-      <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.394\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
+    <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.414\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -71,6 +73,7 @@
     <None Include="..\..\Alphacloud.Common.snk">
       <Link>Alphacloud.Common.snk</Link>
     </None>
+    <None Include="Caching.Redis.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

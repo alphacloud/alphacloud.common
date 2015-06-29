@@ -57,6 +57,15 @@ namespace Alphacloud.Common.Caching.Redis
 
         protected override CacheStatistics DoGetStatistics()
         {
+            var endPoints = _db.Multiplexer.GetEndPoints(configuredOnly: true);
+            foreach (var endPoint in endPoints)
+            {
+                var server = _db.Multiplexer.GetServer(endPoint);
+                if (server == null)
+                    continue;
+                var info = server.Info();
+                info.ToString();
+            }
             return new CacheStatistics(false);
         }
 

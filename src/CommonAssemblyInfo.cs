@@ -30,7 +30,7 @@ using System.Reflection;
 #endif
 
 [assembly: AssemblyCompany("Alphacloud.Net")]
-[assembly: AssemblyProduct("Alphacloud commmon libs")]
-[assembly: AssemblyCopyright("Copyright © Alphacloud 2013")]
+[assembly: AssemblyProduct("Alphacloud commmon libraries")]
+[assembly: AssemblyCopyright("Copyright © Alphacloud 2013-2015")]
 [assembly: AssemblyTrademark("Alphacloud")]
 [assembly: AssemblyCulture("")]

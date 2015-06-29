@@ -139,6 +139,13 @@ namespace Caching.Redis.Tests
             res[k2].Should().Be("val2");
         }
 
+
+        [Test]
+        public void CanGetStatistics()
+        {
+            var stat = _cache.GetStatistics();
+        }
+
         #region Nested type: CachedItem
 
         [Serializable]
@@ -177,9 +184,11 @@ namespace Caching.Redis.Tests
         {
             var configurationOptions = new ConfigurationOptions {
                 ClientName = "Alphacloud.Redis.Tests",
-                EndPoints = {"alphacloud-test"}
+                EndPoints = {"alphacloud-test"},
+                AllowAdmin = true,
             };
 
+            //_streamManager = new RecyclableMemoryStreamManager(32 * 1024, 256 * 1024, 4 * 1024 * 1024);
             _redis = ConnectionMultiplexer.Connect(configurationOptions, Console.Out);
             _db = _redis.GetDatabase();
             _factory = new RedisFactory(new[] {
@@ -193,6 +202,7 @@ namespace Caching.Redis.Tests
         public void TestFixtureTearDown()
         {
             Disposer.TryDispose(_redis);
+            //Disposer.TryDispose(_streamManager);
         }
 
         #endregion

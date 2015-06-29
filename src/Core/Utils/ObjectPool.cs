@@ -221,7 +221,8 @@ namespace Alphacloud.Common.Core.Utils
 
 
         public SerializerPool(int maxPoolSize, [NotNull] Func<ISerializer> objectConstructor,
-            int maxPooledMemoryBlockSize) : base(maxPoolSize, objectConstructor)
+            int maxPooledMemoryBlockSize)
+            : base(maxPoolSize, objectConstructor)
         {
             if (maxPooledMemoryBlockSize <= 0)
                 throw new ArgumentOutOfRangeException("maxPooledMemoryBlockSize", maxPooledMemoryBlockSize,

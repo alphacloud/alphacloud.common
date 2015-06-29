@@ -25,17 +25,47 @@ namespace Alphacloud.Common.Core.Data
     using System.Text;
     using JetBrains.Annotations;
 
+    /// <summary>
+    ///   Serializer interface.
+    /// </summary>
     public interface ISerializer
     {
+        /// <summary>
+        ///   Gets amount of memory allicated by underlying data structures.
+        /// </summary>
         int MemoryAllocated { get; }
+
+
+        /// <summary>
+        ///   Serialize object.
+        /// </summary>
+        /// <param name="obj">The object to serialize.</param>
+        /// <returns>Serialized object</returns>
+        [NotNull]
         byte[] Serialize([NotNull] object obj);
+
+
+        /// <summary>
+        ///   Deserializes object.
+        /// </summary>
+        /// <param name="buffer">The buffer.</param>
+        /// <returns></returns>
+        [CanBeNull]
         object Deserialize([NotNull] byte[] buffer);
     }
 
+    /// <summary>
+    ///   Serialize object's text representation (.ToString()) as UTF8 encoded string.
+    /// </summary>
+    /// <remarks>
+    ///   Used for debugging.
+    ///   Deserialized object is always string.
+    /// </remarks>
     public class StringSerializer : ISerializer
     {
         #region ISerializer Members
 
+        //
         public int MemoryAllocated
         {
             get { return 1; }
@@ -61,38 +91,60 @@ namespace Alphacloud.Common.Core.Data
         #endregion
     }
 
-    public class CompactBinarySerializer : IDisposable, ISerializer
+    public abstract class CompactBinarySerializerBase
     {
         readonly BinaryFormatter _formatter;
-        readonly MemoryStream _stream;
 
 
-        public CompactBinarySerializer()
+        protected CompactBinarySerializerBase([NotNull] BinaryFormatter formatter)
         {
-            _formatter = new BinaryFormatter {
-                AssemblyFormat = FormatterAssemblyStyle.Simple,
-                TypeFormat = FormatterTypeStyle.TypesWhenNeeded
-            };
-            _stream = new MemoryStream();
+            if (formatter == null) throw new ArgumentNullException("formatter");
+            _formatter = formatter;
         }
 
-        #region ISerializer Members
 
-        public int MemoryAllocated
+        protected CompactBinarySerializerBase() : this(new BinaryFormatter {
+            AssemblyFormat = FormatterAssemblyStyle.Simple,
+            TypeFormat = FormatterTypeStyle.TypesWhenNeeded
+        })
         {
-            get { return _stream.Capacity; }
         }
+
+
+        public abstract int MemoryAllocated { get; }
 
 
         public byte[] Serialize([NotNull] object obj)
         {
             if (obj == null) throw new ArgumentNullException("obj");
+            var stream = AcquireStream();
 
-            _stream.Position = 0;
-            _formatter.Serialize(_stream, obj);
-            _stream.SetLength(_stream.Position);
-            return _stream.ToArray();
+            try
+            {
+                stream.Position = 0;
+                _formatter.Serialize(stream, obj);
+                stream.SetLength(stream.Position);
+                return stream.ToArray();
+            }
+            finally
+            {
+                ReleaseStream(stream);
+            }
         }
+
+
+        /// <summary>
+        ///   Acquires the stream.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract MemoryStream AcquireStream();
+
+
+        /// <summary>
+        ///   Releases the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        protected abstract void ReleaseStream(MemoryStream stream);
 
 
         public object Deserialize([NotNull] byte[] buffer)
@@ -106,8 +158,14 @@ namespace Alphacloud.Common.Core.Data
                 return _formatter.Deserialize(ms);
             }
         }
+    }
 
-        #endregion
+    /// <summary>
+    ///   Serialize object using <see cref="BinaryFormatter" />.
+    /// </summary>
+    public class CompactBinarySerializer : CompactBinarySerializerBase, ISerializer, IDisposable
+    {
+        MemoryStream _stream;
 
         #region IDisposable Members
 
@@ -116,9 +174,32 @@ namespace Alphacloud.Common.Core.Data
         /// </summary>
         public void Dispose()
         {
+            if (_stream == null) return;
+
             _stream.Dispose();
+            _stream = null;
         }
 
         #endregion
+
+        #region ISerializer Members
+
+        public override int MemoryAllocated
+        {
+            get { return AcquireStream().Capacity; }
+        }
+
+        #endregion
+
+        protected override MemoryStream AcquireStream()
+        {
+            return _stream = (_stream ?? new MemoryStream());
+        }
+
+
+        protected override void ReleaseStream(MemoryStream stream)
+        {
+            // do nothing
+        }
     }
 }

@@ -60,8 +60,7 @@ namespace Alphacloud.Common.Caching.Redis
     {
         IDictionary<string, RedisConfiguration> _configurationByInstance;
         // todo: customize pool to reject object based on memory size
-        IObjectPool<ISerializer> _serializers = new SerializerPool(16,
-            () => new CompactBinarySerializer(), 64 * 1024);
+        IObjectPool<ISerializer> _serializers;
 
 
         public RedisFactory([NotNull] IEnumerable<RedisConfiguration> configurationOptions)
@@ -82,6 +81,8 @@ namespace Alphacloud.Common.Caching.Redis
             if (configurationOptions == null) throw new ArgumentNullException("configurationOptions");
 
             _configurationByInstance = configurationOptions.ToDictionary(k => k.InstanceName ?? DefaultInstanceName);
+            _serializers = new SerializerPool(16, () => new CompactBinarySerializer(), 256 * 1024);
+
         }
 
 

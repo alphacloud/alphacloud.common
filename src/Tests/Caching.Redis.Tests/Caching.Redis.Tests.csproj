@@ -59,7 +59,7 @@
     </Reference>
     <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.394\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
+      <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.414\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -99,6 +99,9 @@
       <Project>{b94885e3-6d45-47d3-b9b5-c78bd45653f4}</Project>
       <Name>Testing.Nunit</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
