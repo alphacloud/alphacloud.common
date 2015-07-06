@@ -65,6 +65,7 @@ namespace Alphacloud.Common.Caching.Redis
                     continue;
                 var info = server.Info();
                 info.ToString();
+                // todo: complete
             }
             return new CacheStatistics(false);
         }
