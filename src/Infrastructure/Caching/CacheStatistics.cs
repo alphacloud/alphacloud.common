@@ -18,6 +18,7 @@
 
 namespace Alphacloud.Common.Infrastructure.Caching
 {
+
     using System;
     using System.Collections.Generic;
 
@@ -31,6 +32,9 @@ namespace Alphacloud.Common.Infrastructure.Caching
     [Serializable]
     public class CacheStatistics
     {
+        readonly List<CacheNodeStatistics> _nodes;
+
+
         /// <summary>
         ///   Initializes a new instance of the <see cref="CacheStatistics" /> class.
         /// </summary>
@@ -42,6 +46,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             IsSuccess = isSuccess;
         }
 
+
         /// <summary>
         ///   Initializes a new instance of the <see cref="CacheStatistics" /> class.
         /// </summary>
@@ -49,28 +54,46 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <param name="getCount">The get count.</param>
         /// <param name="putCount">The put count.</param>
         /// <param name="itemCount">The item count.</param>
-        public CacheStatistics(long hitCount, long getCount, long putCount, long itemCount) : this()
+        /// <param name="nodes">Staistics per node.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="nodes" /> is <see langword="null" />.</exception>
+        public CacheStatistics(long hitCount, long getCount, long putCount, long itemCount,
+            [NotNull] IEnumerable<CacheNodeStatistics> nodes = null) : this()
         {
             IsSuccess = true;
             HitCount = hitCount;
             GetCount = getCount;
             PutCount = putCount;
             ItemCount = itemCount;
+            if (nodes != null)
+                _nodes.AddRange(nodes);
         }
+
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="CacheStatistics" /> class.
         /// </summary>
         protected CacheStatistics()
         {
-            Nodes = new List<CacheNodeStatistics>(8);
+            _nodes = new List<CacheNodeStatistics>(8);
         }
+
 
         /// <summary>
         ///   Statistics by node.
         /// </summary>
         [NotNull]
-        public List<CacheNodeStatistics> Nodes { get; private set; }
+        public IEnumerable<CacheNodeStatistics> Nodes
+        {
+            get { return _nodes; }
+        }
+
+        /// <summary>
+        ///   Number of cache nodes.
+        /// </summary>
+        public int NodeCount
+        {
+            get { return _nodes.Count; }
+        }
 
         /// <summary>
         ///   Gets a value indicating whether statistics request was successful.
@@ -113,9 +136,11 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </summary>
         public long ItemCount { get; private set; }
 
+
         public override string ToString()
         {
-            return "Nodes: {0}, Total items: {1}, Hit rate: {2}%".ApplyArgs(Nodes.Count, ItemCount, HitRate);
+            return "Nodes: {0}, Total items: {1}, Hit rate: {2}%".ApplyArgs(_nodes.Count, ItemCount, HitRate);
         }
     }
+
 }

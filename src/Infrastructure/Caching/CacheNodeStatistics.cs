@@ -89,7 +89,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             {
                 if (GetCount > 0)
                 {
-                    return (int) ((HitCount * 10) / (GetCount / 10));
+                    return (int) ((HitCount * 100) / GetCount);
                 }
                 return 0;
             }

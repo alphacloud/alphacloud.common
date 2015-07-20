@@ -117,9 +117,10 @@ namespace Alphacloud.Common.Infrastructure.Caching
             var localStats = _localCache.GetStatistics();
             if (localStats.IsSuccess)
             {
-                backingStats.Nodes.Add(
-                    new CacheNodeStatistics(LocalCacheInstanceName, localStats.HitCount, localStats.GetCount,
-                        localStats.PutCount, localStats.ItemCount));
+                throw new NotImplementedException("Update local statistics");
+                //backingStats.Nodes.Add(
+                //    new CacheNodeStatistics(LocalCacheInstanceName, localStats.HitCount, localStats.GetCount,
+                //        localStats.PutCount, localStats.ItemCount));
             }
             return backingStats;
         }

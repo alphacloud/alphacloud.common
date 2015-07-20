@@ -20,6 +20,8 @@ namespace Alphacloud.Common.Caching.Redis
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+
     using Core.Data;
     using Core.Utils;
     using Infrastructure.Caching;
@@ -57,16 +59,30 @@ namespace Alphacloud.Common.Caching.Redis
 
         protected override CacheStatistics DoGetStatistics()
         {
-            var endPoints = _db.Multiplexer.GetEndPoints(configuredOnly: true);
+            var endPoints = _db.Multiplexer.GetEndPoints();
+            var nodeStatistics = new List<CacheNodeStatistics>();
+            
             foreach (var endPoint in endPoints)
             {
                 var server = _db.Multiplexer.GetServer(endPoint);
-                if (server == null)
+                if (server == null || !server.IsConnected)
                     continue;
+                                
                 var info = server.Info();
-                info.ToString();
+                var stats = info.First(g => g.Key == "Stats");
+                var hits = Convert.ToInt64(stats.First(k => k.Key == "keyspace_hits").Value);
+                var misses = Convert.ToInt64(stats.First(k => k.Key == "keyspace_misses").Value);
+                var databaseKeys = server.DatabaseSize(_db.Database);
+                var node = new CacheNodeStatistics(server.EndPoint.ToString(),
+                    hits, hits + misses, -1, databaseKeys
+                    );
+                nodeStatistics.Add(node);
             }
-            return new CacheStatistics(false);
+
+            var hitCount = nodeStatistics.Sum(n => n.HitCount);
+            var getCount = nodeStatistics.Sum(n => n.GetCount);
+            var totalItems = (long)nodeStatistics.Average(n => n.ItemCount);
+            return new CacheStatistics(hitCount, getCount, -1, totalItems, nodeStatistics);
         }
 
 
@@ -130,7 +146,6 @@ namespace Alphacloud.Common.Caching.Redis
         {
             try
             {
-                object item = null;
                 if (!data.IsNull)
                 {
                     return serializer.Deserialize(data);

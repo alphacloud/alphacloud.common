@@ -63,13 +63,8 @@ namespace Alphacloud.Common.Caching.Memcached
             var putCount = _stats.GetValue(ServerStats.All, StatItem.SetCount);
             var getCount = _stats.GetValue(ServerStats.All, StatItem.GetCount);
             var totalItems = _stats.GetValue(ServerStats.All, StatItem.ItemCount);
-            _result = new CacheStatistics(hitCount, getCount, putCount, totalItems);
-
             var nodes = _stats.GetRaw("uptime").Select(kvp => kvp.Key);
-            foreach (var node in nodes)
-            {
-                _result.Nodes.Add(GetNodeStatistics(node));
-            }
+            _result = new CacheStatistics(hitCount, getCount, putCount, totalItems, nodes.Select(GetNodeStatistics));
         }
 
 

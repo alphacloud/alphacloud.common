@@ -184,7 +184,7 @@ namespace Caching.Redis.Tests
         {
             var configurationOptions = new ConfigurationOptions {
                 ClientName = "Alphacloud.Redis.Tests",
-                EndPoints = {"alphacloud-test"},
+                EndPoints = { "localhost:6379", "localhost:6380" },
                 AllowAdmin = true,
             };
 
@@ -202,7 +202,6 @@ namespace Caching.Redis.Tests
         public void TestFixtureTearDown()
         {
             Disposer.TryDispose(_redis);
-            //Disposer.TryDispose(_streamManager);
         }
 
         #endregion

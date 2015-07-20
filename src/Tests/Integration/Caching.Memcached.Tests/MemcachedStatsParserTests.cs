@@ -19,6 +19,7 @@
 namespace Caching.Memcached.Tests
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Reflection;
     using Alphacloud.Common.Caching.Memcached;
@@ -128,7 +129,7 @@ namespace Caching.Memcached.Tests
         {
             _cacheStatistics.Nodes.Should().HaveCount(2, "wrong server count");
 
-            var s1 = _cacheStatistics.Nodes[0];
+            var s1 = _cacheStatistics.Nodes.First();
             s1.Server.Should().Be("127.0.0.1:11211");
             s1.HitCount.Should().Be(100);
             s1.GetCount.Should().Be(200);
