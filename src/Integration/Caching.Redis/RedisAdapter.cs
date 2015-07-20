@@ -77,6 +77,7 @@ namespace Alphacloud.Common.Caching.Redis
                     hits, hits + misses, -1, databaseKeys
                     );
                 nodeStatistics.Add(node);
+                // todo: complete
             }
 
             var hitCount = nodeStatistics.Sum(n => n.HitCount);

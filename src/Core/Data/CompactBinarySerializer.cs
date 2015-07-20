@@ -96,7 +96,7 @@ namespace Alphacloud.Common.Core.Data
         readonly BinaryFormatter _formatter;
 
 
-        protected CompactBinarySerializerBase([NotNull] BinaryFormatter formatter)
+        internal protected CompactBinarySerializerBase([NotNull] BinaryFormatter formatter)
         {
             if (formatter == null) throw new ArgumentNullException("formatter");
             _formatter = formatter;
@@ -146,7 +146,13 @@ namespace Alphacloud.Common.Core.Data
         /// <param name="stream">The stream.</param>
         protected abstract void ReleaseStream(MemoryStream stream);
 
-
+        /// <summary>
+        /// Deserializes data.
+        /// </summary>
+        /// <param name="buffer">Binary buffer.</param>
+        /// <returns>Deserialized object.</returns>
+        /// <exception cref="System.ArgumentNullException">buffer is <c>null</c></exception>
+        /// <remarks>This method does not use AcquireStream/ReleaseStream because memory buffer already exists.</remarks>
         public object Deserialize([NotNull] byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
