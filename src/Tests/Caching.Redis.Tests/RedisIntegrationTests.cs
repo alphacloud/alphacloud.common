@@ -100,7 +100,7 @@ namespace Caching.Redis.Tests
         {
             var key = Guid.NewGuid().ToString("D");
             var value = "val." + key;
-            _cache.Put(key, value, 3.Seconds());
+            _cache.Put(key, value, 2.Seconds());
 
             await Task.Delay(3.Seconds());
             _cache.Get<string>(key).Should().BeNull("expired key received from cache");

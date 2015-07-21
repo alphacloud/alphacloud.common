@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="BuildAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <BuildTarget Condition="'$(BuildTarget)' == ''">Rebuild</BuildTarget>
+    <BuildConfig Condition="'$(BuildConfig)' == ''">Debug</BuildConfig>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\src\.build</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.targets"/>
+
+  <!-- Directories -->
+  <PropertyGroup>
+    <RootDir>$(MSBuildProjectDirectory)</RootDir>
+    <SrcDir>$(RootDir)\Src</SrcDir>
+    <BinDir>$(SrcDir)\bin</BinDir>
+    <OutputDir>$(SrcDir)\out</OutputDir>
+    <NuGetExe>$(SrcDir)\.nuget\nuget.exe</NuGetExe>
+    <PackagesOutDir>$(OutputDir)\packages</PackagesOutDir>
+    <PackagesSrcDir>$(OutputDir)\nuget</PackagesSrcDir>
+  </PropertyGroup>
+
+  <Import Project="$(RootDir)\PackageDefinitions.xml" />
+
+  <PropertyGroup>
+    <MainSolution>$(SrcDir)\Alphacloud.Common.sln</MainSolution>
+    <CoreDir>$(SrcDir)\Core</CoreDir>
+    <InfrastructureDir>$(SrcDir)\Infrastructure</InfrastructureDir>
+    <MemcachedAdapterDir>$(SrcDir)\Integration\Caching.Memcached</MemcachedAdapterDir>
+    <MemcachedCommonLoggingAdapterDir>$(SrcDir)\Integration\Caching.Memcached.CommonLogging</MemcachedCommonLoggingAdapterDir>
+    <CastleWindsorAdapterDir>$(SrcDir)\ServiceLocator.Castle</CastleWindsorAdapterDir>
+    <TestingNunitDir>$(SrcDir)\Testing.Nunit</TestingNunitDir>
+    <WebProjectsDir>$(SrcDir)\Web</WebProjectsDir>
+  </PropertyGroup>
+
+  <Target Name="UpdateVersionInfo">
+    <Message Text="Updating %(PackageDefinition.Identity), version: %(PackageDefinition.Version)" />
+    <Time>
+      <Output TaskParameter="Year" PropertyName="CurrentYear" />
+    </Time>
+
+    <FileUpdate Files="%(PackageDefinition.RootFolder)\Properties\AssemblyInfo.cs"
+      WarnOnNoUpdate="true"
+      Regex="((?:AssemblyVersion|AssemblyFileVersion)\s*\(\s*)\&quot;(.+)\&quot;(\s*\))"
+      ReplacementText="$1&quot;%(PackageDefinition.Version)&quot;$3" />
+    <XmlUpdate
+      Prefix="nu" Namespace="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd"
+      XmlFileName="%(PackageDefinition.RootFolder)\%(PackageDefinition.NuspecFile)"
+      XPath="/nu:package/nu:metadata/nu:version"
+      Value="%(PackageDefinition.Version)" />
+    <XmlUpdate
+      Prefix="nu" Namespace="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd"
+      XmlFileName="%(PackageDefinition.RootFolder)\%(PackageDefinition.NuspecFile)"
+      XPath="/nu:package/nu:metadata/nu:copyright"
+      Value="Copyright (c) 2013-$(CurrentYear) Alphacloud.net" />
+  </Target>
+
+  <Target Name="BuildAndTest">
+    <CallTarget Targets="CleanAll"></CallTarget>
+    <MSBuild Projects="$(RootDir)\build.proj" Targets="BuildAll" Properties="BuildConfig=Release;BuildTarget=Rebuild" />
+
+    <!-- todo: run tests -->
+  </Target>
+
+  <Target Name="BuildPackages">
+    <RemoveDir Directories="$(PackagesSrcDir);$(PackagesOutDir)" ContinueOnError="true" />
+    <MakeDir Directories="$(PackagesSrcDir);$(PackagesOutDir)" ContinueOnError="true" />
+    
+    <!--<MakeDir Directories="$(OutputDir)\nuget\%(PackageDefinition.Identity)" ContinueOnError="true"/>-->
+    
+    <Message Text="##teamcity[progressMessage 'Building NuGet packages...']" />
+    
+    <Copy 
+      SourceFiles="%(PackageDefinition.RootFolder)\%(PackageDefinition.NuspecFile)" 
+      DestinationFiles="$(PackagesSrcDir)\%(PackageDefinition.Identity)\%(PackageDefinition.NuspecFile)" 
+      UseHardlinksIfPossible="true" OverwriteReadOnlyFiles="true" Retries="5"
+    />
+    
+    <ItemGroup>
+      <PackageFiles Include="$(BinDir)\Release\**\Alphacloud.Common.%(PackageDefinition.Identity).dll;$(BinDir)\Release\**\Alphacloud.Common.%(PackageDefinition.Identity).xml">
+          <NuspecDir>%(PackageDefinition.Identity)</NuspecDir>
+      </PackageFiles>
+    </ItemGroup>
+    
+    <Copy 
+      SourceFiles="@(PackageFiles)" 
+      DestinationFolder="$(PackagesSrcDir)\%(PackageFiles.NuspecDir)\lib\%(PackageFiles.RecursiveDir)\" 
+      UseHardlinksIfPossible="true" OverwriteReadOnlyFiles="true" Retries="5"
+    />
+  
+    <NuGetPack File="$(PackagesSrcDir)\%(PackageDefinition.Identity)\%(PackageDefinition.NuspecFile)" OutputDirectory="$(PackagesOutDir)" />
+
+    <!--
+    <Message Text="##teamcity[progressMessage 'Building NuGet symbol packages...']" />
+
+    <ItemGroup>
+      <PdbFiles Include="$(BinDir)\Release\**\Alphacloud.Common.%(PackageDefinition.Identity).pdb">
+          <NuspecDir>%(PackageDefinition.Identity)</NuspecDir>
+      </PdbFiles>
+    </ItemGroup>
+
+    <Copy 
+      SourceFiles="@(PdbFiles)" 
+      DestinationFolder="$(PackagesSrcDir)\%(PdbFiles.NuspecDir)\lib\%(PdbFiles.RecursiveDir)\" 
+      UseHardlinksIfPossible="true" OverwriteReadOnlyFiles="true" Retries="5"
+    />
+    -->
+    
+  <!--
+    todo: 2) Copy *.pdb and src\
+    todo: 3) Build symbols package
+  -->
+  </Target>
+
+  <Target Name="BuildAll">
+    <MSBuild Projects="$(SrcDir)\Alphacloud.Common.sln" Properties="Configuration=$(BuildConfig);CreateHardLinksForCopyLocalIfPossible=true" Targets="$(BuildTarget)"
+             BuildInParallel="true" />
+  </Target>
+
+  <Target Name="CleanAll">
+    <Message Text="Performing full clean-up..." />
+    <MSBuild Projects="$(MainSolution)" Properties="Configuration=Debug" Targets="Clean"  BuildInParallel="true" />
+    <MSBuild Projects="$(MainSolution)" Properties="Configuration=Release" Targets="Clean" BuildInParallel="true" />
+    <DeleteTree Directories="$(SrcDir)\**\bin\**;$(SrcDir)\**\obj\**;$(SrcDir)\**\out\**;$(OutputDir);$(BinDir)" />
+  </Target>
+
+
+</Project>

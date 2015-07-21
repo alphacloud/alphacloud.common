@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>865167ef-8758-4409-a9b7-15257661d952</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Alphacloud.Common.Infrastructure</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheConfigurationException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\Cached.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheDuration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheDurationSection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheFactoryBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheHealthcheckSection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheNodeStatistics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStatistics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CompositeCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CompositeCacheFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\FixedTimeoutStrategy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\ICache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\ICacheFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\ICacheHealthcheckMonitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\ILocalCacheTimeoutStrategy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\MemoryCache\MemoryCacheAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\MemoryCache\MemoryCacheFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\NullCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\NullCacheFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\NullCacheHealthcheckMonitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\ProportionalTimeout.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\TransformingCacheWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\UserCacheKeyTransformer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\CapturedContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\IInstrumentationEventListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\InstrumentationContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\InstrumentationEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\InstrumentationLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\InstrumentationRuntime.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\InstrumentationScope.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\InstrumentationSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\LogExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\LoggingConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\NullCorrelationIdProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\NullInstrumentaionContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\NullInstrumentationContextProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\ThreadStaticInstrumentationContextProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transformations\AdhocEncoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transformations\IEncoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transformations\Transformer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Infrastructure.nuspec" />
+  </ItemGroup>
+</Project>

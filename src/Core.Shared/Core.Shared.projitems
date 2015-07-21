@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>928edad6-aefc-4c20-a902-c20542153bc1</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Alphacloud.Common.Core</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Data\BinaryFormattingExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\BooleanExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ChartHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\CollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\CompactBinarySerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\DateTimeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\DictionaryExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\EnumHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Hash\FastHashAlgorithms.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Hash\ISimpleHasher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Hash\Murmur3.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\IChartData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\IPagedList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\NumberExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\NumberFormattingExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\OrderByHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\PagedList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\PagedListLinqExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\PagingInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\SequenceFormatter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\TimeSpanParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\WeekDays.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\CorrelationIdGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\ICorrelationIdProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\IDiagnosticContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\IInstrumentationContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\IInstrumentationContextProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\InstrumentationConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\ThreadStaticCorrelationIdProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IO\FormattingStreamWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\DelegateAdjuster.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\Property.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Resources\EnumResourceBinder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\IPrincipalProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\ThreadPrincipalProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Strings\Strings1.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\TaskExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Clock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Disposer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\EventHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\IServiceFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\MaybeMonad.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\NullDisposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ObjectPool.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ReaderWriterLockSlimExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Strings\Strings.resx" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Strings\Strings.ru-RU.resx" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Strings\Strings.uk-UA.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Core.nuspec" />
+  </ItemGroup>
+</Project>

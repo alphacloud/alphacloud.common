@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Alphacloud.Common.Infrastructure</id>
+    <version>0.4.2.0</version>
+    <title>Alphacloud infrastructure components.</title>
+    <authors>Alphaclod.net</authors>
+    <owners>Alphacloud.net</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Alphacloud infrastructure includes caching abstraction layer and instrumentation runtime.</description>
+    <releaseNotes>
+      Multi-framework support: .NET 5 and .NET 4.5;
+      Dependencies updated.
+    </releaseNotes>
+    <copyright>Copyright (c) 2013-2015 Alphacloud.net</copyright>
+    <tags>alphacloud infrastructure caching</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Runtime.Caching" targetFramework="" />
+    </frameworkAssemblies>
+    <dependencies>
+      <dependency id="Alphacloud.Common.Core" version="[0.3.2.0,2.0.0.0)" />
+      <dependency id="JetBrains.Annotations" version="[9.1.1,10.0.0)" />
+      <dependency id="Common.Logging" version="[3.0.0,4.0.0)" />
+    </dependencies>
+  </metadata>
+</package>

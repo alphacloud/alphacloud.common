@@ -14,26 +14,29 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NuGetPackageImportStamp>ab2a4f95</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\bin\Debug\net40\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET40;JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Debug\Alphacloud.Common.Core.XML</DocumentationFile>
+    <DocumentationFile>..\bin\Debug\net40\Alphacloud.Common.Core.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\bin\Release\net40\</OutputPath>
+    <DefineConstants>TRACE;NET40;JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Release\Alphacloud.Common.Core.XML</DocumentationFile>
+    <DocumentationFile>..\bin\Release\net40\Alphacloud.Common.Core.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -42,87 +45,31 @@
     <AssemblyOriginatorKeyFile>..\Alphacloud.Common.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations">
-      <HintPath>..\packages\ReSharper.Annotations.7.1.3.130415\lib\net\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="JetBrains.Annotations, Version=9.2.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.9.2.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Data\BooleanExtensions.cs" />
-    <Compile Include="Data\ChartHelper.cs" />
-    <Compile Include="Data\CollectionExtensions.cs" />
-    <Compile Include="Data\CompactBinarySerializer.cs" />
-    <Compile Include="Data\DictionaryExtensions.cs" />
-    <Compile Include="Data\BinaryFormattingExtensions.cs" />
-    <Compile Include="Data\EnumHelper.cs" />
-    <Compile Include="Data\IChartData.cs" />
-    <Compile Include="Data\IPagedList.cs" />
-    <Compile Include="Data\NumberExtensions.cs" />
-    <Compile Include="Data\NumberFormattingExtensions.cs" />
-    <Compile Include="Data\OrderByHelper.cs" />
-    <Compile Include="Data\PagedList.cs" />
-    <Compile Include="Data\PagedListLinqExtensions.cs" />
-    <Compile Include="Data\PagingInfo.cs" />
-    <Compile Include="Data\SequenceFormatter.cs" />
-    <Compile Include="Data\StringExtensions.cs" />
-    <Compile Include="Data\DateTimeExtensions.cs" />
-    <Compile Include="Data\TimeSpanParser.cs" />
-    <Compile Include="Data\WeekDays.cs" />
-    <Compile Include="Instrumentation\CorrelationIdGenerator.cs" />
-    <Compile Include="Instrumentation\ICorrelationIdProvider.cs" />
-    <Compile Include="Instrumentation\IDiagnosticContext.cs" />
-    <Compile Include="Instrumentation\IInstrumentationContext.cs" />
-    <Compile Include="Instrumentation\IInstrumentationContextProvider.cs" />
-    <Compile Include="Instrumentation\InstrumentationConstants.cs" />
-    <Compile Include="Instrumentation\ThreadStaticCorrelationIdProvider.cs" />
-    <Compile Include="IO\FormattingStreamWriter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reflection\Property.cs" />
-    <Compile Include="Reflection\ReflectionExtensions.cs" />
-    <Compile Include="Resources\EnumResourceBinder.cs" />
-    <Compile Include="Security\IPrincipalProvider.cs" />
-    <Compile Include="Security\ThreadPrincipalProvider.cs" />
-    <Compile Include="Strings\Strings1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Threading\TaskExtensions.cs" />
-    <Compile Include="Utils\Clock.cs" />
-    <Compile Include="Reflection\DelegateAdjuster.cs" />
-    <Compile Include="Utils\Disposer.cs" />
-    <Compile Include="Utils\EventHelper.cs" />
-    <Compile Include="Utils\IServiceFactory.cs" />
-    <Compile Include="Utils\MaybeMonad.cs" />
-    <Compile Include="Utils\NullDisposable.cs" />
-    <Compile Include="Utils\ObjectPool.cs" />
-    <Compile Include="Utils\ReaderWriterLockSlimExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Alphacloud.Common.snk">
       <Link>Alphacloud.Common.snk</Link>
     </None>
-    <None Include="Core.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Strings\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Strings\Strings.ru-RU.resx" />
-    <EmbeddedResource Include="Strings\Strings.uk-UA.resx" />
+    <Folder Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="..\Core.Shared\Core.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

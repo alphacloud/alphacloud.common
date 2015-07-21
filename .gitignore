@@ -108,3 +108,4 @@ Backup*/
 UpgradeLog*.XML
 /src/Core/*.nupkg
 /src/Integration/Caching.Memcached.CommonLogging/*.nupkg
+/src/out

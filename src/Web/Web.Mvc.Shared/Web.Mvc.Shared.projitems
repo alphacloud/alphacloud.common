@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>5c121353-e465-4c38-8899-d49e01b026c8</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Alphacloud.Common.Web.Mvc</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CachePrivatelyAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\DisableClientCacheAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\ExcludeFromBrowserHistory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\HttpRequestExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\HttpResponseExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\NotModifiedResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsonNetResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Web.Mvc.nuspec" />
+  </ItemGroup>
+</Project>

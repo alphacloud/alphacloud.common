@@ -16,6 +16,8 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+
 namespace Core.Tests.Data
 {
     using System;

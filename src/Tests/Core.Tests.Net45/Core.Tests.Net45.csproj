@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{613CE068-4556-460C-8B54-B2A1B93E0514}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Core.Tests</RootNamespace>
+    <AssemblyName>Core.Tests.Net45</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\net45\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\net45\</OutputPath>
+    <DefineConstants>TRACE;NET45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\Alphacloud.Common.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentAssertions, Version=4.0.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentAssertions.4.0.1\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentAssertions.Core, Version=4.0.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentAssertions.4.0.1\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=9.2.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\JetBrains.Annotations.9.2.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core.Net45\Core.Net45.csproj">
+      <Project>{901df607-869c-449d-84ee-4bee030d8bb3}</Project>
+      <Name>Core.Net45</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Alphacloud.Common.snk">
+      <Link>Alphacloud.Common.snk</Link>
+    </None>
+    <None Include="..\Core.Tests\App.config">
+      <Link>App.config</Link>
+    </None>
+    <None Include="..\Core.Tests\CodeCoverage.runsettings">
+      <Link>CodeCoverage.runsettings</Link>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Core.Tests\Data\BinaryFormattingExtensionsTests.cs">
+      <Link>Data\BinaryFormattingExtensionsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\ChartHelperTests.cs">
+      <Link>Data\ChartHelperTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\CollectionExtensionsTests.cs">
+      <Link>Data\CollectionExtensionsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\DateTimeExtensionsTests.cs">
+      <Link>Data\DateTimeExtensionsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\DictionaryExtensionsTests.cs">
+      <Link>Data\DictionaryExtensionsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\EnumHelperTests.cs">
+      <Link>Data\EnumHelperTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\EnumResourceBinderTests.cs">
+      <Link>Data\EnumResourceBinderTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\NumberExtensionsTests.cs">
+      <Link>Data\NumberExtensionsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\NumberFormattingExtensionsTests.cs">
+      <Link>Data\NumberFormattingExtensionsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\OrderByHelperTests.cs">
+      <Link>Data\OrderByHelperTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\PagedListTests.cs">
+      <Link>Data\PagedListTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\PagingInfoTests.cs">
+      <Link>Data\PagingInfoTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\TimeSpanParserTests.cs">
+      <Link>Data\TimeSpanParserTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Data\WeekDaysTests.cs">
+      <Link>Data\WeekDaysTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Properties\Resources.Designer.cs">
+      <Link>Properties\Resources.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Reflection\DelegateAdjusterTests.cs">
+      <Link>Reflection\DelegateAdjusterTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Reflection\PropertyTests.cs">
+      <Link>Reflection\PropertyTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Reflection\ReflectionExtensionsTests.cs">
+      <Link>Reflection\ReflectionExtensionsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Core.Tests\Utils\ObjectPoolTests.cs">
+      <Link>Utils\ObjectPoolTests.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Core.Tests\Properties\Resources.resx">
+      <Link>Properties\Resources.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkReference="bd0e45f6-3065-4a49-af4b-0a451ec4e2f3" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
