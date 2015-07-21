@@ -32,6 +32,7 @@ namespace Infrastructure.Tests.Caching
         protected override void DoSetup()
         {
             LocalCache = Mockery.Create<ICache>();
+            LocalCache.SetupGet(lc => lc.Name).Returns("LocalCache");
             RemoteCache = Mockery.Create<ICache>();
         }
 

@@ -113,16 +113,22 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <returns></returns>
         public CacheStatistics GetStatistics()
         {
-            var backingStats = _backingCache.GetStatistics();
-            var localStats = _localCache.GetStatistics();
-            if (localStats.IsSuccess)
+            var backingCacheStats = _backingCache.GetStatistics();
+            var localCacheStats = _localCache.GetStatistics();
+            if (localCacheStats.IsSuccess)
             {
-                throw new NotImplementedException("Update local statistics");
-                //backingStats.Nodes.Add(
-                //    new CacheNodeStatistics(LocalCacheInstanceName, localStats.HitCount, localStats.GetCount,
-                //        localStats.PutCount, localStats.ItemCount));
+                var nodes = new List<CacheNodeStatistics>(backingCacheStats.NodeCount + 1) {
+                    new CacheNodeStatistics(LocalCacheInstanceName, localCacheStats.HitCount, localCacheStats.GetCount,
+                        localCacheStats.PutCount, localCacheStats.ItemCount)
+                };
+                nodes.AddRange(backingCacheStats.Nodes);
+
+                return new CacheStatistics(backingCacheStats.HitCount+localCacheStats.HitCount, backingCacheStats.GetCount+localCacheStats.GetCount, 
+                    backingCacheStats.PutCount, // items always added to both cached, so use backing cache parameter
+                    backingCacheStats.ItemCount+localCacheStats.ItemCount,
+                    nodes);
             }
-            return backingStats;
+            return backingCacheStats;
         }
 
 

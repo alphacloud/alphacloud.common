@@ -67,18 +67,19 @@ namespace Infrastructure.Tests.Caching
             stats.IsSuccess.Should().BeTrue();
             stats.Nodes.Should().HaveCount(1);
 
-            stats.GetCount.Should().Be(20);
-            stats.HitCount.Should().Be(5);
+            stats.GetCount.Should().Be(120);
+            stats.HitCount.Should().Be(15);
             stats.PutCount.Should().Be(100);
-            stats.ItemCount.Should().Be(100);
-            stats.HitRate.Should().Be(25);
+            stats.ItemCount.Should().Be(150);
+            stats.HitRate.Should().Be(12);
 
-            var locaStats = stats.Nodes.First();
-            locaStats.GetCount.Should().Be(100);
-            locaStats.HitCount.Should().Be(10);
-            locaStats.PutCount.Should().Be(100);
-            locaStats.ItemCount.Should().Be(50);
-            locaStats.HitRate.Should().Be(10);
+            var localStats = stats.Nodes.First();
+            localStats.Server.Should().Be("LocalCache");
+            localStats.GetCount.Should().Be(100);
+            localStats.HitCount.Should().Be(10);
+            localStats.PutCount.Should().Be(100);
+            localStats.ItemCount.Should().Be(50);
+            localStats.HitRate.Should().Be(10);
         }
 
 
