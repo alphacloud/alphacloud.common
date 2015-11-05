@@ -1,0 +1,10 @@
+version: 1.0.{build}
+configuration: Release
+platform: Any CPU
+build:
+  project: build.proj
+  verbosity: minimal
+test:
+  assemblies:
+  - src/Tests/Bin/Release/net40/*.Tests.dll
+  - src/Tests/Bin/Release/net45/*.Tests.dll
