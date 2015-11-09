@@ -44,10 +44,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\DelegateAdjuster.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Property.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Resources\EnumResourceBinder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\IPrincipalProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\ThreadPrincipalProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Strings\Strings1.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\AsyncTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\TaskExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Clock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Disposer.cs" />

@@ -19,8 +19,8 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("4528d049-8f75-4e1a-9946-c96d9892bf8a")]
 
-[assembly: AssemblyVersion ("0.3.3.0") ]
-[assembly: AssemblyFileVersion ("0.3.3.0") ]
+[assembly: AssemblyVersion ("0.3.3.1") ]
+[assembly: AssemblyFileVersion ("0.3.3.1") ]
 
 #if NET40
     [assembly: InternalsVisibleTo("Core.Tests, PublicKey="

@@ -76,6 +76,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Web.Mvc.Shared", "Web\Web.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Mvc.Mvc5", "Web\Web.Mvc.Mvc5\Web.Mvc.Mvc5.csproj", "{D6291A8E-398D-469A-B997-5A17D5CB4F71}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Net46", "Core.Net46\Core.Net46.csproj", "{D9ADD594-434A-458D-BFA8-BB2F9FD433DF}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Web\Web.Mvc.Shared\Web.Mvc.Shared.projitems*{d6291a8e-398d-469a-b997-5a17d5cb4f71}*SharedItemsImports = 4
@@ -86,6 +88,7 @@ Global
 		Infrastructure.Shared\Infrastructure.Shared.projitems*{832c2486-e1f8-4a8b-89b8-729946393804}*SharedItemsImports = 4
 		Testing.Nunit.Shared\Testing.Nunit.Shared.projitems*{b94885e3-6d45-47d3-b9b5-c78bd45653f4}*SharedItemsImports = 4
 		Infrastructure.Shared\Infrastructure.Shared.projitems*{865167ef-8758-4409-a9b7-15257661d952}*SharedItemsImports = 13
+		Core.Shared\Core.Shared.projitems*{d9add594-434a-458d-bfa8-bb2f9fd433df}*SharedItemsImports = 4
 		Core.Shared\Core.Shared.projitems*{dc27c4e6-4fba-4d02-b7b4-bb9a48cf25b2}*SharedItemsImports = 4
 		Core.Shared\Core.Shared.projitems*{901df607-869c-449d-84ee-4bee030d8bb3}*SharedItemsImports = 4
 		Web\Web.Mvc.Shared\Web.Mvc.Shared.projitems*{5c121353-e465-4c38-8899-d49e01b026c8}*SharedItemsImports = 13
@@ -167,6 +170,10 @@ Global
 		{D6291A8E-398D-469A-B997-5A17D5CB4F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6291A8E-398D-469A-B997-5A17D5CB4F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6291A8E-398D-469A-B997-5A17D5CB4F71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9ADD594-434A-458D-BFA8-BB2F9FD433DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9ADD594-434A-458D-BFA8-BB2F9FD433DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9ADD594-434A-458D-BFA8-BB2F9FD433DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9ADD594-434A-458D-BFA8-BB2F9FD433DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

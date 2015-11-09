@@ -82,6 +82,7 @@
     <Compile Include="Data\DateTimeExtensionsTests.cs" />
     <Compile Include="Data\TimeSpanParserTests.cs" />
     <Compile Include="Data\WeekDaysTests.cs" />
+    <Compile Include="Reflection\TypeExtensionTests.cs" />
     <Compile Include="Utils\ObjectPoolTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
