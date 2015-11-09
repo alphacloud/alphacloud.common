@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Alphacloud.Common.Caching.Memcached</id>
-    <version>0.3.2.0</version>
+    <version>0.3.2.1</version>
     <title>Enyim Memcached adapter for common caching infrastructure</title>
     <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>

@@ -142,6 +142,9 @@
     <Compile Include="..\Core.Tests\Reflection\ReflectionExtensionsTests.cs">
       <Link>Reflection\ReflectionExtensionsTests.cs</Link>
     </Compile>
+    <Compile Include="..\Core.Tests\Reflection\TypeExtensionTests.cs">
+      <Link>Reflection\TypeExtensionTests.cs</Link>
+    </Compile>
     <Compile Include="..\Core.Tests\Utils\ObjectPoolTests.cs">
       <Link>Utils\ObjectPoolTests.cs</Link>
     </Compile>
@@ -157,7 +160,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="bd0e45f6-3065-4a49-af4b-0a451ec4e2f3" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="bd0e45f6-3065-4a49-af4b-0a451ec4e2f3" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

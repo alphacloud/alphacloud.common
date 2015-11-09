@@ -16,8 +16,8 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e995e036-ecd6-4dd8-801c-d8888b484aa1")]
 
-[assembly: AssemblyVersion("0.1.2.1")]
-[assembly: AssemblyFileVersion("0.1.2.1")]
+[assembly: AssemblyVersion("0.1.2.2")]
+[assembly: AssemblyFileVersion("0.1.2.2")]
 
 [assembly: InternalsVisibleTo("Caching.Redis.Tests, PublicKey="
     + "002400000480000094000000060200000024000052534131000400000100010013c2547ac065d2"
