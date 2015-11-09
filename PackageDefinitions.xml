@@ -6,49 +6,49 @@
     <PackageDefinition Include="Core">
       <RootFolder>$(SrcDir)\Core.Shared</RootFolder>
       <NuspecFile>Core.nuspec</NuspecFile>
-      <Version>0.3.3.0</Version>
+      <Version>0.3.3.2</Version>
     </PackageDefinition>
     
     <PackageDefinition Include="Infrastructure">
       <RootFolder>$(SrcDir)\Infrastructure.Shared</RootFolder>
       <NuspecFile>Infrastructure.nuspec</NuspecFile>
-      <Version>0.4.2.0</Version>
+      <Version>0.4.2.1</Version>
     </PackageDefinition>
     
     <PackageDefinition Include="Caching.Memcached.CommonLogging">
       <RootFolder>$(SrcDir)\Integration\Caching.Memcached.CommonLogging</RootFolder>
       <NuspecFile>Caching.Memcached.CommonLogging.nuspec</NuspecFile>
-      <Version>0.3.2.0</Version>
+      <Version>0.3.2.1</Version>
     </PackageDefinition>
     
     <PackageDefinition Include="Caching.Memcached">
       <RootFolder>$(SrcDir)\Integration\Caching.Memcached</RootFolder>
       <NuspecFile>Caching.Memcached.nuspec</NuspecFile>
-      <Version>0.3.2.0</Version>
+      <Version>0.3.2.1</Version>
     </PackageDefinition>
     
     <PackageDefinition Include="Caching.Redis">
       <RootFolder>$(SrcDir)\Integration\Caching.Redis.Net45</RootFolder>
       <NuspecFile>Caching.Redis.nuspec</NuspecFile>
-      <Version>0.1.2.1</Version>
+      <Version>0.1.2.2</Version>
     </PackageDefinition>
 
     <PackageDefinition Include="ServiceLocator.Castle">
       <RootFolder>$(SrcDir)\Integration\ServiceLocator.Castle</RootFolder>
       <NuspecFile>ServiceLocator.Castle.nuspec</NuspecFile>
-      <Version>1.1.2.0</Version>
+      <Version>1.1.2.1</Version>
     </PackageDefinition>
 
     <PackageDefinition Include="Testing.Nunit">
       <RootFolder>$(SrcDir)\Testing.Nunit.Shared</RootFolder>
       <NuspecFile>Testing.Nunit.nuspec</NuspecFile>
-      <Version>0.3.2.0</Version>
+      <Version>0.3.2.1</Version>
     </PackageDefinition>
 
     <PackageDefinition Include="Web.Mvc">
       <RootFolder>$(SrcDir)\Web\Web.Mvc.Shared</RootFolder>
       <NuspecFile>Web.Mvc.nuspec</NuspecFile>
-      <Version>0.2.1.2</Version>
+      <Version>0.2.1.3</Version>
     </PackageDefinition>
 
   </ItemGroup>
