@@ -30,7 +30,7 @@
     <PackageDefinition Include="Caching.Redis">
       <RootFolder>$(SrcDir)\Integration\Caching.Redis.Net45</RootFolder>
       <NuspecFile>Caching.Redis.nuspec</NuspecFile>
-      <Version>0.1.2.2</Version>
+      <Version>0.1.2.3</Version>
     </PackageDefinition>
 
     <PackageDefinition Include="ServiceLocator.Castle">
