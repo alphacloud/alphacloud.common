@@ -20,15 +20,47 @@ namespace Alphacloud.Common.Core.Reflection
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Data;
     using JetBrains.Annotations;
 
+    /// <summary>
+    /// </summary>
     [PublicAPI]
     public static class TypeExtensions
     {
         /// <summary>
-        ///   Check if <paramref name="thisType" /> implements open generic type <paramref name="genericInterface" />
+        ///   Checks if type implements specific interface (or abstract class)
+        /// </summary>
+        /// <param name="thisType">Type to check.</param>
+        /// <param name="interfaceType">Interface or class type.</param>
+        /// <returns><c>true</c> if type implements specific interface; <c>false</c> otherwise.</returns>
+        public static bool Implements([NotNull] this Type thisType, [NotNull] Type interfaceType)
+        {
+            if (thisType == null) throw new ArgumentNullException(nameof(thisType));
+            if (interfaceType == null) throw new ArgumentNullException(nameof(interfaceType));
+
+            if (interfaceType.IsGenericTypeDefinition)
+                return thisType.ImplementsGeneric(interfaceType);
+
+            return interfaceType.IsAssignableFrom(thisType);
+        }
+
+
+        /// <summary>
+        ///   Checks if type implements specific interface (or abstract class)
+        /// </summary>
+        /// <param name="thisType">Type to check.</param>
+        /// ///
+        /// <typeparam name="T">Interface or class type</typeparam>
+        /// <returns><c>true</c> if type implements specific interface; <c>false</c> otherwise.</returns>
+        public static bool Implements<T>(this Type thisType)
+        {
+            return Implements(thisType, typeof (T));
+        }
+
+
+        /// <summary>
+        ///   Checks if <paramref name="thisType" /> implements open generic type <paramref name="genericInterface" />
         /// </summary>
         /// <param name="thisType"></param>
         /// <param name="genericInterface"></param>
@@ -37,22 +69,48 @@ namespace Alphacloud.Common.Core.Reflection
         {
             if (thisType == null) throw new ArgumentNullException(nameof(thisType));
             if (genericInterface == null) throw new ArgumentNullException(nameof(genericInterface));
+
             if (!genericInterface.IsGenericTypeDefinition)
                 throw new ArgumentException("Type not represents generic type definition", nameof(genericInterface));
             if (!genericInterface.IsInterface)
                 throw new ArgumentException("Argument is not Interface", nameof(genericInterface));
 
-            return thisType.GetInterfaces().Where(intf => intf.IsGenericType)
-                .Any(intf => intf.GetGenericTypeDefinition() == genericInterface);
+            while (true)
+            {
+                if (genericInterface.IsInterface)
+                {
+                    var implementedInterfaces = thisType.GetInterfaces();
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    // ReSharper disable once LoopCanBeConvertedToQuery
+                    for (var idx = 0; idx < implementedInterfaces.Length; idx++)
+                    {
+                        var intf = implementedInterfaces[idx];
+                        if (intf.IsGenericType && intf.GetGenericTypeDefinition() == genericInterface)
+                            return true;
+                    }
+                }
+
+                if (thisType.IsGenericType && thisType.GetGenericTypeDefinition() == genericInterface)
+                    return true;
+
+                var baseType = thisType.BaseType;
+                if (baseType == null)
+                    return false;
+
+                thisType = baseType;
+            }
         }
 
+
         /// <summary>
-        /// Find non-generic interfaces inherited from <paramref name="genericInterface"/> implemented by <paramref name="thisType"/>.
+        ///   Finds non-generic interfaces inherited from <paramref name="genericInterface" /> implemented by
+        ///   <paramref name="thisType" />.
         /// </summary>
         /// <param name="thisType"></param>
         /// <param name="genericInterface">Generic interface type.</param>
         /// <returns>Interface types definitions.</returns>
-        public static IEnumerable<Type> FindNonGenericInterfacesOf([NotNull] this Type thisType, [NotNull] Type genericInterface)
+        public static IEnumerable<Type> FindNonGenericInterfacesOf([NotNull] this Type thisType,
+            [NotNull] Type genericInterface)
         {
             if (genericInterface == null) throw new ArgumentNullException(nameof(genericInterface));
             if (thisType == null) throw new ArgumentNullException(nameof(thisType));
@@ -65,7 +123,5 @@ namespace Alphacloud.Common.Core.Reflection
             return thisType.FindInterfaces((type, o) =>
                 !type.IsGenericType && type.ImplementsGeneric(genericInterface), null);
         }
-
-
     }
 }

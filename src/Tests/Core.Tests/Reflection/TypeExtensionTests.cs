@@ -30,7 +30,33 @@ namespace Core.Tests.Reflection
         [Test]
         public void IsOpenGenertiTypeImplementation_Should_Detect_BaseInterface()
         {
-            typeof (Bar).ImplementsGeneric(typeof (IFoo<>))
+            typeof (Bar).ImplementsGeneric(typeof (IGenericInterface<>))
+                .Should().BeTrue();
+        }
+
+
+        [Test]
+        public void Implements_Should_DetectOpenGenericDefitinions()
+        {
+            typeof (ClosedType).Implements<IClosedInterface>()
+                .Should().BeTrue();
+
+            typeof (Foo).Implements(typeof (IGenericInterface<>));
+        }
+
+
+        [Test]
+        public void Implements_Should_DetectGenericDefinition()
+        {
+            typeof (Bar).Implements<IGenericInterface<int>>()
+                .Should().BeTrue();
+        }
+
+
+        [Test]
+        public void Implements_Should_DetectClassImplementation()
+        {
+            typeof (Foo).Implements<Bar>()
                 .Should().BeTrue();
         }
 
@@ -49,18 +75,19 @@ namespace Core.Tests.Reflection
 
         #region Nested type: Bar
 
-        class Bar : IFoo<int>
+        class Bar : IGenericInterface<int>
         {
-            #region IFoo<int> Members
-
             public int Get()
             {
-                return 1;
+                return 0;
             }
-
-            #endregion
         }
 
+
+        class Foo : Bar
+        {
+            
+        }
         #endregion
 
         #region Nested type: ClosedType
@@ -69,7 +96,7 @@ namespace Core.Tests.Reflection
         {
             #region IClosedInterface Members
 
-            public int Bar()
+            public int Get()
             {
                 return 1;
             }
@@ -87,20 +114,12 @@ namespace Core.Tests.Reflection
 
         #endregion
 
-        #region Nested type: IFoo
-
-        interface IFoo<out T>
-        {
-            T Get();
-        }
-
-        #endregion
 
         #region Nested type: IGenericInterface
 
         private interface IGenericInterface<out T>
         {
-            T Bar();
+            T Get();
         }
 
         #endregion
