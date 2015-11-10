@@ -18,7 +18,6 @@
 
 namespace Alphacloud.Common.Core.Threading
 {
-#if NET45 || NET46
     using System;
     using System.Threading.Tasks;
     using JetBrains.Annotations;
@@ -29,16 +28,32 @@ namespace Alphacloud.Common.Core.Threading
     [PublicAPI]
     public static class AsyncTask
     {
+        private static readonly Lazy<Task> s_completed = new Lazy<Task>(CreateCompletedTask);
+
+
+        private static Task CreateCompletedTask()
+        {
+#if NET40
+            var tcs = new TaskCompletionSource<int>();
+            tcs.SetResult(0);
+            return tcs.Task;
+#else
+            return Task.FromResult(0);
+#endif
+        }
+
+
         /// <summary>
         ///   Creates completed void task.
         /// </summary>
         /// <returns></returns>
         public static Task Completed()
         {
-            return Task.FromResult(0);
+            return s_completed.Value;
         }
 
 
+#if NET46 || NET45
         /// <summary>
         ///   Wraps asynchronous task in synchronous wrapper.
         ///   Method will block unit tasks completes.
@@ -57,7 +72,6 @@ namespace Alphacloud.Common.Core.Threading
                     .GetAwaiter()
                     .GetResult();
         }
-    }
-
 #endif
+    }
 }

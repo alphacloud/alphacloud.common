@@ -6,7 +6,7 @@
     <PackageDefinition Include="Core">
       <RootFolder>$(SrcDir)\Core.Shared</RootFolder>
       <NuspecFile>Core.nuspec</NuspecFile>
-      <Version>0.3.3.2</Version>
+      <Version>0.3.4.0</Version>
     </PackageDefinition>
     
     <PackageDefinition Include="Infrastructure">
