@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Alphacloud.Common.Testing.Nunit</id>
-    <version>0.3.2.1</version>
+    <version>0.3.3.0</version>
     <title>Test helpers (NUnit/MOQ based)</title>
     <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>
@@ -13,11 +13,10 @@
     <copyright>Copyright (c) 2013-2015 Alphacloud.net</copyright>
     <tags>alphacloud signed testing nunit moq</tags>
     <releaseNotes>
-Multi-framework support: .NET 5 and .NET 4.5;
-Dependencies updated.
+Update dependencies.
     </releaseNotes>
     <dependencies>
-      <dependency id="Jetbrains.Annotations" version="[9.2.0,10.0.0)" />
+      <dependency id="Jetbrains.Annotations" version="[10.0.0,12.0.0)" />
       <dependency id="AutoMapper" version="[4.1.0,5.0.0)" />
       <dependency id="FluentAssertions" version="[4.0.0,5.0.0)" />
       <dependency id="Moq" version="[4.2.1510.0,5.0.0.0)" />

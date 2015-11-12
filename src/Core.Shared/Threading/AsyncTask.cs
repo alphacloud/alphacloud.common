@@ -72,6 +72,24 @@ namespace Alphacloud.Common.Core.Threading
                     .GetAwaiter()
                     .GetResult();
         }
+
+
+        /// <summary>
+        ///   Wraps asynchronous task in synchronous wrapper.
+        ///   Method will block unit tasks completes.
+        /// </summary>
+        /// <param name="asyncTask">Asynchronous task</param>
+        /// <param name="continueOnCapturedContext"></param>
+        public static void Synchronize([NotNull] Func<Task> asyncTask,
+            bool continueOnCapturedContext = false)
+        {
+            if (asyncTask == null) throw new ArgumentNullException(nameof(asyncTask));
+
+            Task.Run(async () => await asyncTask().ConfigureAwait(continueOnCapturedContext))
+                .GetAwaiter()
+                .GetResult();
+        }
+
 #endif
     }
 }
