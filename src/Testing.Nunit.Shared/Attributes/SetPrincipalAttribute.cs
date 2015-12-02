@@ -19,27 +19,27 @@
 namespace Alphacloud.Common.Testing.Nunit.Attributes
 {
     using System;
+    using System.Security;
     using System.Security.Principal;
     using System.Threading;
-
     using JetBrains.Annotations;
-
     using NUnit.Framework;
+    using NUnit.Framework.Interfaces;
 
     /// <summary>
-    /// Sets custom principal for test execution.
+    ///   Sets custom principal for test execution.
     /// </summary>
     [PublicAPI]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public sealed class SetPrincipalAttribute : Attribute, ITestAction
     {
-        readonly string _identity;
         readonly string _authType;
+        readonly string _identity;
         IPrincipal _oldPrincipal;
 
 
         /// <summary>
-        /// Specifies user identity to set.
+        ///   Specifies user identity to set.
         /// </summary>
         /// <param name="identity">The identity.</param>
         public SetPrincipalAttribute(string identity)
@@ -49,7 +49,7 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
 
 
         /// <summary>
-        /// Specifies user identity and authentication type.
+        ///   Specifies user identity and authentication type.
         /// </summary>
         /// <param name="identity">The identity.</param>
         /// <param name="authType">The authentication type.</param>
@@ -60,13 +60,18 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
 
 
         /// <summary>
-        /// User roles (optional).
+        ///   User roles (optional).
         /// </summary>
         public string[] Roles { get; set; }
 
         #region ITestAction Members
 
-        public void BeforeTest(TestDetails testDetails)
+        /// <summary>
+        ///   Executed before each test is run
+        /// </summary>
+        /// <param name="test">The test that is going to be run.</param>
+        /// <exception cref="SecurityException">The caller does not have the permission required to set the principal. </exception>
+        public void BeforeTest(ITest test)
         {
             _oldPrincipal = Thread.CurrentPrincipal;
             var identity = string.IsNullOrEmpty(_authType)
@@ -79,16 +84,24 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
         }
 
 
-        public void AfterTest(TestDetails testDetails)
+        /// <summary>
+        ///   Executed after each test is run
+        /// </summary>
+        /// <param name="test">The test that has just been run.</param>
+        /// <exception cref="SecurityException">The caller does not have the permission required to set the principal. </exception>
+        public void AfterTest(ITest test)
         {
             Thread.CurrentPrincipal = _oldPrincipal;
         }
 
 
-        public ActionTargets Targets
-        {
-            get { return ActionTargets.Test; }
-        }
+        /// <summary>
+        ///   Provides the target for the action attribute
+        /// </summary>
+        /// <returns>
+        ///   The target for the action attribute
+        /// </returns>
+        public ActionTargets Targets => ActionTargets.Test;
 
         #endregion
     }

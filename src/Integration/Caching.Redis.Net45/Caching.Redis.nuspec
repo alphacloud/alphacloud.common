@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>StackExchange Redis adapter for common caching infrastructure</description>
     <releaseNotes>
-Update dependencies.
+Upgrade Common.Logging.
     </releaseNotes>
     <copyright>Copyright (c) 2013-2015 Alphacloud.net</copyright>
     <tags>alphacloud caching redis</tags>
@@ -20,7 +20,7 @@ Update dependencies.
       <dependency id="Common.Logging" version="[3.3.0,4.0.0)" />
       <dependency id="StackExchange.Redis.StrongName" version="[1.0.488,2.0.0)" />
       <dependency id="Alphacloud.Common.Core" version="[0.3.5.0,2.0.0.0)" />
-      <dependency id="Alphacloud.Common.Infrastructure" version="[0.4.3.0,2.0.0.0)" />
+      <dependency id="Alphacloud.Common.Infrastructure" version="[0.4.4.0,2.0.0.0)" />
       <dependency id="Microsoft.IO.RecyclableMemoryStream" version="[1.1.0,2.0.0)" />
     </dependencies>
   </metadata>

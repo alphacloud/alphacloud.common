@@ -179,7 +179,7 @@ namespace Caching.Redis.Tests
         }
 
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             var configurationOptions = new ConfigurationOptions {
@@ -198,7 +198,7 @@ namespace Caching.Redis.Tests
         }
 
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TestFixtureTearDown()
         {
             Disposer.TryDispose(_redis);

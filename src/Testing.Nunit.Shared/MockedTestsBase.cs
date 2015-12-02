@@ -45,6 +45,7 @@ namespace Alphacloud.Common.Testing.Nunit
         /// <summary>
         ///   Cleanup tests
         /// </summary>
+        /// <exception cref="MockException">One or more mocks had expectations that were not satisfied.</exception>
         [TearDown]
         public void TearDown()
         {

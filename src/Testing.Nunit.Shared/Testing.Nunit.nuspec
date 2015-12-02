@@ -13,14 +13,14 @@
     <copyright>Copyright (c) 2013-2015 Alphacloud.net</copyright>
     <tags>alphacloud signed testing nunit moq</tags>
     <releaseNotes>
-Update dependencies.
+Upgrade to NUnit 3.
     </releaseNotes>
     <dependencies>
       <dependency id="Jetbrains.Annotations" version="[10.0.0,12.0.0)" />
-      <dependency id="AutoMapper" version="[4.1.0,5.0.0)" />
+      <dependency id="AutoMapper" version="[4.1.1,5.0.0)" />
       <dependency id="FluentAssertions" version="[4.0.0,5.0.0)" />
       <dependency id="Moq" version="[4.2.1510.0,5.0.0.0)" />
-      <dependency id="NUnit" version="[2.6.4,4.0.0)" />
+      <dependency id="NUnit" version="[3.0.0,4.0.0)" />
     </dependencies>
   </metadata>
 </package>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>efecd478-85af-4037-9c17-75297811c158</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Infrastructure.Tests</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheBaseTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheConfigurationTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheExtensionsTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheFactoryBaseTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CompositeCacheDebugModeTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CompositeCacheFactoryTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CompositeCacheTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\CompositeCacheTestsBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\DisabledCompositeFactoryTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\MemoryCacheTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\ProportionalTimeoutTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\TransformingCacheWrapperTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\UserIdentityCacheKeyScopeTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Castle\CastleWindsorTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\CapturedContextTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\InstrumentationContextTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\InstrumentationLoggerTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Instrumentation\InstrumentationRuntimeTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\CaptureLog4NetEvents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\CaptureLog4NetMessagesTests.cs" />
+  </ItemGroup>
+</Project>

@@ -22,9 +22,10 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
     using Core.Utils;
     using JetBrains.Annotations;
     using NUnit.Framework;
+    using NUnit.Framework.Interfaces;
 
     /// <summary>
-    ///   Set custom date time on <see cref="Clock" /> for time of the test execution.
+    ///   Sets custom date time on <see cref="Clock" /> for time of the test execution.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     [PublicAPI]
@@ -57,7 +58,7 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
         ///   Executed before each test is run
         /// </summary>
         /// <param name="testDetails">Provides details about the test that is going to be run.</param>
-        public void BeforeTest(TestDetails testDetails)
+        public void BeforeTest(ITest testDetails)
         {
             Clock.CurrentTime = () => _datetime;
             Clock.CurrentTimeUtc = () => _datetimeUtc;
@@ -69,7 +70,7 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
         ///   Executed after each test is run
         /// </summary>
         /// <param name="testDetails">Provides details about the test that has just been run.</param>
-        public void AfterTest(TestDetails testDetails)
+        public void AfterTest(ITest testDetails)
         {
             Clock.Reset();
         }
@@ -79,10 +80,7 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
         ///   Provides the target for the action attribute
         /// </summary>
         /// <returns>The target for the action attribute</returns>
-        public ActionTargets Targets
-        {
-            get { return ActionTargets.Test; }
-        }
+        public ActionTargets Targets => ActionTargets.Test;
 
         #endregion
     }

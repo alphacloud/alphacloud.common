@@ -32,8 +32,6 @@ namespace Infrastructure.Tests.Instrumentation
 
 
     [TestFixture]
-    [SetCulture("ru-RU")]
-    [SetUICulture("uk-UA")]
     [SetPrincipal("capture-context")]
     class CapturedContextTests : MockedTestsBase
     {
@@ -59,7 +57,7 @@ namespace Infrastructure.Tests.Instrumentation
             var uiCulture = new CultureInfo("en-GB");
             var principal = new GenericPrincipal(new GenericIdentity("captured"), new string[0]);
             var ctx = new CapturedContext(culture, uiCulture,
-                principal, 11,
+                principal, -1,
                 "cid-001", _instrumentationContext.Object);
 
             ctx.Set();
@@ -95,7 +93,9 @@ namespace Infrastructure.Tests.Instrumentation
 
 
         [Test]
-        public void CaptureContext_When_Notinitialized_Should_CaptureCultureAndPrincipalOnly()
+        [SetCulture("ru-RU")]
+        [SetUICulture("uk-UA")]
+        public void CaptureContext_When_NotInitialized_Should_CaptureCultureAndPrincipalOnly()
         {
             var context = InstrumentationRuntime.Instance.CaptureContext();
 
@@ -129,5 +129,7 @@ namespace Infrastructure.Tests.Instrumentation
             Thread.CurrentThread.CurrentUICulture.Should().Be(uiCulture);
             Thread.CurrentPrincipal.Identity.Name.Should().Be("captured");
         }
+
+
     }
 }

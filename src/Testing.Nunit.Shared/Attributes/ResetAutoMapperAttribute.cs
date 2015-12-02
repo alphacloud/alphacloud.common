@@ -22,8 +22,11 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
     using AutoMapper;
     using JetBrains.Annotations;
     using NUnit.Framework;
+    using NUnit.Framework.Interfaces;
 
-
+    /// <summary>
+    /// Clears AutoMapper mappings before each test.
+    /// </summary>
     [PublicAPI]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public sealed class ResetAutoMapperAttribute : Attribute, ITestAction
@@ -33,8 +36,8 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
         /// <summary>
         ///   Executed before each test is run
         /// </summary>
-        /// <param name="testDetails">Provides details about the test that is going to be run.</param>
-        public void BeforeTest(TestDetails testDetails)
+        /// <param name="test">Provides details about the test that is going to be run.</param>
+        public void BeforeTest(ITest test)
         {
             Mapper.Reset();
         }
@@ -43,8 +46,8 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
         /// <summary>
         ///   Executed after each test is run
         /// </summary>
-        /// <param name="testDetails">Provides details about the test that has just been run.</param>
-        public void AfterTest(TestDetails testDetails)
+        /// <param name="test">Provides details about the test that has just been run.</param>
+        public void AfterTest(ITest test)
         {
             Mapper.Reset();
         }
@@ -56,10 +59,7 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
         /// <returns>
         ///   The target for the action attribute
         /// </returns>
-        public ActionTargets Targets
-        {
-            get { return ActionTargets.Suite; }
-        }
+        public ActionTargets Targets => ActionTargets.Suite;
 
         #endregion
     }

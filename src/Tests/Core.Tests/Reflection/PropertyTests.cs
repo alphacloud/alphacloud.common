@@ -45,11 +45,9 @@
 
 
         [Test]
-        [ExpectedException(typeof (InvalidOperationException))]
-        public void Name_Should_Not_HandleIndexers()
+        public void Name_Should_Throw_IfIndexerSpecified()
         {
-            Property.Name<Aggregate>(a => a.List[0])
-                .Should().Be("List[0]");
+            Assert.Throws<InvalidOperationException>(() => Property.Name<Aggregate>(a => a.List[0]));
         }
 
         [Test]
