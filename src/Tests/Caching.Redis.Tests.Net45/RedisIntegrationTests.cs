@@ -75,7 +75,7 @@ namespace Caching.Redis.Tests
 
 
         [Test]
-        public async void CanMultiGet()
+        public async Task CanMultiGet()
         {
             _db.StringSet(_key2, "value", 10.Seconds());
             var res = await _db.StringGetAsync(new RedisKey[] {_key1, _key2});
@@ -96,7 +96,7 @@ namespace Caching.Redis.Tests
 
 
         [Test]
-        public async void Put_Should_AddItemToCacheWithExpiration()
+        public async Task Put_Should_AddItemToCacheWithExpiration()
         {
             var key = Guid.NewGuid().ToString("D");
             var value = "val." + key;
