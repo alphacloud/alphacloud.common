@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ServiceLocator.Castle.Tests</RootNamespace>
-    <AssemblyName>ServiceLocator.Castle.Tests</AssemblyName>
+    <AssemblyName>Tests.ServiceLocator.Castle.Net40</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>

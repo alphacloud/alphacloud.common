@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Infrastructure.Tests</RootNamespace>
-    <AssemblyName>Infrastructure.Tests.Net45</AssemblyName>
+    <AssemblyName>Tests.Infrastructure.Net45</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
