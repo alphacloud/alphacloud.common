@@ -1,7 +1,6 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F69E87C-76F0-48C8-B4B0-C2EB68931D89}"
 	ProjectSection(SolutionItems) = preProject
@@ -40,10 +39,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C44573
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.Redis.Tests", "Tests\Caching.Redis.Tests\Caching.Redis.Tests.csproj", "{15985B26-2846-42C5-99FB-932FAD071A36}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.Redis.Net45", "Integration\Caching.Redis.Net45\Caching.Redis.Net45.csproj", "{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Net45", "Core.Net45\Core.Net45.csproj", "{901DF607-869C-449D-84EE-4BEE030D8BB3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests.Net45", "Tests\Core.Tests.Net45\Core.Tests.Net45.csproj", "{613CE068-4556-460C-8B54-B2A1B93E0514}"
@@ -78,6 +73,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Mvc.Mvc5", "Web\Web.Mvc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Net46", "Core.Net46\Core.Net46.csproj", "{D9ADD594-434A-458D-BFA8-BB2F9FD433DF}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Infrastructure.Tests.Shared", "Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.shproj", "{C2104A0C-2E00-409C-AAF3-D010AD5230CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Tests.Net45", "Tests\Infrastructure.Tests.Net45\Infrastructure.Tests.Net45.csproj", "{29124D65-FDB8-4D03-AC7E-FC4F530DCC27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.Redis.Net45", "Integration\Caching.Redis.Net45\Caching.Redis.Net45.csproj", "{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.Redis.Tests.Net45", "Tests\Caching.Redis.Tests.Net45\Caching.Redis.Tests.Net45.csproj", "{15985B26-2846-42C5-99FB-932FAD071A36}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Web\Web.Mvc.Shared\Web.Mvc.Shared.projitems*{d6291a8e-398d-469a-b997-5a17d5cb4f71}*SharedItemsImports = 4
@@ -90,8 +93,11 @@ Global
 		Infrastructure.Shared\Infrastructure.Shared.projitems*{865167ef-8758-4409-a9b7-15257661d952}*SharedItemsImports = 13
 		Core.Shared\Core.Shared.projitems*{d9add594-434a-458d-bfa8-bb2f9fd433df}*SharedItemsImports = 4
 		Core.Shared\Core.Shared.projitems*{dc27c4e6-4fba-4d02-b7b4-bb9a48cf25b2}*SharedItemsImports = 4
+		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{29124d65-fdb8-4d03-ac7e-fc4f530dcc27}*SharedItemsImports = 4
+		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{c2104a0c-2e00-409c-aaf3-d010ad5230ce}*SharedItemsImports = 13
 		Core.Shared\Core.Shared.projitems*{901df607-869c-449d-84ee-4bee030d8bb3}*SharedItemsImports = 4
 		Web\Web.Mvc.Shared\Web.Mvc.Shared.projitems*{5c121353-e465-4c38-8899-d49e01b026c8}*SharedItemsImports = 13
+		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{8b9a63fb-b63f-47ac-b7fa-4032cdabe7bb}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -134,14 +140,6 @@ Global
 		{F33F2379-0D62-477A-824A-61D6E5AAE990}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F33F2379-0D62-477A-824A-61D6E5AAE990}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F33F2379-0D62-477A-824A-61D6E5AAE990}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15985B26-2846-42C5-99FB-932FAD071A36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15985B26-2846-42C5-99FB-932FAD071A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15985B26-2846-42C5-99FB-932FAD071A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15985B26-2846-42C5-99FB-932FAD071A36}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{901DF607-869C-449D-84EE-4BEE030D8BB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{901DF607-869C-449D-84EE-4BEE030D8BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{901DF607-869C-449D-84EE-4BEE030D8BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -174,6 +172,18 @@ Global
 		{D9ADD594-434A-458D-BFA8-BB2F9FD433DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9ADD594-434A-458D-BFA8-BB2F9FD433DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9ADD594-434A-458D-BFA8-BB2F9FD433DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29124D65-FDB8-4D03-AC7E-FC4F530DCC27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29124D65-FDB8-4D03-AC7E-FC4F530DCC27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29124D65-FDB8-4D03-AC7E-FC4F530DCC27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29124D65-FDB8-4D03-AC7E-FC4F530DCC27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15985B26-2846-42C5-99FB-932FAD071A36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15985B26-2846-42C5-99FB-932FAD071A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15985B26-2846-42C5-99FB-932FAD071A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15985B26-2846-42C5-99FB-932FAD071A36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,12 +195,14 @@ Global
 		{F9E6CF1B-50A1-436F-A509-B97832A74346} = {825AAA21-8078-4548-A565-B0C76E2EE0FB}
 		{8DF06376-2BE9-454F-A06F-AF6381B6125D} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
 		{F33F2379-0D62-477A-824A-61D6E5AAE990} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
-		{15985B26-2846-42C5-99FB-932FAD071A36} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
-		{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E} = {825AAA21-8078-4548-A565-B0C76E2EE0FB}
 		{613CE068-4556-460C-8B54-B2A1B93E0514} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
 		{A5878975-B3CE-4E4C-8B83-017DA279A039} = {825AAA21-8078-4548-A565-B0C76E2EE0FB}
 		{6DA87CEA-ADF9-444E-8832-37B9CC2ABBCB} = {825AAA21-8078-4548-A565-B0C76E2EE0FB}
 		{5C121353-E465-4C38-8899-D49E01B026C8} = {F5F4F3E9-B563-4AE2-A50D-FD22014B1C71}
 		{D6291A8E-398D-469A-B997-5A17D5CB4F71} = {F5F4F3E9-B563-4AE2-A50D-FD22014B1C71}
+		{C2104A0C-2E00-409C-AAF3-D010AD5230CE} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
+		{29124D65-FDB8-4D03-AC7E-FC4F530DCC27} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
+		{97796FA0-A5AC-43EE-A9B7-95909E2C0D8E} = {825AAA21-8078-4548-A565-B0C76E2EE0FB}
+		{15985B26-2846-42C5-99FB-932FAD071A36} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
 	EndGlobalSection
 EndGlobal
