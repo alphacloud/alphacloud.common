@@ -42,13 +42,13 @@
     <PackageDefinition Include="Testing.Nunit">
       <RootFolder>$(SrcDir)\Testing.Nunit.Shared</RootFolder>
       <NuspecFile>Testing.Nunit.nuspec</NuspecFile>
-      <Version>0.4.0.0</Version>
+      <Version>0.4.0.1</Version>
     </PackageDefinition>
 
     <PackageDefinition Include="Web.Mvc">
       <RootFolder>$(SrcDir)\Web\Web.Mvc.Shared</RootFolder>
       <NuspecFile>Web.Mvc.nuspec</NuspecFile>
-      <Version>0.2.2.0</Version>
+      <Version>0.2.2.1</Version>
     </PackageDefinition>
 
   </ItemGroup>

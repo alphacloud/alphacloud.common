@@ -16,8 +16,8 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("67a02de6-0f55-4499-a8c2-2eac93f89b6c")]
 
-[assembly: AssemblyVersion("0.3.3.0")]
-[assembly: AssemblyFileVersion("0.3.3.0")]
+[assembly: AssemblyVersion("0.3.4.0")]
+[assembly: AssemblyFileVersion("0.3.4.0")]
 
 [assembly: InternalsVisibleTo("Tests.Caching.Memcached.Net40, PublicKey="
     +"002400000480000094000000060200000024000052534131000400000100010013c2547ac065d2"

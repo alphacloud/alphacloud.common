@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Alphacloud.Common.Caching.Redis</id>
-    <version>0.1.3.0</version>
+    <version>0.1.4.0</version>
     <title>StackExchange Redis adapter for common caching infrastructure</title>
     <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>

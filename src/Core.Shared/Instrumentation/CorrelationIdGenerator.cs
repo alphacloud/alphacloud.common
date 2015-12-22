@@ -21,7 +21,6 @@ namespace Alphacloud.Common.Core.Instrumentation
     using System;
     using System.Threading;
     using Data;
-    using Utils;
 
     /// <summary>
     ///   Correlation ID generator.
@@ -35,7 +34,7 @@ namespace Alphacloud.Common.Core.Instrumentation
         public static string NewId()
         {
             var uid = Guid.NewGuid().ToString("N");
-            var identity = Thread.CurrentPrincipal.With(p => p.Identity).Return(i => i.Name, string.Empty);
+            var identity = Thread.CurrentPrincipal?.Identity?.Name ?? string.Empty;
             identity = identity.Substring(0, Math.Min(20, identity.Length));
             return "{0}-{1}".ApplyArgs(string.IsNullOrWhiteSpace(identity) ? "None" : identity,
                 uid.Substring(24));
