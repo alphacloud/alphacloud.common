@@ -4,7 +4,7 @@
     <id>Alphacloud.Common.Infrastructure</id>
     <version>0.4.3.0</version>
     <title>Alphacloud infrastructure components.</title>
-    <authors>Alphaclod.net</authors>
+    <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
