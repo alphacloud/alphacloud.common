@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>StackExchange Redis adapter for common caching infrastructure</description>
     <releaseNotes>
-Upgrade Common.Logging.
+Upgrade dependencies.
     </releaseNotes>
     <copyright>Copyright (c) 2013-2015 Alphacloud.net</copyright>
     <tags>alphacloud caching redis</tags>
