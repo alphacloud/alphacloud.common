@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.Memcached.CommonLogging", "Integration\Caching.Memcached.CommonLogging\Caching.Memcached.CommonLogging.csproj", "{F9E6CF1B-50A1-436F-A509-B97832A74346}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.Memcached.Tests", "Tests\Integration\Caching.Memcached.Tests\Caching.Memcached.Tests.csproj", "{8DF06376-2BE9-454F-A06F-AF6381B6125D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.Memcached.Tests.Net45", "Tests\Integration\Caching.Memcached.Tests\Caching.Memcached.Tests.Net45.csproj", "{8DF06376-2BE9-454F-A06F-AF6381B6125D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLocator.Castle.Tests", "Tests\ServiceLocator.Castle.Tests\ServiceLocator.Castle.Tests.csproj", "{F33F2379-0D62-477A-824A-61D6E5AAE990}"
 EndProject
