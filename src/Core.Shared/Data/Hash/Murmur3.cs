@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -33,11 +33,19 @@ namespace Alphacloud.Common.Core.Data.Hash
     /// </remarks>
     internal class Murmur3 : ISimpleHasher
     {
-        private const uint M = 0x5bd1e995;
-        private const int R = 24;
-        private const uint Seed = 0xdeadbeef;
+        const uint M = 0x5bd1e995;
+        const int R = 24;
+        const uint Seed = 0xdeadbeef;
 
+        #region ISimpleHasher Members
 
+        /// <summary>
+        /// Computes the hash for specified array.
+        /// </summary>
+        /// <param name="array">The array.</param>
+        /// <param name="start">The start position.</param>
+        /// <param name="size">The size.</param>
+        /// <returns>32bit hash</returns>
         public uint Compute([NotNull] byte[] array, int start, int size)
         {
             if (array == null)
@@ -57,18 +65,23 @@ namespace Alphacloud.Common.Core.Data.Hash
         }
 
 
+        /// <summary>
+        /// Computes the hash for specified array.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns>32bit hash</returns>
         public uint Compute([NotNull] int[] data)
         {
             if (data == null)
             {
                 throw new ArgumentNullException("data");
             }
-            int length = data.Length;
-            uint hash = Initialize(length * 4);
+            var length = data.Length;
+            var hash = Initialize(length * 4);
 
             unchecked
             {
-                for (int i = 0; i < length; i++)
+                for (var i = 0; i < length; i++)
                 {
                     var current = (uint) data[i];
                     current = current * M;
@@ -82,18 +95,24 @@ namespace Alphacloud.Common.Core.Data.Hash
         }
 
 
+        /// <summary>
+        ///   Computes the hash for specified data.
+        ///   Use this overload to avoid calling.ToArray()
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns>32bit hash</returns>
         public uint Compute(IList<int> data)
         {
             if (data == null)
             {
                 throw new ArgumentNullException("data");
             }
-            int length = data.Count;
-            uint hash = Initialize(length * 4);
+            var length = data.Count;
+            var hash = Initialize(length * 4);
 
             unchecked
             {
-                for (int i = 0; i < length; i++)
+                for (var i = 0; i < length; i++)
                 {
                     var current = (uint) data[i];
                     current = current * M;
@@ -106,8 +125,9 @@ namespace Alphacloud.Common.Core.Data.Hash
             }
         }
 
+        #endregion
 
-        private static uint Initialize(int length)
+        static uint Initialize(int length)
         {
             unchecked
             {
@@ -118,7 +138,7 @@ namespace Alphacloud.Common.Core.Data.Hash
         }
 
 
-        private static uint Finalize(uint hash)
+        static uint Finalize(uint hash)
         {
             unchecked
             {
@@ -132,23 +152,23 @@ namespace Alphacloud.Common.Core.Data.Hash
 
 
         // taken from Enyim memcached client.
-        private static unsafe uint UnsafeHashCore(byte[] data, int offset, int length)
+        static unsafe uint UnsafeHashCore(byte[] data, int offset, int length)
         {
-            uint hash = Initialize(length);
-            int count = length >> 2;
+            var hash = Initialize(length);
+            var count = length >> 2;
 
-            fixed (byte* start = &(data[offset]))
+            fixed (byte* start = &data[offset])
             {
                 var ptrUInt = (uint*) start;
 
                 while (count > 0)
                 {
-                    uint current = *ptrUInt;
+                    var current = *ptrUInt;
 
-                    current = (current * M);
+                    current = current * M;
                     current ^= current >> R;
-                    current = (current * M);
-                    hash = (hash * M);
+                    current = current * M;
+                    hash = hash * M;
                     hash ^= current;
 
                     count--;
@@ -163,18 +183,18 @@ namespace Alphacloud.Common.Core.Data.Hash
                         // ABC --> CBA; (UInt16)(AB) --> BA
                         //h ^= (uint)(*ptrByte);
                         //h ^= (uint)(ptrByte[1] << 8);
-                        hash ^= (*(ushort*) ptrUInt);
+                        hash ^= *(ushort*) ptrUInt;
                         hash ^= (uint) (((byte*) ptrUInt)[2] << 16);
                         hash *= M;
                         break;
 
                     case 2:
-                        hash ^= (*(ushort*) ptrUInt);
+                        hash ^= *(ushort*) ptrUInt;
                         hash *= M;
                         break;
 
                     case 1:
-                        hash ^= (*((byte*) ptrUInt));
+                        hash ^= *(byte*) ptrUInt;
                         hash *= M;
                         break;
                 }

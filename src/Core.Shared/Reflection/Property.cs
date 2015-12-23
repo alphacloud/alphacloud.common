@@ -1,4 +1,22 @@
-﻿namespace Alphacloud.Common.Core.Reflection
+﻿#region copyright
+
+// Copyright 2013-2015 Alphacloud.Net
+// 
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+// 
+//        http://www.apache.org/licenses/LICENSE-2.0
+// 
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+#endregion
+
+namespace Alphacloud.Common.Core.Reflection
 {
     using System;
     using System.Linq.Expressions;
@@ -25,9 +43,10 @@
         /// <returns>Property name.</returns>
         public static string PropertyName<T>(this T obj, Expression<Func<T, object>> expression)
         {
-            Expression body = expression.Body;
+            var body = expression.Body;
             return GetMemberName(new StringBuilder(128), body, false).ToString();
         }
+
 
         /// <summary>
         ///   Get property name from expression.
@@ -38,7 +57,7 @@
         public static string Name<T>(
             Expression<Func<T, object>> expression)
         {
-            Expression body = expression.Body;
+            var body = expression.Body;
             return GetMemberName(new StringBuilder(128), body, false).ToString();
         }
 
@@ -63,7 +82,7 @@
         }
 
 
-        private static StringBuilder GetMemberName(StringBuilder sb, Expression expression, bool skipInstanceReference)
+        static StringBuilder GetMemberName(StringBuilder sb, Expression expression, bool skipInstanceReference)
         {
             while (true)
             {
@@ -85,11 +104,11 @@
                 var unaryExpression = expression as UnaryExpression;
                 if (unaryExpression == null)
                     throw new InvalidOperationException(
-                        "Could not determine member from {0}".ApplyArgs(expression));
+                        "Could not determine member from expression '{0}'.".ApplyArgs(expression));
 
                 if (unaryExpression.NodeType != ExpressionType.Convert)
                     throw new InvalidOperationException(
-                        "Cannot interpret member from {0}".ApplyArgs(expression));
+                        "Cannot interpret member from expression '{0}'.".ApplyArgs(expression));
 
                 expression = unaryExpression.Operand;
             }

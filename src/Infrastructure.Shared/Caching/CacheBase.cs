@@ -26,13 +26,11 @@ namespace Alphacloud.Common.Infrastructure.Caching
     using JetBrains.Annotations;
 
     /// <summary>
-    ///   Basic cache functionality.
+    ///   Basic cache class.
     /// </summary>
     [PublicAPI]
     public abstract class CacheBase : ICache, IDisposable
     {
-        static readonly ICache s_nullCache = new NullCache();
-
         /// <summary>
         ///   Cache key separator.
         /// </summary>
@@ -41,7 +39,6 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </remarks>
         static readonly object s_separator = '.';
 
-        readonly ILog _log;
         readonly ICacheHealthcheckMonitor _monitor;
 
 
@@ -54,7 +51,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         protected CacheBase([NotNull] ICacheHealthcheckMonitor monitor, string instanceName)
         {
             if (monitor == null) throw new ArgumentNullException("monitor");
-            _log = LogManager.GetLogger(GetType());
+            Log = LogManager.GetLogger(GetType());
             _monitor = monitor;
             Name = instanceName;
         }
@@ -63,18 +60,12 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <summary>
         ///   Cache what does nothing.
         /// </summary>
-        public static ICache Null
-        {
-            get { return s_nullCache; }
-        }
+        public static ICache Null { get; } = new NullCache();
 
         /// <summary>
         ///   Logger for this instance.
         /// </summary>
-        protected ILog Log
-        {
-            get { return _log; }
-        }
+        protected ILog Log { get; }
 
         /// <summary>
         ///   Gets a value indicating whether this cache is available.
@@ -112,7 +103,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
                 }
                 catch (Exception ex)
                 {
-                    _log.WarnFormat("{0}: Error getting statistics", ex, Name);
+                    Log.WarnFormat("{0}: Error getting statistics", ex, Name);
                 }
             }
             return new CacheStatistics(false);
@@ -141,6 +132,15 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
+        /// <summary>
+        /// Gets multiple items from cache.
+        /// </summary>
+        /// <remarks>
+        /// Items will be retrieved in one call if supported by underlying cache implementation. If not, multiple requests will be made.
+        /// </remarks>
+        /// <param name="keys">List of item keys to retrieve.</param>
+        /// <returns>Key/Value dictionary. Missing items will have <c>null</c> as value.</returns>
+        /// <exception cref="ArgumentNullException">if <paramref name="keys"/> is <c>null</c>.</exception>
         public IDictionary<string, object> Get([NotNull] ICollection<string> keys)
         {
             if (keys == null) throw new ArgumentNullException("keys");
@@ -263,6 +263,16 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
+        /// <summary>
+        ///   Stores multiple items to cache.
+        /// </summary>
+        /// <param name="data">Key-Value pairs</param>
+        /// <param name="ttl">Absolute expiration timeout.</param>
+        /// <exception cref="System.ArgumentNullException"><paramref name="data" /> is <c>null </c></exception>
+        /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="ttl" />cache timeout must be positive number.</exception>
+        /// <remarks>
+        ///   Items will be stored in one calls if supported by underlying cache implementation.
+        /// </remarks>
         public virtual void Put([NotNull] ICollection<KeyValuePair<string, object>> data, TimeSpan ttl)
         {
             if (data == null) throw new ArgumentNullException("data");
@@ -313,18 +323,33 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
+        /// <summary>
+        /// Logs the get operation faiulre.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="ex">The ex.</param>
         protected void LogGetFaiulre(string key, Exception ex)
         {
             Log.WarnFormat("{0}: Get('{1}')", ex, Name, key);
         }
 
 
+        /// <summary>
+        /// Logs successful get operation.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="data">The data.</param>
         protected void LogGetSucceed(string key, object data)
         {
             Log.InfoFormat("{2}: Get('{0}'): {1}", key, data != null ? "Hit" : "Miss", Name);
         }
 
 
+        /// <summary>
+        /// Default multi-get implementation using multiple cache requests.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
+        /// <returns>Cached items as Key/Value dictionary.</returns>
         protected virtual IDictionary<string, object> DoMultiGet(ICollection<string> keys)
         {
             var res = new Dictionary<string, object>();
@@ -337,6 +362,11 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
+        /// <summary>
+        /// Default multi-put implementation using multiple cache requests.
+        /// </summary>
+        /// <param name="data">Items to store in cache.</param>
+        /// <param name="ttl">Absolute cache implementation.</param>
         protected virtual void DoPutOrRemove(IEnumerable<KeyValuePair<string, object>> data, TimeSpan ttl)
         {
             foreach (var kvp in data)
@@ -361,7 +391,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
 
 
         /// <summary>
-        ///   Retrieve statistics from underlying cache.
+        ///   Retrieves statistics from underlying cache.
         /// </summary>
         /// <returns>
         ///   <see cref="CacheStatistics" />
@@ -516,6 +546,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
 

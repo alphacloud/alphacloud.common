@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ namespace Alphacloud.Common.Core.Reflection
 {
     using System;
     using System.Linq.Expressions;
-
     using JetBrains.Annotations;
 
     /// <summary>
@@ -34,17 +33,17 @@ namespace Alphacloud.Common.Core.Reflection
     public static class DelegateAdjuster
     {
         /// <summary>
-        /// 
+        ///   Creates delegate which accpepts argument of base class, dynamically upcasts it calls given action.
         /// </summary>
-        /// <typeparam name="TBase"></typeparam>
-        /// <typeparam name="TDerived"></typeparam>
+        /// <typeparam name="TBase">Base type for the argument.</typeparam>
+        /// <typeparam name="TDerived">Required type for the argument.</typeparam>
         /// <param name="source"></param>
-        /// <returns></returns>
-        public static Action<TBase> CastArgument <TBase, TDerived>(Expression<Action<TDerived>> source)
+        /// <returns>Delegate of type <c>Action&lt;TBase&gt;</c></returns>
+        public static Action<TBase> CastArgument<TBase, TDerived>(Expression<Action<TDerived>> source)
             where TDerived : TBase
         {
             if (typeof (TDerived) == typeof (TBase))
-                return (Action<TBase>) ((Delegate) source.Compile());
+                return (Action<TBase>) (Delegate) source.Compile();
             var sourceParameter = Expression.Parameter(typeof (TBase), "source");
             var result = Expression.Lambda<Action<TBase>>(
                 Expression.Invoke(
@@ -55,15 +54,23 @@ namespace Alphacloud.Common.Core.Reflection
         }
 
 
-        public static Action<TBase, TArg1> CastFirstArgument <TBase, TDerived, TArg1>(
-            Expression<Action<TDerived, TArg1>> source)
+        /// <summary>
+        /// Creates delegate which accpepts first argument of base class, dynamically upcasts it calls given action.
+        /// </summary>
+        /// <typeparam name="TBase">Base type for the first argument.</typeparam>
+        /// <typeparam name="TDerived">Actual type for the first argument.</typeparam>
+        /// <typeparam name="TArg2">Second Argument type.</typeparam>
+        /// <param name="source">The source expression.</param>
+        /// <returns>Delegate with first argument of <typeparamref name="TBase"/></returns>
+        public static Action<TBase, TArg2> CastFirstArgument<TBase, TDerived, TArg2>(
+            Expression<Action<TDerived, TArg2>> source)
             where TDerived : TBase
         {
             if (typeof (TDerived) == typeof (TBase))
-                return (Action<TBase, TArg1>) ((Delegate) source.Compile());
+                return (Action<TBase, TArg2>) (Delegate) source.Compile();
             var sourceParameter = Expression.Parameter(typeof (TBase), "source");
-            var arg1 = Expression.Parameter(typeof (TArg1), "arg1");
-            var result = Expression.Lambda<Action<TBase, TArg1>>(
+            var arg1 = Expression.Parameter(typeof (TArg2), "arg1");
+            var result = Expression.Lambda<Action<TBase, TArg2>>(
                 Expression.Invoke(
                     source,
                     Expression.Convert(sourceParameter, typeof (TDerived)),
@@ -73,12 +80,20 @@ namespace Alphacloud.Common.Core.Reflection
         }
 
 
-        public static Func<TBase, TResult> CastArgument <TBase, TDerived, TResult>(
+        /// <summary>
+        /// Creates delegate which accpepts first argument of base class, dynamically upcasts it calls given function.
+        /// </summary>
+        /// <typeparam name="TBase">Base type for the first argument.</typeparam>
+        /// <typeparam name="TDerived">Requred type for the first argument.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="source">The source expression.</param>
+        /// <returns>Function with first argument of type <typeparamref name="TBase"/></returns>
+        public static Func<TBase, TResult> CastArgument<TBase, TDerived, TResult>(
             Expression<Func<TDerived, TResult>> source)
             where TDerived : TBase
         {
             if (typeof (TDerived) == typeof (TBase))
-                return (Func<TBase, TResult>) ((Delegate) source.Compile());
+                return (Func<TBase, TResult>) (Delegate) source.Compile();
             var sourceParameter = Expression.Parameter(typeof (TBase), "source");
             var result = Expression.Lambda<Func<TBase, TResult>>(
                 Expression.Invoke(

@@ -38,12 +38,12 @@
     <AssemblyOriginatorKeyFile>..\..\Alphacloud.Common.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FluentAssertions.4.1.0\lib\net45\FluentAssertions.dll</HintPath>
+    <Reference Include="FluentAssertions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentAssertions.4.1.1\lib\net45\FluentAssertions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FluentAssertions.4.1.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+    <Reference Include="FluentAssertions.Core, Version=4.1.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentAssertions.4.1.1\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
@@ -84,13 +84,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.csproj">
-      <Project>{dc27c4e6-4fba-4d02-b7b4-bb9a48cf25b2}</Project>
-      <Name>Core</Name>
+    <ProjectReference Include="..\..\Core.Net45\Core.Net45.csproj">
+      <Project>{901df607-869c-449d-84ee-4bee030d8bb3}</Project>
+      <Name>Core.Net45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Infrastructure.csproj">
-      <Project>{d40ed75d-018a-42d0-8a45-011bf25031bb}</Project>
-      <Name>Infrastructure</Name>
+    <ProjectReference Include="..\..\Infrastructure.Net45\Infrastructure.Net45.csproj">
+      <Project>{832c2486-e1f8-4a8b-89b8-729946393804}</Project>
+      <Name>Infrastructure.Net45</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\Caching.Redis.Net45\Caching.Redis.Net45.csproj">
       <Project>{97796fa0-a5ac-43ee-a9b7-95909e2c0d8e}</Project>

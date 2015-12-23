@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2014 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@
 namespace Alphacloud.Common.Core.Instrumentation
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Data;
     using JetBrains.Annotations;
 
-
     /// <summary>
-    ///   Call type.
+    ///   Call type constrants.
     /// </summary>
     public static class CallType
     {
@@ -43,6 +43,7 @@ namespace Alphacloud.Common.Core.Instrumentation
     /// <summary>
     ///   Method call count info.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class CallSummary
     {
         /// <summary>
@@ -60,9 +61,18 @@ namespace Alphacloud.Common.Core.Instrumentation
         /// </summary>
         public string CallType { get; set; }
 
+        /// <summary>
+        ///   Call duration.
+        /// </summary>
         public TimeSpan Duration { get; set; }
 
 
+        /// <summary>
+        ///   Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        ///   A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return "{0}: {1}".ApplyArgs(Operation, CallCount);

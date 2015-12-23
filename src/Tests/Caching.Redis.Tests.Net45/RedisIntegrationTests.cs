@@ -199,7 +199,7 @@ namespace Caching.Redis.Tests
 
 
         [OneTimeTearDown]
-        public void TestFixtureTearDown()
+        public void OneTimeTearDown()
         {
             Disposer.TryDispose(_redis);
         }

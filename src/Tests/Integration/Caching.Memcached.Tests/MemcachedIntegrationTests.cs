@@ -41,7 +41,7 @@ namespace Caching.Memcached.Tests
         ICache _cache;
 
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             _factory = new MemcachedFactory();
@@ -49,7 +49,7 @@ namespace Caching.Memcached.Tests
         }
 
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void FixtureTearDown()
         {
             _factory.Dispose();

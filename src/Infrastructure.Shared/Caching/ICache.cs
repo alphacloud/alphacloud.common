@@ -74,20 +74,33 @@ namespace Alphacloud.Common.Infrastructure.Caching
         void Put([NotNull] string key, [CanBeNull] object value, TimeSpan ttl);
 
         /// <summary>
-        ///   Get cache statistics
+        ///   Get cache statistics.
         /// </summary>
         /// <returns></returns>
         [NotNull]
         CacheStatistics GetStatistics();
 
-
+        /// <summary>
+        /// Gets multiple items from cache.
+        /// </summary>
+        /// <remarks>
+        /// Items will be retrieved in one call if supported by underlying cache implementation. If not, multiple requests will be made.
+        /// </remarks>
+        /// <param name="keys">List of item keys to retrieve.</param>
+        /// <returns>Key/Value dictionary. Missing items will have <c>null</c> as value.</returns>
+        /// <exception cref="ArgumentNullException">if <paramref name="keys"/> is <c>null</c>.</exception>
         IDictionary<string, object> Get([NotNull] ICollection<string> keys);
 
         /// <summary>
-        /// Store multiple values in cache.
+        /// Stores multiple items to cache.
         /// </summary>
         /// <param name="data">Key-Value pairs</param>
         /// <param name="ttl">Absolute expiration timeout.</param>
+        /// <exception cref="System.ArgumentNullException"><paramref name="data"/> is <c>null </c></exception>
+        /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="ttl"/>cache timeout must be positive number.</exception>
+        /// <remarks>
+        /// Items will be stored in one calls if supported by underlying cache implementation.
+        /// </remarks>
         void Put([NotNull] ICollection<KeyValuePair<string, object>> data, TimeSpan ttl);
     }
 }

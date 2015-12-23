@@ -94,9 +94,9 @@
       <Project>{901df607-869c-449d-84ee-4bee030d8bb3}</Project>
       <Name>Core.Net45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Infrastructure.csproj">
-      <Project>{d40ed75d-018a-42d0-8a45-011bf25031bb}</Project>
-      <Name>Infrastructure</Name>
+    <ProjectReference Include="..\..\Infrastructure.Net45\Infrastructure.Net45.csproj">
+      <Project>{832c2486-e1f8-4a8b-89b8-729946393804}</Project>
+      <Name>Infrastructure.Net45</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

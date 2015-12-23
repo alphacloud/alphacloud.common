@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2015 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@
 
 #endregion
 
-using Alphacloud.Common.Core.Data;
-
 namespace Caching.Memcached.Tests
 {
     using System;
     using Alphacloud.Common.Caching.Memcached.CommonLogging;
+    using Alphacloud.Common.Core.Data;
     using Enyim.Caching;
     using Enyim.Caching.Memcached;
     using FluentAssertions;
@@ -31,30 +30,11 @@ namespace Caching.Memcached.Tests
     [TestFixture]
     class MemcachedClientTests
     {
+        MemcachedClient _client;
         ILog _log;
 
-        #region Setup/Teardown
 
-        [SetUp]
-        public void SetUp()
-        {
-            _log = Common.Logging.LogManager.GetLogger<MemcachedClientTests>();
-            _client = new MemcachedClient();
-        }
-
-
-        [TearDown]
-        public void TearDown()
-        {
-            _client.Dispose();
-        }
-
-        #endregion
-
-        MemcachedClient _client;
-
-
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetup()
         {
             LogManager.AssignFactory(new MemcachedLogFactory());
@@ -91,5 +71,23 @@ namespace Caching.Memcached.Tests
 
             res.Should().ContainKey(k1);
         }
+
+        #region Setup/Teardown
+
+        [SetUp]
+        public void SetUp()
+        {
+            _log = Common.Logging.LogManager.GetLogger<MemcachedClientTests>();
+            _client = new MemcachedClient();
+        }
+
+
+        [TearDown]
+        public void TearDown()
+        {
+            _client.Dispose();
+        }
+
+        #endregion
     }
 }
