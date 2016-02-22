@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,24 +16,25 @@
 
 #endregion
 
-#region Using
 
-using NUnit.Framework;
-
-using FluentAssertions;
-
-#endregion
-
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 namespace Infrastructure.Tests.Caching
 {
     using Alphacloud.Common.Infrastructure.Caching;
     using Alphacloud.Common.Testing.Nunit.Attributes;
-
-//// ReSharper disable InconsistentNaming
+    using FluentAssertions;
+    using NUnit.Framework;
 
     [TestFixture]
     class UserIdentityCacheKeyScopeTests
     {
+        UserIdentityCacheKeyScope _scope;
+
         #region Setup/Teardown
 
         [SetUp]
@@ -44,17 +45,12 @@ namespace Infrastructure.Tests.Caching
 
         #endregion
 
-        UserIdentityCacheKeyScope _scope;
-
-
         [Test]
-        [SetPrincipal("identity", Roles = new[] { "1", "2" })]
+        [SetPrincipal("identity", Roles = new[] {"1", "2"})]
         public void ShouldPrefixKeyWithCurrentThreadIdentity()
         {
             _scope.Encode("key")
                 .Should().Be("identity.key");
         }
     }
-
-//// ReSharper restore InconsistentNaming
 }

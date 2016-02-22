@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2014 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,6 +16,12 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 namespace Infrastructure.Tests.Instrumentation
 {
     using System.Threading;
@@ -26,22 +32,19 @@ namespace Infrastructure.Tests.Instrumentation
     using Moq;
     using NUnit.Framework;
 
-
     [TestFixture]
     class InstrumentationRuntimeTests : MockedTestsBase
     {
-        Mock<IInstrumentationContext> _instrumentationContext;
+        const string CorrelationId = "correlation.id";
         Mock<ICorrelationIdProvider> _correlationIdProvider;
+        Mock<IInstrumentationContext> _instrumentationContext;
         Mock<IInstrumentationContextProvider> _instrumentationContextProvider;
         InstrumentationRuntime _instrumentationRuntime;
         InstrumentationSettings _instrumentationSettings;
 
-        const string CorrelationId = "correlation.id";
-
 
         protected override void DoSetup()
         {
-
             _instrumentationContext = Mockery.Create<IInstrumentationContext>();
             _correlationIdProvider = Mockery.Create<ICorrelationIdProvider>();
             _instrumentationContextProvider = Mockery.Create<IInstrumentationContextProvider>();

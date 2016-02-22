@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,37 +16,25 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.BoxingAllocation
 namespace Core.Tests.Data
 {
     using System;
     using System.Globalization;
-
     using Alphacloud.Common.Core.Data;
-
     using FluentAssertions;
-
     using NUnit.Framework;
 
-//// ReSharper disable InconsistentNaming
 
     [TestFixture]
     class TimeSpanParserTests
     {
-        #region Setup/Teardown
-
-        [SetUp]
-        public void SetUp()
-        {
-        }
-
-
-        [TearDown]
-        public void TearDown()
-        {
-        }
-
-        #endregion
-
         [Test]
         public void Should_Parse_HHMM()
         {
@@ -63,7 +51,21 @@ namespace Core.Tests.Data
             TimeSpanParser.TryParseTime("1", out ts).Should().BeTrue();
             ts.Should().Be(1.Hours());
         }
+
+        #region Setup/Teardown
+
+        [SetUp]
+        public void SetUp()
+        {
+        }
+
+
+        [TearDown]
+        public void TearDown()
+        {
+        }
+
+        #endregion
     }
 
-//// ReSharper restore InconsistentNaming
 }

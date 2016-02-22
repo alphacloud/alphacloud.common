@@ -30,7 +30,7 @@
     <PackageDefinition Include="Caching.Redis">
       <RootFolder>$(SrcDir)\Integration\Caching.Redis.Net45</RootFolder>
       <NuspecFile>Caching.Redis.nuspec</NuspecFile>
-      <Version>0.1.4.0</Version>
+      <Version>0.1.4.1</Version>
     </PackageDefinition>
 
     <PackageDefinition Include="ServiceLocator.Castle">
@@ -42,7 +42,7 @@
     <PackageDefinition Include="Testing.Nunit">
       <RootFolder>$(SrcDir)\Testing.Nunit.Shared</RootFolder>
       <NuspecFile>Testing.Nunit.nuspec</NuspecFile>
-      <Version>0.4.0.1</Version>
+      <Version>0.4.0.2</Version>
     </PackageDefinition>
 
     <PackageDefinition Include="Web.Mvc">

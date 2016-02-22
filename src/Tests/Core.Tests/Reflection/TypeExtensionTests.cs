@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2015 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,6 +16,13 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.BoxingAllocation
 namespace Core.Tests.Reflection
 {
     using System.Linq;
@@ -77,22 +84,21 @@ namespace Core.Tests.Reflection
 
         class Bar : IGenericInterface<int>
         {
+            #region IGenericInterface<int> Members
+
             public int Get()
             {
                 return 0;
             }
+
+            #endregion
         }
 
-
-        class Foo : Bar
-        {
-            
-        }
         #endregion
 
         #region Nested type: ClosedType
 
-        private class ClosedType : IClosedInterface
+        class ClosedType : IClosedInterface
         {
             #region IClosedInterface Members
 
@@ -106,18 +112,25 @@ namespace Core.Tests.Reflection
 
         #endregion
 
-        #region Nested type: IClosedInterface
+        #region Nested type: Foo
 
-        private interface IClosedInterface : IGenericInterface<int>
+        class Foo : Bar
         {
         }
 
         #endregion
 
+        #region Nested type: IClosedInterface
+
+        interface IClosedInterface : IGenericInterface<int>
+        {
+        }
+
+        #endregion
 
         #region Nested type: IGenericInterface
 
-        private interface IGenericInterface<out T>
+        interface IGenericInterface<out T>
         {
             T Get();
         }

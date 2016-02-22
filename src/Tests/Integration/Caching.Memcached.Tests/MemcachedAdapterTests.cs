@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,6 +16,12 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 namespace Caching.Memcached.Tests
 {
     using System;
@@ -32,32 +38,11 @@ namespace Caching.Memcached.Tests
     [TestFixture]
     class MemcachedAdapterTests
     {
-        #region Setup/Teardown
-
-        [SetUp]
-        public void SetUp()
-        {
-            _mockery = new MockRepository(MockBehavior.Default);
-            _clientMock = _mockery.Create<IMemcachedClient>();
-            _healthCheck = _mockery.Create<ICacheHealthcheckMonitor>();
-            _healthCheck.SetupGet(hc => hc.IsCacheAvailable).Returns(true);
-            _adapter = new MemcachedAdapter(_clientMock.Object, _healthCheck.Object, "test");
-        }
-
-
-        [TearDown]
-        public void TearDown()
-        {
-            _adapter = null;
-            _mockery.Verify();
-        }
-
-        #endregion
+        MemcachedAdapter _adapter;
 
         Mock<IMemcachedClient> _clientMock;
-        MockRepository _mockery;
         Mock<ICacheHealthcheckMonitor> _healthCheck;
-        MemcachedAdapter _adapter;
+        MockRepository _mockery;
 
 
         [Test]
@@ -109,5 +94,27 @@ namespace Caching.Memcached.Tests
 
             _clientMock.Verify(c => c.Store(StoreMode.Set, "test.key-d", "value", 3.Seconds()));
         }
+
+        #region Setup/Teardown
+
+        [SetUp]
+        public void SetUp()
+        {
+            _mockery = new MockRepository(MockBehavior.Default);
+            _clientMock = _mockery.Create<IMemcachedClient>();
+            _healthCheck = _mockery.Create<ICacheHealthcheckMonitor>();
+            _healthCheck.SetupGet(hc => hc.IsCacheAvailable).Returns(true);
+            _adapter = new MemcachedAdapter(_clientMock.Object, _healthCheck.Object, "test");
+        }
+
+
+        [TearDown]
+        public void TearDown()
+        {
+            _adapter = null;
+            _mockery.Verify();
+        }
+
+        #endregion
     }
 }

@@ -16,12 +16,17 @@
 
 #endregion
 
-namespace Core.Tests.Base.Data
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
+namespace Core.Tests.Data
 {
     using System.Linq;
     using Alphacloud.Common.Core.Data;
     using FluentAssertions;
-// ReSharper disable InconsistentNaming
 
     using NUnit.Framework;
 
@@ -86,6 +91,4 @@ namespace Core.Tests.Base.Data
             public double Percentage { get; set; }
         }
     }
-
-    // ReSharper restore InconsistentNaming
 }

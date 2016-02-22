@@ -16,10 +16,12 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ObjectAllocation
 namespace ServiceLocator.Castle.Tests
 {
     using Alphacloud.Common.ServiceLocator.Castle;
-    using global::FluentAssertions;
+    using FluentAssertions;
     using global::Castle.MicroKernel.Registration;
     using global::Castle.Windsor;
     using NUnit.Framework;
@@ -27,6 +29,12 @@ namespace ServiceLocator.Castle.Tests
     [TestFixture]
     public class WindsorServiceLocatorAdapterTests
     {
+        WindsorServiceLocatorAdapter _adapter;
+
+        WindsorContainer _container;
+        Service _service1;
+        Service _service2;
+
         #region Setup/Teardown
 
         [SetUp]
@@ -42,12 +50,6 @@ namespace ServiceLocator.Castle.Tests
         }
 
         #endregion
-
-        WindsorContainer _container;
-        Service _service1;
-        Service _service2;
-        WindsorServiceLocatorAdapter _adapter;
-
 
         [Test]
         public void ShouldResolveNamedInstancesWithGenericResolver()

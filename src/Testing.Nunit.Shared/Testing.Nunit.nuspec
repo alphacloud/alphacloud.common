@@ -18,8 +18,8 @@ Upgrade third-party dependencies.
     <dependencies>
       <dependency id="Alphacloud.Common.Core" version="[%Version(Core),2.0.0.0)" />
       <dependency id="Jetbrains.Annotations" version="[10.0.0,12.0.0)" />
-      <dependency id="AutoMapper" version="[4.1.1,5.0.0)" />
-      <dependency id="FluentAssertions" version="[4.1.1,5.0.0)" />
+      <dependency id="AutoMapper" version="[4.2.0,5.0.0)" />
+      <dependency id="FluentAssertions" version="[4.2.2,5.0.0)" />
       <dependency id="Moq" version="[4.2.1510.0,5.0.0.0)" />
       <dependency id="NUnit" version="[3.0.1,4.0.0)" />
     </dependencies>

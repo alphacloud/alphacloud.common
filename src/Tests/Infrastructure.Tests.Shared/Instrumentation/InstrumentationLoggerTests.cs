@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2014 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,6 +16,12 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 namespace Infrastructure.Tests.Instrumentation
 {
     using Alphacloud.Common.Infrastructure.Instrumentation;
@@ -27,6 +33,10 @@ namespace Infrastructure.Tests.Instrumentation
     [TestFixture]
     class InstrumentationLoggerTests
     {
+        LoggingConfiguration _configuration;
+        InstrumentationContext _instrumentationContext;
+        InstrumentationLogger _instrumentationLogger;
+
         #region Setup/Teardown
 
         [SetUp]
@@ -39,11 +49,6 @@ namespace Infrastructure.Tests.Instrumentation
         }
 
         #endregion
-
-        LoggingConfiguration _configuration;
-        InstrumentationLogger _instrumentationLogger;
-        InstrumentationContext _instrumentationContext;
-
 
         [Test]
         public void CallCompleted_Should_LogCallDuration()

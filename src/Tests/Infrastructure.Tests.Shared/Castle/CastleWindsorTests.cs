@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,30 +16,25 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 namespace Infrastructure.Tests.Castle
 {
-    using NUnit.Framework;
     using global::Castle.MicroKernel.Registration;
     using global::Castle.Windsor;
+    using NUnit.Framework;
 
     [TestFixture]
     public class CastleWindsorTests
     {
-        private WindsorContainer _container;
-        private MyService _instance1;
-        private MyService _instance2;
+        WindsorContainer _container;
+        MyService _instance1;
+        MyService _instance2;
 
-        private interface IService
-        {
-            void DoSomething(string arg);
-        }
-
-        private class MyService : IService
-        {
-            public void DoSomething(string arg)
-            {
-            }
-        }
 
         [SetUp]
         public void SetUp()
@@ -52,12 +47,14 @@ namespace Infrastructure.Tests.Castle
             _container.Register(Component.For<IService>().Instance(_instance2).Named("service2"));
         }
 
+
         [Test]
         public void ShouldResolveNamedInstances()
         {
-            Assert.AreSame(_instance1,  _container.Resolve<IService>("service1"), "service1");
+            Assert.AreSame(_instance1, _container.Resolve<IService>("service1"), "service1");
             Assert.AreSame(_instance2, _container.Resolve<IService>("service2"), "service2");
         }
+
 
         [Test]
         public void ShouldResolveNamedInstancesUsingGenerics()
@@ -65,5 +62,29 @@ namespace Infrastructure.Tests.Castle
             Assert.AreSame(_instance1, _container.Resolve<IService>("service1"), "service1");
             Assert.AreSame(_instance2, _container.Resolve<IService>("service2"), "service2");
         }
+
+        #region Nested type: IService
+
+        interface IService
+        {
+            void DoSomething(string arg);
+        }
+
+        #endregion
+
+        #region Nested type: MyService
+
+        class MyService : IService
+        {
+            #region IService Members
+
+            public void DoSomething(string arg)
+            {
+            }
+
+            #endregion
+        }
+
+        #endregion
     }
 }

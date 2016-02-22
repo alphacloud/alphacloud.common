@@ -16,13 +16,12 @@
 
 #endregion
 
+// ReSharper disable HeapView.ObjectAllocation
 namespace Infrastructure.Tests.Caching
 {
     using Alphacloud.Common.Infrastructure.Caching;
     using FluentAssertions;
     using NUnit.Framework;
-
-    // ReSharper disable InconsistentNaming
 
 
     [TestFixture]
@@ -39,6 +38,4 @@ namespace Infrastructure.Tests.Caching
             cacheDuration.Huge.Should().Be(1.Hours());
         }
     }
-
-    // ReSharper restore InconsistentNaming
 }

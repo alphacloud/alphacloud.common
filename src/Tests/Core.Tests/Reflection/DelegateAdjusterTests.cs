@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2015 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,6 +16,13 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.BoxingAllocation
 namespace Core.Tests.Reflection
 {
     using System;
@@ -24,7 +31,7 @@ namespace Core.Tests.Reflection
     using NUnit.Framework;
 
     [TestFixture]
-    internal class DelegateAdjusterTests
+    class DelegateAdjusterTests
     {
         [Test]
         public void Action_BaseTypePassed_ShouldThrow_InvalidCastException()

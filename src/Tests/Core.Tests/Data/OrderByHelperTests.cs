@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,6 +16,13 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.BoxingAllocation
 namespace Core.Tests.Data
 {
     using System;
@@ -27,7 +34,77 @@ namespace Core.Tests.Data
     [TestFixture]
     public class OrderByHelperTests
     {
-        private class Aggregate : IEquatable<Aggregate>
+        [Test]
+        public void CanSortByMultiProperty()
+        {
+            var data = new[] {
+                new Simple(2, "A"),
+                new Simple(1, "B"),
+                new Simple(3, "B")
+            };
+
+            data.OrderBy("Name DESC, Id ASC")
+                .Should()
+                .ContainInOrder(new Simple(1, "B"), new Simple(3, "B"), new Simple(2, "A"));
+        }
+
+
+        [Test]
+        public void CanSortByNestedProperties()
+        {
+            var data = new[] {
+                new Aggregate(new Simple(2)),
+                new Aggregate(new Simple(1))
+            };
+
+            data.OrderBy("Nested.Id")
+                .Should()
+                .ContainInOrder(new Aggregate(new Simple(1)), new Aggregate(new Simple(2)));
+        }
+
+
+        [Test]
+        public void CanSortBySingleProperty()
+        {
+            var data = new[] {
+                new Simple(2),
+                new Simple(1),
+                new Simple(3)
+            };
+
+            var res = data.OrderBy("Id");
+            res.Should().ContainInOrder(new Simple(1), new Simple(2), new Simple(3));
+        }
+
+
+        [Test]
+        public void CanSortBySinglePropertyDescending()
+        {
+            var data = new[] {
+                new Simple(2),
+                new Simple(1),
+                new Simple(3)
+            };
+
+            var res = data.OrderBy("Id DESC");
+            res.Should().ContainInOrder(new Simple(3), new Simple(2), new Simple(1));
+        }
+
+
+        [Test]
+        public void FailOnNullNestedProps()
+        {
+            var data = new[] {
+                new Aggregate(new Simple(2)),
+                new Aggregate(null)
+            };
+            Action order = () => data.OrderBy("Nested.Id").ToArray();
+            order.ShouldThrow<NullReferenceException>();
+        }
+
+        #region Nested type: Aggregate
+
+        class Aggregate : IEquatable<Aggregate>
         {
             public Aggregate(Simple nested)
             {
@@ -35,7 +112,7 @@ namespace Core.Tests.Data
             }
 
 
-            public Simple Nested { get; set; }
+            public Simple Nested { get; }
 
             #region Equality members
 
@@ -70,13 +147,17 @@ namespace Core.Tests.Data
 
             public override int GetHashCode()
             {
-                return (Nested != null ? Nested.GetHashCode() : 0);
+                return Nested != null ? Nested.GetHashCode() : 0;
             }
 
             #endregion
         }
 
-        private class Simple : IEquatable<Simple>
+        #endregion
+
+        #region Nested type: Simple
+
+        class Simple : IEquatable<Simple>
         {
             public Simple(int id)
             {
@@ -92,9 +173,15 @@ namespace Core.Tests.Data
             }
 
 
-            public int Id { get; set; }
+            public int Id { get; }
 
-            public string Name { get; set; }
+            public string Name { get; }
+
+
+            public override string ToString()
+            {
+                return "{0}.{1}".ApplyArgs(Id, Name);
+            }
 
             #region Equality members
 
@@ -133,84 +220,8 @@ namespace Core.Tests.Data
             }
 
             #endregion
-
-            public override string ToString()
-            {
-                return "{0}.{1}".ApplyArgs(Id, Name);
-            }
         }
 
-        [Test]
-        public void CanSortByMultiProperty()
-        {
-            var data = new[]
-            {
-                new Simple(2, "A"),
-                new Simple(1, "B"),
-                new Simple(3, "B")
-            };
-
-            data.OrderBy("Name DESC, Id ASC")
-                .Should()
-                .ContainInOrder(new Simple(1, "B"), new Simple(3, "B"), new Simple(2, "A"));
-        }
-
-
-        [Test]
-        public void CanSortByNestedProperties()
-        {
-            var data = new[]
-            {
-                new Aggregate(new Simple(2)),
-                new Aggregate(new Simple(1))
-            };
-
-            data.OrderBy("Nested.Id")
-                .Should()
-                .ContainInOrder(new Aggregate(new Simple(1)), new Aggregate(new Simple(2)));
-        }
-
-
-        [Test]
-        public void CanSortBySingleProperty()
-        {
-            var data = new[]
-            {
-                new Simple(2),
-                new Simple(1),
-                new Simple(3)
-            };
-
-            var res = data.OrderBy("Id");
-            res.Should().ContainInOrder(new Simple(1), new Simple(2), new Simple(3));
-        }
-
-
-        [Test]
-        public void CanSortBySinglePropertyDescending()
-        {
-            var data = new[]
-            {
-                new Simple(2),
-                new Simple(1),
-                new Simple(3)
-            };
-
-            var res = data.OrderBy("Id DESC");
-            res.Should().ContainInOrder(new Simple(3), new Simple(2), new Simple(1));
-        }
-
-
-        [Test]
-        public void FailOnNullNestedProps()
-        {
-            var data = new[]
-            {
-                new Aggregate(new Simple(2)),
-                new Aggregate(null)
-            };
-            Action order = () => data.OrderBy("Nested.Id").ToArray();
-            order.ShouldThrow<NullReferenceException>();
-        }
+        #endregion
     }
 }

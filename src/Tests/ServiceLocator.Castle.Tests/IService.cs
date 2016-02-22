@@ -16,6 +16,7 @@
 
 #endregion
 
+// ReSharper disable MemberCanBePrivate.Global
 namespace ServiceLocator.Castle.Tests
 {
     interface IService

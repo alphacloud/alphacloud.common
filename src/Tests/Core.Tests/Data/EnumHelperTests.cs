@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2014 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -17,7 +17,12 @@
 #endregion
 
 // ReSharper disable ExceptionNotDocumented
-
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.BoxingAllocation
 namespace Core.Tests.Data
 {
     using System;
@@ -25,16 +30,9 @@ namespace Core.Tests.Data
     using Alphacloud.Common.Core.Data;
     using NUnit.Framework;
 
-
     [TestFixture]
     public class EnumHelperTests
     {
-        enum LocalTest
-        {
-            [System.ComponentModel.Description("None")] None
-        }
-
-
         [Test]
         [Category("Manual")]
         public void PerformanceTest()
@@ -47,7 +45,7 @@ namespace Core.Tests.Data
             var ts = Stopwatch.StartNew();
             for (var i = 0; i < iterationCount; i++)
             {
-                var d = EnumHelper.GetDescription(LocalTest.None);
+                EnumHelper.GetDescription(LocalTest.None);
             }
             Console.WriteLine(@"Elapsed time (cached): {0} ms", ts.ElapsedMilliseconds);
 
@@ -58,5 +56,14 @@ namespace Core.Tests.Data
             }
             Console.WriteLine(@"Elapsed time (non-cached): {0} ms", ts.ElapsedMilliseconds);
         }
+
+        #region Nested type: LocalTest
+
+        enum LocalTest
+        {
+            [System.ComponentModel.Description("None")] None
+        }
+
+        #endregion
     }
 }

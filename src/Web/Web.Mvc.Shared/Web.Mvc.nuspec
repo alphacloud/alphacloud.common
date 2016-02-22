@@ -18,7 +18,7 @@ Update dependencies.
     <dependencies>
       <dependency id="JetBrains.Annotations" version="[10.0.0,12.0.0)" />
       <dependency id="Microsoft.AspNet.Mvc" version="[5.2.3, 6.0.0)" />
-      <dependency id="Newtonsoft.Json" version="[7.0.0,8.0.0)" />
+      <dependency id="Newtonsoft.Json" version="[8.0.2,9.0.0)" />
       <dependency id="Alphacloud.Common.Core" version="[%Version(Core),2.0.0)" />
     </dependencies>
   </metadata>

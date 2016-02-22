@@ -16,6 +16,12 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 namespace Core.Tests.Data
 {
     using System;
@@ -25,8 +31,6 @@ namespace Core.Tests.Data
     using FluentAssertions;
 
     using NUnit.Framework;
-
-//// ReSharper disable InconsistentNaming
 
     [TestFixture]
     class DateTimeExtensionsTests
@@ -51,5 +55,4 @@ namespace Core.Tests.Data
         }
     }
 
-//// ReSharper restore InconsistentNaming
 }

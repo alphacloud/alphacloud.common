@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2014 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,6 +16,12 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 namespace Infrastructure.Tests.Logging
 {
     using Common.Logging;
@@ -28,29 +34,11 @@ namespace Infrastructure.Tests.Logging
     [TestFixture]
     public class CaptureLog4NetMessagesTests
     {
-        #region Setup/Teardown
-
-        [SetUp]
-        public void SetUp()
-        {
-            AddLoggingAppender();
-        }
-
-
-        [TearDown]
-        public void TearDown()
-        {
-            if (_logger != null)
-                _logger.RemoveAppender(_memoryAppender);
-        }
-
-        #endregion
-
         static readonly ILog s_log = LogManager.GetLogger<CaptureLog4NetMessagesTests>(); // initialize log system.
+        IAppenderAttachable _logger;
 
 
         MemoryAppender _memoryAppender;
-        IAppenderAttachable _logger;
 
 
         void AddLoggingAppender()
@@ -87,5 +75,23 @@ namespace Infrastructure.Tests.Logging
                 lc.Messages.Should().Contain(testMessage);
             }
         }
+
+        #region Setup/Teardown
+
+        [SetUp]
+        public void SetUp()
+        {
+            AddLoggingAppender();
+        }
+
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (_logger != null)
+                _logger.RemoveAppender(_memoryAppender);
+        }
+
+        #endregion
     }
 }

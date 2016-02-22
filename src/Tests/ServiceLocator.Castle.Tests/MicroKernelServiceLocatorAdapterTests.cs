@@ -16,6 +16,8 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ObjectAllocation
 namespace ServiceLocator.Castle.Tests
 {
     using Alphacloud.Common.ServiceLocator.Castle;

@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,25 +16,29 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 namespace Infrastructure.Tests.Caching
 {
     using System;
-
     using Alphacloud.Common.Infrastructure.Caching;
     using Alphacloud.Common.Infrastructure.Transformations;
-
     using FluentAssertions;
-
     using Moq;
-
     using NUnit.Framework;
-
-    // ReSharper disable InconsistentNaming
-
 
     [TestFixture]
     class TransformingCacheWrapperTests
     {
+        TransformingCacheWrapper _cache;
+
+        Mock<ICache> _cacheMock;
+
+
         [SetUp]
         public void SetUp()
         {
@@ -44,38 +48,12 @@ namespace Infrastructure.Tests.Caching
                 new ValueTransformer());
         }
 
+
         [TearDown]
         public void TearDown()
         {
         }
 
-        class KeyTransformer : IEncoder<string>
-        {
-            public string Encode(string source)
-            {
-                return source + ".key";
-            }
-        }
-
-
-        class ValueTransformer : ITransformer<object>
-        {
-            public const string EncodedSuffix = "(encoded)";
-
-            public object Encode(object source)
-            {
-                return source + EncodedSuffix;
-            }
-
-            public object Decode(object source)
-            {
-                var str = source.ToString();
-                return str.Substring(0, str.Length - EncodedSuffix.Length);
-            }
-        }
-
-        Mock<ICache> _cacheMock;
-        TransformingCacheWrapper _cache;
 
         [Test]
         public void Get_Should_DecodeValue()
@@ -87,6 +65,7 @@ namespace Infrastructure.Tests.Caching
                 .Should().Be("value");
         }
 
+
         [Test]
         public void Get_Should_EncodeKey()
         {
@@ -94,6 +73,7 @@ namespace Infrastructure.Tests.Caching
             _cache.Get("1");
             _cacheMock.Verify(c => c.Get("1.key"));
         }
+
 
         [Test]
         public void Put_Should_EncodeKey()
@@ -104,6 +84,7 @@ namespace Infrastructure.Tests.Caching
             _cacheMock.Verify(c => c.Put("1.key", It.IsAny<object>(), ttl));
         }
 
+
         [Test]
         public void Put_Should_EncodeValue()
         {
@@ -113,6 +94,7 @@ namespace Infrastructure.Tests.Caching
                 c => c.Put(It.IsAny<string>(), "cached value" + ValueTransformer.EncodedSuffix, It.IsAny<TimeSpan>()));
         }
 
+
         [Test]
         public void Remove_Should_DecorateKey()
         {
@@ -120,7 +102,46 @@ namespace Infrastructure.Tests.Caching
 
             _cacheMock.Verify(c => c.Remove("00.key"));
         }
-    }
 
-    // ReSharper restore InconsistentNaming
+        #region Nested type: KeyTransformer
+
+        class KeyTransformer : IEncoder<string>
+        {
+            #region IEncoder<string> Members
+
+            public string Encode(string source)
+            {
+                return source + ".key";
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Nested type: ValueTransformer
+
+        class ValueTransformer : ITransformer<object>
+        {
+            public const string EncodedSuffix = "(encoded)";
+
+            #region ITransformer<object> Members
+
+            public object Encode(object source)
+            {
+                return source + EncodedSuffix;
+            }
+
+
+            public object Decode(object source)
+            {
+                var str = source.ToString();
+                return str.Substring(0, str.Length - EncodedSuffix.Length);
+            }
+
+            #endregion
+        }
+
+        #endregion
+    }
 }

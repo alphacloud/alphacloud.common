@@ -20,6 +20,12 @@ using Alphacloud.Common.Infrastructure.Caching;
 using Alphacloud.Common.Testing.Nunit;
 using Moq;
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 namespace Infrastructure.Tests.Caching
 {
     abstract class CompositeCacheTestsBase : MockedTestsBase

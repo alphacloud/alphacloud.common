@@ -16,6 +16,9 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ObjectAllocation
 namespace Infrastructure.Tests.Caching
 {
     using System;

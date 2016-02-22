@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,34 +16,22 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.BoxingAllocation
 namespace Core.Tests.Data
 {
     using Alphacloud.Common.Core.Data;
-
     using FluentAssertions;
-
     using NUnit.Framework;
-
-//// ReSharper disable InconsistentNaming
 
     [TestFixture]
     class WeekDaysTests
     {
-        #region Setup/Teardown
-
-        [SetUp]
-        public void SetUp()
-        {
-        }
-
-
-        [TearDown]
-        public void TearDown()
-        {
-        }
-
-        #endregion
-
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -106,7 +94,20 @@ namespace Core.Tests.Data
             new WeekDays(Week.Monday | Week.Sunday).Pack()
                 .Should().Be(Week.Monday | Week.Sunday);
         }
-    }
 
-//// ReSharper restore InconsistentNaming
+        #region Setup/Teardown
+
+        [SetUp]
+        public void SetUp()
+        {
+        }
+
+
+        [TearDown]
+        public void TearDown()
+        {
+        }
+
+        #endregion
+    }
 }

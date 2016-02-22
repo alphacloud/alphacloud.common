@@ -21,6 +21,7 @@
     <NuGetExe>$(SrcDir)\.nuget\nuget.exe</NuGetExe>
     <PackagesOutDir>$(OutputDir)\packages</PackagesOutDir>
     <PackagesSrcDir>$(OutputDir)\nuget</PackagesSrcDir>
+    <TestsBinDir>$(SrcDir)\bin\$(BuildConfig)</TestsBinDir>
   </PropertyGroup>
 
   <Import Project="$(RootDir)\PackageDefinitions.xml" />
@@ -37,9 +38,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <UseHardLinks>CreateHardLinksForCopyAdditionalFilesIfPossible=true;CreateHardLinksForCopyFilesToOutputDirectoryIfPossible=true;CreateHardLinksForCopyLocalIfPossible=true;CreateHardLinksForAdditionalFilesIfPossible=true;CreateHardLinksForPublishFilesIfPossible=true</UseHardLinks>
+    <!--<UseHardLinks>CreateHardLinksForCopyAdditionalFilesIfPossible=true;CreateHardLinksForCopyFilesToOutputDirectoryIfPossible=true;CreateHardLinksForCopyLocalIfPossible=true;CreateHardLinksForAdditionalFilesIfPossible=true;CreateHardLinksForPublishFilesIfPossible=true</UseHardLinks>-->
   </PropertyGroup>
-  
+
+
   <Target Name="UpdateVersionInfo">
     <Message Text="Updating %(PackageDefinition.Identity), version: %(PackageDefinition.Version)" />
     <Time>
@@ -62,34 +64,46 @@
       Value="Copyright (c) 2013-$(CurrentYear) Alphacloud.net" />
   </Target>
 
-  <Target Name="BuildAndTest">
-    <CallTarget Targets="CleanAll"></CallTarget>
-    <MSBuild Projects="$(RootDir)\build.proj" Targets="BuildAll" Properties="BuildConfig=Release;BuildTarget=Rebuild" />
+  <Target Name="BuildAndTest" DependsOnTargets="BuildAll">
+    <!--<CallTarget Targets="CleanAll"></CallTarget>-->
+    <!--<MSBuild Projects="$(RootDir)\build.proj" Targets="BuildAll" Properties="BuildConfig=Release;BuildTarget=Rebuild" />-->
+
+    <ItemGroup>
+      <NunitNet40TestAssemblies Include="$(TestsBinDir)\net40\Tests.*.Net40.dll">
+      </NunitNet40TestAssemblies>
+      <NunitNet45TestAssemblies Include="$(TestsBinDir)\net45\Tests.*.Net45.dll">
+      </NunitNet45TestAssemblies>
+    </ItemGroup>
+
     <!-- todo: run tests -->
+    <Message Text="Runing .NET 4 tests - @(NunitNet40TestAssemblies)" />
+
+    <Message Text="Runing .NET 4.5 tests - @(NunitNet45TestAssemblies)" />
+
   </Target>
 
   <Target Name="BuildPackages">
     <RemoveDir Directories="$(PackagesSrcDir);$(PackagesOutDir)" ContinueOnError="true" />
     <MakeDir Directories="$(PackagesSrcDir);$(PackagesOutDir)" ContinueOnError="true" />
-    
+
     <Message Text="##teamcity[progressMessage 'Building NuGet packages...']" />
-    
-    <Copy 
-      SourceFiles="%(PackageDefinition.RootFolder)\%(PackageDefinition.NuspecFile)" 
-      DestinationFiles="$(PackagesSrcDir)\%(PackageDefinition.Identity)\%(PackageDefinition.NuspecFile)" 
+
+    <Copy
+      SourceFiles="%(PackageDefinition.RootFolder)\%(PackageDefinition.NuspecFile)"
+      DestinationFiles="$(PackagesSrcDir)\%(PackageDefinition.Identity)\%(PackageDefinition.NuspecFile)"
       UseHardlinksIfPossible="false" OverwriteReadOnlyFiles="true" Retries="5"
     />
-    
+
     <ItemGroup>
       <PackageFiles Include="$(BinDir)\Release\**\Alphacloud.Common.%(PackageDefinition.Identity).dll;$(BinDir)\Release\**\Alphacloud.Common.%(PackageDefinition.Identity).xml">
-          <NuspecDir>%(PackageDefinition.Identity)</NuspecDir>
+        <NuspecDir>%(PackageDefinition.Identity)</NuspecDir>
       </PackageFiles>
     </ItemGroup>
-    
+
     <!-- set dependency version in NuSpec files -->
     <ItemGroup>
-        <NuSpecFiles Include="$(PackagesSrcDir)\**\*.nuspec">
-        </NuSpecFiles>
+      <NuSpecFiles Include="$(PackagesSrcDir)\**\*.nuspec">
+      </NuSpecFiles>
     </ItemGroup>
 
     <FileUpdate Files="@(NuSpecFiles)"
@@ -97,16 +111,16 @@
         ReplacementText="%(PackageDefinition.Version)"
         
     />
-    
-    <Copy 
-      SourceFiles="@(PackageFiles)" 
-      DestinationFolder="$(PackagesSrcDir)\%(PackageFiles.NuspecDir)\lib\%(PackageFiles.RecursiveDir)\" 
+
+    <Copy
+      SourceFiles="@(PackageFiles)"
+      DestinationFolder="$(PackagesSrcDir)\%(PackageFiles.NuspecDir)\lib\%(PackageFiles.RecursiveDir)\"
       UseHardlinksIfPossible="true" OverwriteReadOnlyFiles="true" Retries="5"
     />
-  
+
     <NuGetPack File="$(PackagesSrcDir)\%(PackageDefinition.Identity)\%(PackageDefinition.NuspecFile)" OutputDirectory="$(PackagesOutDir)" />
-    
-    
+
+
     <!--
     <Message Text="##teamcity[progressMessage 'Building NuGet symbol packages...']" />
 
@@ -122,8 +136,8 @@
       UseHardlinksIfPossible="true" OverwriteReadOnlyFiles="true" Retries="5"
     />
     -->
-    
-  <!--
+
+    <!--
     todo: 2) Copy *.pdb and src\
     todo: 3) Build symbols package
   -->
@@ -131,7 +145,7 @@
 
   <Target Name="BuildAll">
     <MSBuild Projects="$(SrcDir)\Alphacloud.Common.sln" Properties="Configuration=$(BuildConfig);$(UseHardLinks)" Targets="$(BuildTarget)"
-             BuildInParallel="true" />
+             BuildInParallel="false" />
   </Target>
 
   <Target Name="CleanAll">

@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2015 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,6 +16,13 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.BoxingAllocation
 namespace Core.Tests.Utils
 {
     using System.Collections.Generic;
@@ -49,7 +56,7 @@ namespace Core.Tests.Utils
         public void ShouldMaintainMaxPoolSize()
         {
             var items = new List<string>();
-            for (int i = 0; i < 20; i++)
+            for (var i = 0; i < 20; i++)
             {
                 items.Add(_pool.GetObject());
             }

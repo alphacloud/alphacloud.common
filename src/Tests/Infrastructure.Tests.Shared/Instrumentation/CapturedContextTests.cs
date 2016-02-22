@@ -1,6 +1,6 @@
 ﻿#region copyright
 
-// Copyright 2013-2014 Alphacloud.Net
+// Copyright 2013-2016 Alphacloud.Net
 // 
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -16,6 +16,12 @@
 
 #endregion
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable HeapView.ClosureAllocation
+// ReSharper disable ExceptionNotDocumentedOptional
+// ReSharper disable HeapView.DelegateAllocation
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 namespace Infrastructure.Tests.Instrumentation
 {
     using System.Globalization;
@@ -30,14 +36,13 @@ namespace Infrastructure.Tests.Instrumentation
     using Moq;
     using NUnit.Framework;
 
-
     [TestFixture]
     [SetPrincipal("capture-context")]
     class CapturedContextTests : MockedTestsBase
     {
         Mock<IInstrumentationContextProvider> _contextProvider;
-        Mock<IInstrumentationContext> _instrumentationContext;
         Mock<ICorrelationIdProvider> _correlationIdProvider;
+        Mock<IInstrumentationContext> _instrumentationContext;
 
 
         protected override void DoSetup()
@@ -129,7 +134,5 @@ namespace Infrastructure.Tests.Instrumentation
             Thread.CurrentThread.CurrentUICulture.Should().Be(uiCulture);
             Thread.CurrentPrincipal.Identity.Name.Should().Be("captured");
         }
-
-
     }
 }
