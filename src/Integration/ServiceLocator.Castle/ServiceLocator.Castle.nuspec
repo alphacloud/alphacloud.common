@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Alphacloud.Common.ServiceLocator.Castle</id>
-    <version>1.1.2.1</version>
+    <version>1.2.0.0</version>
     <title>CommonServiceLocator adapter for Castle Windsor (signed)</title>
     <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>
@@ -11,10 +11,9 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>CommonServiceLocator adapter for Castle Windsor and MicroKernel (Signed)</description>
     <releaseNotes>
-Multi-framework support: .NET 5 and .NET 4.5;
 Dependencies updated.
     </releaseNotes>
-    <copyright>Copyright (c) 2013-2015 Alphacloud.net</copyright>
+    <copyright>Copyright (c) 2013-2016 Alphacloud.net</copyright>
     <tags>alphacloud castle windsor microkernel signed dependencyInjection inversionOfControl</tags>
     <dependencies>
       <dependency id="Castle.Core" version="[3.3.0,4.0.0)" />

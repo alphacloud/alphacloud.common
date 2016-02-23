@@ -49,7 +49,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{90220CD1-8483-4F25-9D2C-4BE57C0286E2}"
 	ProjectSection(SolutionItems) = preProject
 		..\build.proj = ..\build.proj
-		Build.proj = Build.proj
 		.build\MSBuild.Community.Tasks.dll = .build\MSBuild.Community.Tasks.dll
 		.build\MSBuild.Community.Tasks.targets = .build\MSBuild.Community.Tasks.targets
 		.build\MSBuild.Community.Tasks.xml = .build\MSBuild.Community.Tasks.xml

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Alphacloud.Common.Infrastructure</id>
-    <version>0.4.4.0</version>
+    <version>0.4.0.0</version>
     <title>Alphacloud infrastructure components.</title>
     <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>
@@ -11,9 +11,9 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Alphacloud infrastructure includes caching abstraction layer and instrumentation runtime.</description>
     <releaseNotes>
-Upgrade Common.Logging.
+Targeting .NET 4 / .NET 4.5 / .NET 4.6.
     </releaseNotes>
-    <copyright>Copyright (c) 2013-2015 Alphacloud.net</copyright>
+    <copyright>Copyright (c) 2013-2016 Alphacloud.net</copyright>
     <tags>alphacloud infrastructure caching</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Runtime.Caching" targetFramework="" />

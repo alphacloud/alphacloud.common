@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Alphacloud.Common.Core</id>
-    <version>0.3.5.0</version>
+    <version>0.4.0.0</version>
     <title>Alphacloud.Common core functionality</title>
     <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>
@@ -10,10 +10,10 @@
     <projectUrl>https://github.com/alphacloud/alphacloud.common</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Contains core utility methods.</description>
-    <copyright>Copyright (c) 2013-2015 Alphacloud.net</copyright>
+    <copyright>Copyright (c) 2013-2016 Alphacloud.net</copyright>
     <tags>alphacloud</tags>
     <releaseNotes>
-Update dependencies.
+Targeting .NET 4 / .NET 4.5 / .NET 4.6.
     </releaseNotes>
     <dependencies>
       <dependency id="Jetbrains.Annotations" version="[10.0.0,12.0.0)" />

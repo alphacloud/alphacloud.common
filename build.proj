@@ -152,7 +152,7 @@
     <Message Text="Performing full clean-up..." />
     <MSBuild Projects="$(MainSolution)" Properties="Configuration=Debug" Targets="Clean"  BuildInParallel="true" />
     <MSBuild Projects="$(MainSolution)" Properties="Configuration=Release" Targets="Clean" BuildInParallel="true" />
-    <DeleteTree Directories="$(SrcDir)\**\bin\**;$(SrcDir)\**\obj\**;$(SrcDir)\**\out\**;$(OutputDir);$(BinDir)" />
+    <DeleteTree Directories="$(SrcDir)\**\bin\**;$(SrcDir)\**\obj\**;$(SrcDir)\**\out\**;$(OutputDir);$(BinDir);$(SrcDir)\packages" />
   </Target>
 
 

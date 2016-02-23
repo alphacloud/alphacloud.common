@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Alphacloud.Common.Web.Mvc</id>
-    <version>0.2.2.1</version>
+    <version>0.3.0.0</version>
     <title>ASP.NET MVC helpers.</title>
     <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>
@@ -13,7 +13,7 @@
     <releaseNotes>
 Update dependencies.
     </releaseNotes>
-    <copyright>Copyright (c) 2013-2015 Alphacloud.net</copyright>
+    <copyright>Copyright (c) 2013-2016 Alphacloud.net</copyright>
     <tags>alphacloud asp.net mvc</tags>
     <dependencies>
       <dependency id="JetBrains.Annotations" version="[10.0.0,12.0.0)" />
