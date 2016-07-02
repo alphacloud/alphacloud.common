@@ -124,6 +124,12 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return "{0:0.0} secs; {1:0.0}; {2:0.0}; {3:0.0} and {4:0.0} minutes".ApplyArgs(Tiny.TotalSeconds,

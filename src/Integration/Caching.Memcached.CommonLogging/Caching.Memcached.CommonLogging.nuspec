@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Alphacloud.Common.Caching.Memcached.CommonLogging</id>
-    <version>0.4.0.0</version>
+    <version>0.5.0.0</version>
     <title>Common.Logging adapter for Enyim Memcached client library</title>
     <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>
@@ -11,12 +11,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Common.Logging adapter for Enyim Memcached client library</description>
     <releaseNotes>
-Update dependencies.
+Dependencies upgrade.
     </releaseNotes>
     <copyright>Copyright (c) 2013-2016 Alphacloud.net</copyright>
     <tags>alphacloud enyim memcached common logging</tags>
     <dependencies>
-      <dependency id="JetBrains.Annotations" version="[10.0.0,12.0.0)" />
+      <dependency id="JetBrains.Annotations" version="[10.1.5,12.0.0)" />
       <dependency id="Common.Logging" version="[3.3.1,4.0.0)" />
       <dependency id="EnyimMemcached" version="[2.13,3.0)" />
     </dependencies>

@@ -25,21 +25,20 @@ namespace Alphacloud.Common.Infrastructure.Caching
     using global::Common.Logging;
     using JetBrains.Annotations;
 
-
     /// <summary>
-    /// Delegate to load missing
+    ///   Delegate to load missing
     /// </summary>
     /// <param name="keys"></param>
     /// <returns></returns>
     public delegate IDictionary<string, object> Loader(ICollection<string> keys);
 
-        /// <summary>
+    /// <summary>
     ///   Cache extensions / helpers.
     /// </summary>
     [PublicAPI]
     public static class CacheExtensions
     {
-        static readonly ILog s_log = LogManager.GetLogger(typeof(CacheExtensions));
+        private static readonly ILog s_log = LogManager.GetLogger(typeof(CacheExtensions));
 
 
         /// <summary>
@@ -111,14 +110,24 @@ namespace Alphacloud.Common.Infrastructure.Caching
             return cache.GetOrLoad<Cached<T>>(key, retrieve, ttl, shouldCache);
         }
 
-        
 
+        /// <summary>
+        ///   Get item from cache or load from external source.
+        /// </summary>
+        /// <param name="cache">The cache.</param>
+        /// <param name="keys">The keys to load.</param>
+        /// <param name="loader">The loader.</param>
+        /// <param name="ttl">Cache item TTL (used whan adding new items to cache.</param>
+        /// <returns>Key/Item pairs as dictionary.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        ///   <paramref name="cache" />  or <paramref name="keys" /> or <paramref name="loader" /> is null.
+        /// </exception>
         public static IDictionary<string, object> GetOrLoad([NotNull] this ICache cache,
             [NotNull] ICollection<string> keys, [NotNull] Loader loader, TimeSpan ttl)
         {
-            if (cache == null) throw new ArgumentNullException("cache");
-            if (keys == null) throw new ArgumentNullException("keys");
-            if (loader == null) throw new ArgumentNullException("loader");
+            if (cache == null) throw new ArgumentNullException(nameof(cache));
+            if (keys == null) throw new ArgumentNullException(nameof(keys));
+            if (loader == null) throw new ArgumentNullException(nameof(loader));
 
             var cached = cache.Get(keys);
 
@@ -140,7 +149,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
-            /// <summary>
+        /// <summary>
         ///   Gets the specified key.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -151,7 +160,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         public static T Get<T>([NotNull] this ICache cache, string key)
             where T : class
         {
-            object cached = cache.Get(key);
+            var cached = cache.Get(key);
             if (cached == null)
             {
                 return null;
@@ -161,7 +170,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             if (obj == null)
             {
                 throw new CacheException("Error casting item '{0}' from type {1} to {2}"
-                    .ApplyArgs(key, cached.GetType().Name, typeof (T).Name));
+                    .ApplyArgs(key, cached.GetType().Name, typeof(T).Name));
             }
 
             return obj;

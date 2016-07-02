@@ -160,6 +160,15 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
+        /// <summary>
+        /// Gets multiple items from cache.
+        /// </summary>
+        /// <remarks>
+        /// Items will be retrieved in one call if supported by underlying cache implementation. If not, multiple requests will be made.
+        /// </remarks>
+        /// <param name="keys">List of item keys to retrieve.</param>
+        /// <returns>Key/Value dictionary. Missing items will have <c>null</c> as value.</returns>
+        /// <exception cref="ArgumentNullException">if <paramref name="keys"/> is <c>null</c>.</exception>
         public IDictionary<string, object> Get([NotNull] ICollection<string> keys)
         {
             if (keys == null) throw new ArgumentNullException("keys");
@@ -171,7 +180,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
             var remoteData = _backingCache.Get(missingKeys);
             foreach (var kv in remoteData)
             {
-                // update local cache: mske sure no obsolete data stored locally
+                // update local cache: make sure no obsolete data stored locally
                 if (kv.Value != null)
                     _localCache.Put(kv.Key, kv.Value, _localTimeoutStrategy.GetLocalTimeout(TimeSpan.Zero));
                 else

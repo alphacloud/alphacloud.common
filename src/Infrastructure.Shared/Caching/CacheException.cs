@@ -56,6 +56,11 @@ namespace Alphacloud.Common.Infrastructure.Caching
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheException"/> class.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
         protected CacheException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }

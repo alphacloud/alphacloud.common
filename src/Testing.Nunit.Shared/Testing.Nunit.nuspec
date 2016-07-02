@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Alphacloud.Common.Testing.Nunit</id>
-    <version>0.5.0.0</version>
+    <version>0.6.0.0</version>
     <title>Test helpers (NUnit/MOQ based)</title>
     <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>
@@ -13,23 +13,24 @@
     <copyright>Copyright (c) 2013-2016 Alphacloud.net</copyright>
     <tags>alphacloud signed testing nunit moq</tags>
     <releaseNotes>
-Targeting .NET 4 / .NET 4.5 / .NET 4.6.
+Dependencies upgrade.
     </releaseNotes>
     <dependencies>
       <group>
         <dependency id="Alphacloud.Common.Core" version="[%Version(Core),2.0.0.0)" />
       </group>
       <group>
-        <dependency id="Jetbrains.Annotations" version="[10.0.0,12.0.0)" />
-        <dependency id="FluentAssertions" version="[4.2.2,5.0.0)" />
-        <dependency id="Moq" version="[4.2.1510.0,5.0.0.0)" />
-        <dependency id="NUnit" version="[3.0.1,4.0.0)" />
+        <dependency id="Jetbrains.Annotations" version="[10.1.5,12.0.0)" />
+        <dependency id="FluentAssertions" version="[4.9.1,5.0.0)" />
+        <dependency id="NUnit" version="[3.4.1,4.0.0)" />
       </group>
       <group targetFramework="net40">
-        <dependency id="AutoMapper" version="[4.1.1,5.0.0)" />
+        <dependency id="AutoMapper" version="[4.1.1,4.1.1]" />
+        <dependency id="Moq" version="[4.2.1510.2205,4.2.1510.2205]" />
       </group>
       <group targetFramework="net45">
-        <dependency id="AutoMapper" version="[4.2.0,5.0.0)" />
+        <dependency id="AutoMapper" version="[5.0.0,6.0.0)" />
+        <dependency id="Moq" version="[4.5.10,5.0.0)" />
       </group>
     </dependencies>
   </metadata>

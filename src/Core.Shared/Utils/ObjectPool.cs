@@ -52,12 +52,16 @@ namespace Alphacloud.Common.Core.Utils
 
         #region IObjectPool<T> Members
 
-        public int Count
-        {
-            get { return _pool.Count; }
-        }
+        /// <summary>
+        /// Returns number of objects in the pool.
+        /// </summary>
+        public int Count => _pool.Count;
 
 
+        /// <summary>
+        ///   Retrieve object from pool or create new if pool is empty.
+        /// </summary>
+        /// <returns>Object requested.</returns>
         public T GetObject()
         {
             T result;
@@ -69,12 +73,23 @@ namespace Alphacloud.Common.Core.Utils
         }
 
 
+        /// <summary>
+        ///   Retrieve or create object and wrapper it with disposable <see cref="PooledObjectWrapper{T}" />.
+        /// </summary>
+        /// <returns>Wrapped object.</returns>
         public PooledObjectWrapper<T> GetWrappedObject()
         {
             return new PooledObjectWrapper<T>(this, GetObject());
         }
 
 
+        /// <summary>
+        ///   Return object back to pool.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <remarks>
+        ///   In case pool is already reached maximum size, object will be disposed.
+        /// </remarks>
         public void ReturnObject([NotNull] T obj)
         {
             if (ShouldStore(obj))
@@ -89,6 +104,10 @@ namespace Alphacloud.Common.Core.Utils
 
         #endregion
 
+        /// <summary>
+        /// Determines if object should be stored in pool.
+        /// </summary>
+        /// <returns><c>true</c> - object should be stored in pool, <c>false</c> - object should be discarded.</returns>
         protected virtual bool ShouldStore([CanBeNull] T obj)
         {
             return (obj != null) && _pool.Count < _maxPoolSize;
@@ -117,19 +136,19 @@ namespace Alphacloud.Common.Core.Utils
         /// <summary>
         ///   Retrieve object from pool or create new if pool is empty.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Object requested.</returns>
         T GetObject();
 
 
         /// <summary>
-        ///   Retrieve or create object and return wrapper <see cref="PooledObjectWrapper{T}" />.
+        ///   Retrieve or create object and wrapper it with disposable <see cref="PooledObjectWrapper{T}" />.
         /// </summary>
         /// <returns>Wrapped object.</returns>
         PooledObjectWrapper<T> GetWrappedObject();
 
 
         /// <summary>
-        ///   Put object back to pool.
+        ///   Return object back to pool.
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <remarks>
@@ -163,8 +182,8 @@ namespace Alphacloud.Common.Core.Utils
         /// </exception>
         public PooledObjectWrapper([NotNull] IObjectPool<T> owner, [NotNull] T obj)
         {
-            if (owner == null) throw new ArgumentNullException("owner");
-            if (obj == null) throw new ArgumentNullException("obj");
+            if (owner == null) throw new ArgumentNullException(nameof(owner));
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
             _value = obj;
             _owner = new WeakReference(owner);
         }
@@ -225,15 +244,18 @@ namespace Alphacloud.Common.Core.Utils
             : base(maxPoolSize, objectConstructor)
         {
             if (maxPooledMemoryBlockSize <= 0)
-                throw new ArgumentOutOfRangeException("maxPooledMemoryBlockSize", maxPooledMemoryBlockSize,
+                throw new ArgumentOutOfRangeException(nameof(maxPooledMemoryBlockSize), maxPooledMemoryBlockSize,
                     @"Memory block size must ebe positive number.");
             _maxPooledMemoryBlockToStore = maxPooledMemoryBlockSize;
         }
 
 
+        /// <summary>
+        /// Determines if object should be stored in pool.
+        /// </summary>
         protected override bool ShouldStore(ISerializer obj)
         {
-            return base.ShouldStore(obj) && obj.MemoryAllocated <= _maxPooledMemoryBlockToStore;
+            return base.ShouldStore(obj) && obj.AllocatedMemorySize <= _maxPooledMemoryBlockToStore;
         }
     }
 }

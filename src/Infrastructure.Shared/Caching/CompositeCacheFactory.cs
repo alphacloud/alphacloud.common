@@ -86,7 +86,11 @@ namespace Alphacloud.Common.Infrastructure.Caching
             LoadFromConfig(settings);
         }
 
-
+        /// <summary>
+        /// Creates named cache cache.
+        /// </summary>
+        /// <param name="instance">The instance.</param>
+        /// <returns></returns>
         protected internal override ICache CreateCache(string instance)
         {
             var cache = base.CreateCache(instance);
@@ -106,6 +110,9 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
+        /// <summary>
+        /// Initializes cache factory.
+        /// </summary>
         public override void Initialize()
         {
             if (!IsEnabled) return;

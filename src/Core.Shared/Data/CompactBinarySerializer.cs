@@ -20,7 +20,6 @@ namespace Alphacloud.Common.Core.Data
 {
     using System;
     using System.IO;
-    using System.Runtime.Serialization.Formatters;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Text;
     using JetBrains.Annotations;
@@ -33,7 +32,7 @@ namespace Alphacloud.Common.Core.Data
         /// <summary>
         ///   Gets amount of memory allicated by underlying data structures.
         /// </summary>
-        int MemoryAllocated { get; }
+        int AllocatedMemorySize { get; }
 
 
         /// <summary>
@@ -49,7 +48,8 @@ namespace Alphacloud.Common.Core.Data
         ///   Deserializes object.
         /// </summary>
         /// <param name="buffer">The buffer.</param>
-        /// <returns></returns>
+        /// <returns>Deserialized object.</returns>
+        /// <exception cref="ArgumentNullException"> if <paramref name="buffer"/> is <c>null</c>.</exception>
         [CanBeNull]
         object Deserialize([NotNull] byte[] buffer);
     }
@@ -66,22 +66,37 @@ namespace Alphacloud.Common.Core.Data
         #region ISerializer Members
 
         //
-        public int MemoryAllocated
-        {
-            get { return 1; }
-        }
+        /// <summary>
+        /// Gets the size of the allocated memory.
+        /// </summary>
+        /// <value>
+        /// The size of the allocated memory.
+        /// </value>
+        public int AllocatedMemorySize => 1;
 
 
+        /// <summary>
+        /// Serializes the specified object.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">obj</exception>
         public byte[] Serialize(object obj)
         {
-            if (obj == null) throw new ArgumentNullException("obj");
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
             return Encoding.UTF8.GetBytes(obj.ToString());
         }
 
 
+        /// <summary>
+        ///   Reads string from buffer using UTF8 encoding.
+        /// </summary>
+        /// <param name="buffer">The buffer.</param>
+        /// <returns>Deserialized <see cref="string"/>.</returns>
+        /// <exception cref="ArgumentNullException"> if <paramref name="buffer"/> is <c>null</c>.</exception>
         public object Deserialize(byte[] buffer)
         {
-            if (buffer == null) throw new ArgumentNullException("buffer");
+            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             if (buffer.Length == 0)
                 return string.Empty;
 
@@ -91,85 +106,10 @@ namespace Alphacloud.Common.Core.Data
         #endregion
     }
 
-    public abstract class CompactBinarySerializerBase
-    {
-        readonly BinaryFormatter _formatter;
-
-
-        internal protected CompactBinarySerializerBase([NotNull] BinaryFormatter formatter)
-        {
-            if (formatter == null) throw new ArgumentNullException("formatter");
-            _formatter = formatter;
-        }
-
-
-        protected CompactBinarySerializerBase() : this(new BinaryFormatter {
-            AssemblyFormat = FormatterAssemblyStyle.Simple,
-            TypeFormat = FormatterTypeStyle.TypesWhenNeeded
-        })
-        {
-        }
-
-
-        public abstract int MemoryAllocated { get; }
-
-
-        public byte[] Serialize([NotNull] object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            var stream = AcquireStream();
-
-            try
-            {
-                stream.Position = 0;
-                _formatter.Serialize(stream, obj);
-                stream.SetLength(stream.Position);
-                return stream.ToArray();
-            }
-            finally
-            {
-                ReleaseStream(stream);
-            }
-        }
-
-
-        /// <summary>
-        ///   Acquires the stream.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract MemoryStream AcquireStream();
-
-
-        /// <summary>
-        ///   Releases the stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        protected abstract void ReleaseStream(MemoryStream stream);
-
-        /// <summary>
-        /// Deserializes data.
-        /// </summary>
-        /// <param name="buffer">Binary buffer.</param>
-        /// <returns>Deserialized object.</returns>
-        /// <exception cref="System.ArgumentNullException">buffer is <c>null</c></exception>
-        /// <remarks>This method does not use AcquireStream/ReleaseStream because memory buffer already exists.</remarks>
-        public object Deserialize([NotNull] byte[] buffer)
-        {
-            if (buffer == null) throw new ArgumentNullException("buffer");
-
-            if (buffer.Length == 0)
-                return null;
-            using (var ms = new MemoryStream(buffer))
-            {
-                return _formatter.Deserialize(ms);
-            }
-        }
-    }
-
     /// <summary>
     ///   Serialize object using <see cref="BinaryFormatter" />.
     /// </summary>
-    public class CompactBinarySerializer : CompactBinarySerializerBase, ISerializer, IDisposable
+    public class CompactBinarySerializer : CompactBinarySerializerBase, IDisposable
     {
         MemoryStream _stream;
 
@@ -190,19 +130,33 @@ namespace Alphacloud.Common.Core.Data
 
         #region ISerializer Members
 
-        public override int MemoryAllocated
+        /// <summary>
+        /// Gets the size of the allocated memory.
+        /// </summary>
+        /// <value>
+        /// The size of the allocated memory.
+        /// </value>
+        public override int AllocatedMemorySize
         {
             get { return AcquireStream().Capacity; }
         }
 
         #endregion
 
+        /// <summary>
+        /// Acquires the stream.
+        /// </summary>
+        /// <returns></returns>
         protected override MemoryStream AcquireStream()
         {
             return _stream = (_stream ?? new MemoryStream());
         }
 
 
+        /// <summary>
+        /// Releases the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
         protected override void ReleaseStream(MemoryStream stream)
         {
             // do nothing
