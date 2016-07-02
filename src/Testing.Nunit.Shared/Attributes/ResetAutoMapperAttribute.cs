@@ -39,7 +39,11 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
         /// <param name="test">Provides details about the test that is going to be run.</param>
         public void BeforeTest(ITest test)
         {
+#if NET40
             Mapper.Reset();
+#else
+            Mapper.Initialize(c => { });
+#endif
         }
 
 
@@ -49,7 +53,11 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
         /// <param name="test">Provides details about the test that has just been run.</param>
         public void AfterTest(ITest test)
         {
+#if NET40
             Mapper.Reset();
+#else
+            Mapper.Initialize(c => { });
+#endif
         }
 
 
@@ -61,6 +69,6 @@ namespace Alphacloud.Common.Testing.Nunit.Attributes
         /// </returns>
         public ActionTargets Targets => ActionTargets.Suite;
 
-        #endregion
+#endregion
     }
 }
