@@ -137,6 +137,12 @@ namespace Alphacloud.Common.Infrastructure.Caching
         public long ItemCount { get; private set; }
 
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return "Nodes: {0}, Total items: {1}, Hit rate: {2}%".ApplyArgs(_nodes.Count, ItemCount, HitRate);

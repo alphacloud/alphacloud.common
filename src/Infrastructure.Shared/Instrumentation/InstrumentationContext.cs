@@ -27,14 +27,14 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
     using JetBrains.Annotations;
 
     /// <summary>
-    ///   Call information.
+    ///   Contains information about operation completed.
     /// </summary>
     public class CallInfo
     {
         public CallInfo([NotNull] string type, [NotNull] string operation, TimeSpan duration, int callingThreadId)
         {
-            if (type == null) throw new ArgumentNullException("type");
-            if (operation == null) throw new ArgumentNullException("operation");
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (operation == null) throw new ArgumentNullException(nameof(operation));
 
             CallType = string.Intern(type);
             Operation = operation;
@@ -43,11 +43,24 @@ namespace Alphacloud.Common.Infrastructure.Instrumentation
         }
 
 
+        /// <summary>
+        /// Type of the call.
+        /// Can be any text.
+        /// </summary>
         public string CallType { get; private set; }
 
+        /// <summary>
+        /// Operation name.
+        /// </summary>
         public string Operation { get; private set; }
+        /// <summary>
+        /// Operation duration.
+        /// </summary>
         public TimeSpan Duration { get; private set; }
 
+        /// <summary>
+        /// Calling thread identifier.
+        /// </summary>
         public int CallingThreadId { get; private set; }
     }
 

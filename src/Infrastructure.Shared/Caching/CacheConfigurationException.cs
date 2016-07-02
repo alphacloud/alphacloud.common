@@ -31,21 +31,38 @@ namespace Alphacloud.Common.Infrastructure.Caching
     [ExcludeFromCodeCoverage]
     public class CacheConfigurationException : CacheException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheConfigurationException"/> class.
+        /// </summary>
         protected CacheConfigurationException()
         {
         }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheConfigurationException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
         public CacheConfigurationException(string message) : base(message)
         {
         }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheConfigurationException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
         public CacheConfigurationException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheConfigurationException"/> class.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
         protected CacheConfigurationException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }

@@ -22,8 +22,8 @@ namespace Alphacloud.Common.Infrastructure.Caching
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Configuration;
-    using JetBrains.Annotations;
     using global::Common.Logging;
+    using JetBrains.Annotations;
 
     /// <summary>
     ///   Base class for cache factory.
@@ -36,9 +36,8 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </summary>
         public const string DefaultInstanceName = "default";
 
-        const string CacheParametersConfigPath = "alphacloud/cache/parameters";
-        readonly IDictionary<string, ICache> _caches = new SortedList<string, ICache>(16);
-        readonly ILog _log;
+        private const string CacheParametersConfigPath = "alphacloud/cache/parameters";
+        private readonly IDictionary<string, ICache> _caches = new SortedList<string, ICache>(16);
 
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </summary>
         protected CacheFactoryBase()
         {
-            _log = LogManager.GetLogger(GetType());
+            Log = LogManager.GetLogger(GetType());
             IsEnabled = true;
             var section = (NameValueCollection) ConfigurationManager.GetSection(CacheParametersConfigPath);
             if (section != null)
@@ -61,12 +60,12 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <exception cref="System.ArgumentNullException">settings is null</exception>
         protected CacheFactoryBase([NotNull] NameValueCollection settings)
         {
-            _log = LogManager.GetLogger(GetType());
+            Log = LogManager.GetLogger(GetType());
             IsEnabled = true;
 
             if (settings == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
             }
             LoadParameters(settings);
         }
@@ -75,9 +74,21 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// <summary>
         ///   Logger
         /// </summary>
-        protected ILog Log
+        protected ILog Log { get; }
+
+
+        private void LoadParameters(NameValueCollection section)
         {
-            get { return _log; }
+            bool isEnabled;
+            var enabled = section != null ? section["enabled"] : bool.TrueString;
+            if (bool.TryParse(enabled, out isEnabled))
+            {
+                IsEnabled = isEnabled;
+            }
+            if (!IsEnabled)
+            {
+                Log.Warn("Cache is disabled in configuration, using NullCache");
+            }
         }
 
         #region Implementation of ICacheFactory
@@ -97,7 +108,7 @@ namespace Alphacloud.Common.Infrastructure.Caching
         /// </returns>
         public ICache GetCache(string instance = null)
         {
-            string instanceName = instance ?? DefaultInstanceName;
+            var instanceName = instance ?? DefaultInstanceName;
             Log.DebugFormat("Resolving cache '{0}'", instanceName);
             CheckDisposed();
 
@@ -161,6 +172,9 @@ namespace Alphacloud.Common.Infrastructure.Caching
         public bool IsDisposed { get; private set; }
 
 
+        /// <summary>
+        ///   Releases unmanaged and - optionally - managed resources.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
@@ -168,6 +182,10 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposing || IsDisposed)
@@ -195,19 +213,5 @@ namespace Alphacloud.Common.Infrastructure.Caching
         }
 
         #endregion
-
-        void LoadParameters(NameValueCollection section)
-        {
-            bool isEnabled;
-            var enabled = section != null ? section["enabled"] : bool.TrueString;
-            if (bool.TryParse(enabled, out isEnabled))
-            {
-                IsEnabled = isEnabled;
-            }
-            if (!IsEnabled)
-            {
-                Log.Warn("Cache is disabled in configuration, using NullCache");
-            }
-        }
     }
 }
