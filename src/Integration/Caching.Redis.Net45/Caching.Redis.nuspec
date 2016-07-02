@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Alphacloud.Common.Caching.Redis</id>
-    <version>0.2.0.0</version>
+    <version>0.3.0.0</version>
     <title>StackExchange Redis adapter for common caching infrastructure</title>
     <authors>Alphacloud.net</authors>
     <owners>Alphacloud.net</owners>
@@ -11,14 +11,14 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>StackExchange Redis adapter for common caching infrastructure</description>
     <releaseNotes>
-Upgrade dependencies.
+Dependencies upgrade.
     </releaseNotes>
     <copyright>Copyright (c) 2013-2016 Alphacloud.net</copyright>
     <tags>alphacloud caching redis</tags>
     <dependencies>
-      <dependency id="JetBrains.Annotations" version="[10.0.0,12.0.0)" />
+      <dependency id="JetBrains.Annotations" version="[10.1.5,12.0.0)" />
       <dependency id="Common.Logging" version="[3.3.0,4.0.0)" />
-      <dependency id="StackExchange.Redis.StrongName" version="[1.0.488,2.0.0)" />
+      <dependency id="StackExchange.Redis.StrongName" version="[1.1.603,2.0.0)" />
       <dependency id="Alphacloud.Common.Core" version="[%Version(Core),2.0.0.0)" />
       <dependency id="Alphacloud.Common.Infrastructure" version="[%Version(Infrastructure),2.0.0.0)" />
       <dependency id="Microsoft.IO.RecyclableMemoryStream" version="[1.1.0,2.0.0)" />
