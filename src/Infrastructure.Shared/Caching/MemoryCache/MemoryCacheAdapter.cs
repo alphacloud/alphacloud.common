@@ -47,7 +47,7 @@ namespace Alphacloud.Common.Infrastructure.Caching.MemoryCache
         {
             if (cache == null)
             {
-                throw new ArgumentNullException("cache");
+                throw new ArgumentNullException(nameof(cache));
             }
             _cache = cache;
         }

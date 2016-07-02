@@ -29,7 +29,7 @@ namespace Alphacloud.Common.Caching.Redis
     /// </summary>
     /// <seealso cref="RecyclableMemoryStream" />
     /// <seealso cref="RecyclableMemoryStreamManager" />
-    class CompactSerializerWithRecyclableMemoryStream : CompactBinarySerializerBase
+    public class CompactSerializerWithRecyclableMemoryStream : CompactBinarySerializerBase
     {
         readonly RecyclableMemoryStreamManager _streamManager;
 
@@ -41,15 +41,18 @@ namespace Alphacloud.Common.Caching.Redis
         /// <exception cref="ArgumentNullException"><paramref name="streamManager" /> is <see langword="null" />.</exception>
         public CompactSerializerWithRecyclableMemoryStream([NotNull] RecyclableMemoryStreamManager streamManager)
         {
-            if (streamManager == null) throw new ArgumentNullException("streamManager");
+            if (streamManager == null) throw new ArgumentNullException(nameof(streamManager));
             _streamManager = streamManager;
         }
 
 
-        public override int MemoryAllocated
-        {
-            get { return 1; }
-        }
+        /// <summary>
+        /// Gets the memory allocated.
+        /// </summary>
+        /// <value>
+        /// The memory allocated.
+        /// </value>
+        public override int AllocatedMemorySize => 1;
 
 
         /// <summary>

@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChartHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CompactBinarySerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\CompactBinarySerializerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\DateTimeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\DictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EnumHelper.cs" />

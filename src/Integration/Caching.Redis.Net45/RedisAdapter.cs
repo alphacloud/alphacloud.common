@@ -49,8 +49,8 @@ namespace Alphacloud.Common.Caching.Redis
             string instanceName, [NotNull] IDatabase redisDatabase,
             [NotNull] IObjectPool<ISerializer> serializers) : base(monitor, instanceName)
         {
-            if (redisDatabase == null) throw new ArgumentNullException("redisDatabase");
-            if (serializers == null) throw new ArgumentNullException("serializers");
+            if (redisDatabase == null) throw new ArgumentNullException(nameof(redisDatabase));
+            if (serializers == null) throw new ArgumentNullException(nameof(serializers));
 
             _serializers = serializers;
             _db = redisDatabase;
