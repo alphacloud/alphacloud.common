@@ -1,0 +1,12 @@
+﻿{
+  "supports": {},
+  "dependencies": {
+    "JetBrains.Annotations": "10.2.1",
+    "NETStandard.Library": "1.6.1",
+    "System.Resources.ResourceManager": "4.3.0",
+    "System.Runtime.Serialization.Formatters": "4.3.0"
+  },
+  "frameworks": {
+    "netstandard1.5": {}
+  }
+}

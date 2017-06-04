@@ -109,3 +109,4 @@ UpgradeLog*.XML
 /src/Core/*.nupkg
 /src/Integration/Caching.Memcached.CommonLogging/*.nupkg
 /src/out
+project.lock.json

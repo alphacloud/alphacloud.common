@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F69E87C-76F0-48C8-B4B0-C2EB68931D89}"
 	ProjectSection(SolutionItems) = preProject
@@ -98,30 +98,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing.NUnit Assembly", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.NUnit.Net46", "Testing.NUnit.Net46\Testing.NUnit.Net46.csproj", "{E0778E7F-5AA4-4B14-AAC4-5CCB52E0E761}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.NS15", "Core.NS15\Core.NS15.csproj", "{D1C27D37-EB9F-4C64-911B-2C556D3180EA}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Tests\Core.Tests.Shared\Core.Tests.Shared.projitems*{bd0e45f6-3065-4a49-af4b-0a451ec4e2f3}*SharedItemsImports = 4
-		Tests\Core.Tests.Shared\Core.Tests.Shared.projitems*{613ce068-4556-460c-8b54-b2a1b93e0514}*SharedItemsImports = 4
-		Web\Web.Mvc.Shared\Web.Mvc.Shared.projitems*{d6291a8e-398d-469a-b997-5a17d5cb4f71}*SharedItemsImports = 4
-		Testing.Nunit.Shared\Testing.Nunit.Shared.projitems*{e55905ce-1076-4bd4-b2d3-367dd8c2699c}*SharedItemsImports = 4
-		Tests\Core.Tests.Shared\Core.Tests.Shared.projitems*{c3a1c1c1-ad06-4a11-9f53-a27772aa6de2}*SharedItemsImports = 13
-		Infrastructure.Shared\Infrastructure.Shared.projitems*{d40ed75d-018a-42d0-8a45-011bf25031bb}*SharedItemsImports = 4
 		Testing.Nunit.Shared\Testing.Nunit.Shared.projitems*{169c56d5-e61c-464b-b646-27ea1f6d6c45}*SharedItemsImports = 13
-		Testing.Nunit.Shared\Testing.Nunit.Shared.projitems*{e0778e7f-5aa4-4b14-aac4-5ccb52e0e761}*SharedItemsImports = 4
-		Core.Shared\Core.Shared.projitems*{928edad6-aefc-4c20-a902-c20542153bc1}*SharedItemsImports = 13
+		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{29124d65-fdb8-4d03-ac7e-fc4f530dcc27}*SharedItemsImports = 4
 		Tests\Core.Tests.Shared\Core.Tests.Shared.projitems*{35a08632-98b3-41f9-aa5e-ab2037286a83}*SharedItemsImports = 4
+		Web\Web.Mvc.Shared\Web.Mvc.Shared.projitems*{5c121353-e465-4c38-8899-d49e01b026c8}*SharedItemsImports = 13
+		Tests\Core.Tests.Shared\Core.Tests.Shared.projitems*{613ce068-4556-460c-8b54-b2a1b93e0514}*SharedItemsImports = 4
+		Infrastructure.Shared\Infrastructure.Shared.projitems*{6d25f2d0-734b-4914-8ba9-4d0976f05fa2}*SharedItemsImports = 4
 		Infrastructure.Shared\Infrastructure.Shared.projitems*{832c2486-e1f8-4a8b-89b8-729946393804}*SharedItemsImports = 4
-		Testing.Nunit.Shared\Testing.Nunit.Shared.projitems*{b94885e3-6d45-47d3-b9b5-c78bd45653f4}*SharedItemsImports = 4
 		Infrastructure.Shared\Infrastructure.Shared.projitems*{865167ef-8758-4409-a9b7-15257661d952}*SharedItemsImports = 13
+		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{8b9a63fb-b63f-47ac-b7fa-4032cdabe7bb}*SharedItemsImports = 4
+		Core.Shared\Core.Shared.projitems*{901df607-869c-449d-84ee-4bee030d8bb3}*SharedItemsImports = 4
+		Core.Shared\Core.Shared.projitems*{928edad6-aefc-4c20-a902-c20542153bc1}*SharedItemsImports = 13
+		Testing.Nunit.Shared\Testing.Nunit.Shared.projitems*{b94885e3-6d45-47d3-b9b5-c78bd45653f4}*SharedItemsImports = 4
+		Tests\Core.Tests.Shared\Core.Tests.Shared.projitems*{bd0e45f6-3065-4a49-af4b-0a451ec4e2f3}*SharedItemsImports = 4
+		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{c2104a0c-2e00-409c-aaf3-d010ad5230ce}*SharedItemsImports = 13
+		Tests\Core.Tests.Shared\Core.Tests.Shared.projitems*{c3a1c1c1-ad06-4a11-9f53-a27772aa6de2}*SharedItemsImports = 13
+		Core.Shared\Core.Shared.projitems*{d1c27d37-eb9f-4c64-911b-2c556d3180ea}*SharedItemsImports = 4
+		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{d3a97184-f648-40d4-baff-5fb5785e47f9}*SharedItemsImports = 4
+		Infrastructure.Shared\Infrastructure.Shared.projitems*{d40ed75d-018a-42d0-8a45-011bf25031bb}*SharedItemsImports = 4
+		Web\Web.Mvc.Shared\Web.Mvc.Shared.projitems*{d6291a8e-398d-469a-b997-5a17d5cb4f71}*SharedItemsImports = 4
 		Core.Shared\Core.Shared.projitems*{d9add594-434a-458d-bfa8-bb2f9fd433df}*SharedItemsImports = 4
 		Core.Shared\Core.Shared.projitems*{dc27c4e6-4fba-4d02-b7b4-bb9a48cf25b2}*SharedItemsImports = 4
-		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{29124d65-fdb8-4d03-ac7e-fc4f530dcc27}*SharedItemsImports = 4
-		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{c2104a0c-2e00-409c-aaf3-d010ad5230ce}*SharedItemsImports = 13
-		Infrastructure.Shared\Infrastructure.Shared.projitems*{6d25f2d0-734b-4914-8ba9-4d0976f05fa2}*SharedItemsImports = 4
-		Core.Shared\Core.Shared.projitems*{901df607-869c-449d-84ee-4bee030d8bb3}*SharedItemsImports = 4
-		Web\Web.Mvc.Shared\Web.Mvc.Shared.projitems*{5c121353-e465-4c38-8899-d49e01b026c8}*SharedItemsImports = 13
-		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{d3a97184-f648-40d4-baff-5fb5785e47f9}*SharedItemsImports = 4
-		Tests\Infrastructure.Tests.Shared\Infrastructure.Tests.Shared.projitems*{8b9a63fb-b63f-47ac-b7fa-4032cdabe7bb}*SharedItemsImports = 4
+		Testing.Nunit.Shared\Testing.Nunit.Shared.projitems*{e0778e7f-5aa4-4b14-aac4-5ccb52e0e761}*SharedItemsImports = 4
+		Testing.Nunit.Shared\Testing.Nunit.Shared.projitems*{e55905ce-1076-4bd4-b2d3-367dd8c2699c}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -518,6 +521,22 @@ Global
 		{E0778E7F-5AA4-4B14-AAC4-5CCB52E0E761}.Release|x64.Build.0 = Release|Any CPU
 		{E0778E7F-5AA4-4B14-AAC4-5CCB52E0E761}.Release|x86.ActiveCfg = Release|Any CPU
 		{E0778E7F-5AA4-4B14-AAC4-5CCB52E0E761}.Release|x86.Build.0 = Release|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Debug|ARM.Build.0 = Debug|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Debug|x64.Build.0 = Debug|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Debug|x86.Build.0 = Debug|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Release|ARM.Build.0 = Release|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Release|x64.ActiveCfg = Release|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Release|x64.Build.0 = Release|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Release|x86.ActiveCfg = Release|Any CPU
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -553,5 +572,6 @@ Global
 		{C3A1C1C1-AD06-4A11-9F53-A27772AA6DE2} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
 		{D3A97184-F648-40D4-BAFF-5FB5785E47F9} = {50C0FB8B-4B5D-468A-9839-44283E7E6D9E}
 		{E0778E7F-5AA4-4B14-AAC4-5CCB52E0E761} = {B748DDB6-8618-4DE6-9D2E-EED39DE316B6}
+		{D1C27D37-EB9F-4C64-911B-2C556D3180EA} = {17312E98-7241-4ADF-8C6C-C5DFE13136C0}
 	EndGlobalSection
 EndGlobal
